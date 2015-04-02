@@ -279,7 +279,7 @@ class WordPressPluginFeed
             $feed->addEntry($entry);
         }
 
-        //header('Content-Type: application/rss+xml');
+        header('Content-Type: text/xml;charset=utf-8');
         echo $feed->export($format);        
     }
     
