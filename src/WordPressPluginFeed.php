@@ -83,13 +83,9 @@ class WordPressPluginFeed
             $this->loadTags();
             $this->loadReleases();
         }
-        catch(Exception $ex)
+        catch(Exception $exception)
         {
-            $this->error
-            (
-                $ex->getCode(), $ex->getMessage(), 
-                $ex->getFile(), $ex->getFile()
-            );
+            $this->exception($exception);
         }
     }
     
@@ -284,18 +280,26 @@ class WordPressPluginFeed
      * 
      * @param   int     $errno
      * @param   string  $errstr
-     * @param   string  $errfile
-     * @param   int     $errline
      */
-    protected function error($errno, $errstr, $errfile, $errline)
+    protected function error($errno, $errstr)
+    {
+        throw new Exception($errstr, $errno);
+    }
+
+    /**
+     * Exception handler
+     * 
+     * @param Exception $exception
+     */
+    protected function exception(Exception $exception)
     {
         $this->title = 'WordPress Plugin Feed';
         
         $error = new stdClass();
-        $error->title = "Error $errno";
+        $error->title = "Error " . $exception->getCode();
         $error->link = $this->link;
         $error->created = Carbon::now();
-        $error->content = $errstr;
+        $error->content = $exception->getMessage();
         
         $this->releases = [$error];        
     }
