@@ -164,7 +164,7 @@ class WordPressPluginFeed
                 
                 $this->tags[$tag->name] = $tag;
             }
-        } 
+        }
     }
     
     /**
@@ -184,19 +184,23 @@ class WordPressPluginFeed
         // each h4 is a release
         foreach($changelog->filter('h4') as $index=>$node)
         {
+            // convert release title to version
+            $version = preg_replace('/\s+(.+)$/', '', $node->textContent);
+            $version = preg_replace('/^v/', '', $version);
+            
             // version must exist in tag list
-            if(!isset($this->tags[$node->textContent]))
+            if(!isset($this->tags[$version]))
             {
                 continue;
             }
             
             // tag instance
-            $tag =& $this->tags[$node->textContent];
+            $tag =& $this->tags[$version];
             $tag->release = true;
 
             // release object
             $release = new stdClass();
-            $release->title = 'Release ' . $node->textContent;
+            $release->title = "Release $version";
             $release->description = $tag->description;
             $release->created = $tag->created;
             $release->content = '';
@@ -222,7 +226,7 @@ class WordPressPluginFeed
                     . '&limit=100&sfp_email=&sfph_mail=';                       
             
             // move pointer to previous release
-            while(current($this->tags) && key($this->tags) != $tag->name)
+            while(current($this->tags) && key($this->tags) != $version)
             {
                 next($this->tags);
             }
@@ -240,7 +244,7 @@ class WordPressPluginFeed
                 $release->title .= ' (Security update)';
             }
             
-            $this->releases[$tag->name] = $release;
+            $this->releases[$version] = $release;
         }
     }
     
