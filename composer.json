@@ -1,0 +1,10 @@
+{
+    "require": {
+        "zendframework/zend-feed": "~2.4",
+        "symfony/dom-crawler": "~2.6",
+        "symfony/css-selector": "~2.6",
+        "zendframework/zend-servicemanager": "~2.4",
+        "zendframework/zend-cache": "~2.4",
+        "nesbot/carbon": "~1.18"
+    }
+}
