@@ -10,6 +10,12 @@ WordPress developers should be informed of the updates of the plugins that use. 
 
 WordPress Feed Plugin provides detailed feeds for plugin releases, avoiding the need to review the WordPress control panel or visit the profile of each plugin.
 
+Features:
+* Full human readable changelog 
+* Accurate release date (based on Subversion commits)
+* Link to Subversion commit list between releases
+* Highlighted security updates
+
 Because this tool parses HTML of different websites, result cannot be 100% accurate and can fail after a change in the code. So pull requests are welcome...
 
 Usage
