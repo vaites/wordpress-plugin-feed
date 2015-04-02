@@ -90,6 +90,14 @@ class WordPressPluginFeed
     }
     
     /**
+     * Clear expired cache after work is done
+     */
+    public function __destruct() 
+    {
+        $this->cache->clearExpired();
+    }
+    
+    /**
      * Get HTML code from changelog tab
      * 
      * Results are cached
