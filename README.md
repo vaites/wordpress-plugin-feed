@@ -1,6 +1,8 @@
 WordPress Plugin Feed
 =====================
 
+![Example](https://raw.githubusercontent.com/vaites/wordpress-plugin-feed/master/example.png)
+
 WordPress developers should be informed of the updates of the plugins that use. Automattic provides feeds that do not give the necessary information:
 
 * [Akismet feed](https://wordpress.org/plugins/rss/topic/akismet)
