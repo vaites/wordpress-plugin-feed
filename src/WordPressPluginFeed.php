@@ -189,8 +189,9 @@ class WordPressPluginFeed
         foreach($changelog->filter('h4') as $index=>$node)
         {
             // convert release title to version
-            $version = preg_replace('/\s+(.+)$/', '', $node->textContent);
-            $version = preg_replace('/^v/', '', $version);
+            $version = $node->textContent;
+            $version = preg_replace('/^v(ersion\s*)?/i', '', trim($version));
+            $version = preg_replace('/\s+(.+)$/', '', trim($version));
             
             // version must exist in tag list
             if(!isset($this->tags[$version]))
@@ -204,7 +205,7 @@ class WordPressPluginFeed
 
             // release object
             $release = new stdClass();
-            $release->title = "Release $version";
+            $release->title = "{$this->title} $version";
             $release->description = $tag->description;
             $release->created = $tag->created;
             $release->content = '';
