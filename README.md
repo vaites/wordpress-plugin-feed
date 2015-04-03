@@ -21,8 +21,14 @@ Because this tool parses HTML of different websites, result cannot be 100% accur
 Usage
 -----
 
-Just place the code on any web server that supports PHP and run `composer update`. Then, add to your favorite feed reader:
+Just place the code on any web server that supports PHP and run `composer update`:
 
-    http://your/web/server/wordpress-plugin/feed/index.php?plugin=PLUGIN
+    git clone https://github.com/vaites/wordpress-plugin-feed
+    cd wordpress-plugin-feed
+    composer update
+
+Then, add to your favorite feed reader:
+
+    http://your/web/server/wordpress-plugin-feed/index.php?plugin=PLUGIN
 
 Replace *PLUGIN* with the name of the plugin you want to track, the same as WordPress uses in plugin URL (like *better-wp-security* for [iThemes Security](https://wordpress.org/plugins/better-wp-security)).
