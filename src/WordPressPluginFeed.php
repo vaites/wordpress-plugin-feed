@@ -22,6 +22,13 @@ class WordPressPluginFeed
     protected $title = null;
     
     /**
+     * Plugin short description
+     *
+     * @var string
+     */
+    protected $description = null;
+
+    /**
      * Plugin URL at WordPress.org
      *
      * @var string
@@ -186,8 +193,9 @@ class WordPressPluginFeed
         // profile 
         $crawler = new Crawler($this->fetch('profile'));
 
-        // plugin title (used for feed title)
+        // plugin title (used for feed title) and short description
         $this->title = $crawler->filter('#plugin-title h2')->text();
+        $this->description = $crawler->filter('.shortdesc')->text();
 
         // need to parse changelog block
         $changelog = $crawler->filter('.block.changelog .block-content');
@@ -307,6 +315,7 @@ class WordPressPluginFeed
 
         $feed = new Feed();
         $feed->setTitle($this->title);
+        $feed->setDescription($this->description);
         $feed->setLink("https://wordpress.org/plugins/{$this->plugin}/");
         $feed->setFeedLink($this->link, 'atom');
         $feed->setDateModified($time);
