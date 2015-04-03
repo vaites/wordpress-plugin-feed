@@ -142,7 +142,8 @@ class WordPressPluginFeed
         }
         elseif($type == 'tags')
         {
-            $url = "https://plugins.trac.wordpress.org/browser/%s/tags?desc=1";
+            $url = "https://plugins.trac.wordpress.org/browser/%s/tags"
+                 . "?order=date&desc=1";
         }
         
         $source = sprintf($url, $this->plugin);
@@ -190,11 +191,14 @@ class WordPressPluginFeed
                 
                 // tag object
                 $tag = new stdClass();
-                $tag->name = trim($row->filter('.name')->text());                
+                $tag->name = trim($row->filter('.name')->text());  
                 $tag->revision = trim($row->filter('.rev a')->first()->text());
                 $tag->description = trim($row->filter('.change')->text());
                 $tag->created = Carbon::parse($time);
                 $tag->release = false; // betas and other tags aren't releases
+                
+                // fixes to tag name
+                $tag->name = preg_replace('/^v/', '', $tag->name);
                 
                 $this->tags[$tag->name] = $tag;
             }
@@ -209,8 +213,12 @@ class WordPressPluginFeed
         // profile 
         $crawler = new Crawler($this->fetch('profile'));
 
-        // plugin title (used for feed title) and short description
+        // plugin title (used for feed title)
         $this->title = $crawler->filter('#plugin-title h2')->text();
+        $this->title = preg_replace('/\s*(:|\-|\|)(.+)/', '', $this->title);
+        $this->title = preg_replace('/\s+\((.+)\)$/', '', $this->title);
+        
+        // short description
         $this->description = $crawler->filter('.shortdesc')->text();
 
         // need to parse changelog block
