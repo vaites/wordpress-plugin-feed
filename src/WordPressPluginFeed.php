@@ -216,13 +216,43 @@ class WordPressPluginFeed
             {
                 if($node->tagName != 'h4')
                 {
-                    $release->content .= $details->eq($index)->html() . PHP_EOL;
+                    $release->content .= "<{$node->tagName}>" . 
+                                         $details->eq($index)->html() .
+                                         "</{$node->tagName}>" . PHP_EOL;
                 }
                 else
                 {
                     break;
                 }
             }
+            
+            $this->releases[$version] = $release;
+        }
+        
+        // with zero releases, generate release data from Trac
+        if(empty($this->releases))
+        {
+            foreach($this->tags as $tag)
+            {
+                $version = $tag->name;
+                
+                $release = new stdClass();
+                $release->title = "{$this->title} $version";
+                $release->description = $tag->description;
+                $release->created = $tag->created;
+                $release->content = "Commit message: " . $tag->description;
+
+                $this->releases[$version] = $release;
+            }
+            
+            reset($this->tags);            
+        }
+        
+        // add extra info to detected releases
+        foreach($this->releases as $version=>$release)
+        {            
+            // tag instance
+            $tag =& $this->tags[$version];
             
             // link to Track browser listing commits between since previous tag
             $release->link = 'https://plugins.trac.wordpress.org/log/'
@@ -237,7 +267,7 @@ class WordPressPluginFeed
             }
             
             // add previous release revision to limit commit list
-            $previous = current($this->tags);
+            $previous = next($this->tags);
             if(!empty($previous))
             {
                 $release->link .= '&stop_rev=' . $previous->revision;
