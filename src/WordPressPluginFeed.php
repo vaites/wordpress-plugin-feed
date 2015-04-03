@@ -27,6 +27,13 @@ class WordPressPluginFeed
      * @var string
      */
     protected $description = null;
+    
+    /**
+     * Plugin image
+     * 
+     * @var string
+     */
+    protected $image = null;
 
     /**
      * Plugin URL at WordPress.org
@@ -34,6 +41,13 @@ class WordPressPluginFeed
      * @var string
      */
     protected $link = null;
+    
+    /**
+     * Feed URL
+     *
+     * @var string
+     */
+    protected $feed_link = null;
     
     /**
      * Last release date
@@ -64,7 +78,7 @@ class WordPressPluginFeed
     protected $cache = null;
     
     /**
-     * 
+     * Load plugin data
      * 
      * @param   string  $plugin
      */
@@ -76,7 +90,10 @@ class WordPressPluginFeed
         $request = filter_input(INPUT_SERVER, 'REQUEST_URI');
         
         $this->plugin = $plugin;
-        $this->link = "http://$host/$request";
+        $this->link = "https://wordpress.org/plugins/$plugin/";
+        $this->image = "http://ps.w.org/$plugin/assets/icon-128x128.png";
+        
+        $this->feed_link = "http://{$host}{$request}";
         
         $this->cache = StorageFactory::factory(
         [
@@ -112,10 +129,9 @@ class WordPressPluginFeed
     }
     
     /**
-     * Get HTML code from changelog tab
+     * Get HTML code from changelog tab (results are cached)
      * 
-     * Results are cached
-     * 
+     * @param   string  $type   profile, tags or image
      * @return  string
      */
     public function fetch($type = 'profile')
@@ -313,21 +329,25 @@ class WordPressPluginFeed
     public function generate($format = 'atom')
     {
         $time = is_null($this->modified) ? time() : $this->modified->timestamp;
-
+        
         $feed = new Feed();
         $feed->setTitle($this->title);
-        $feed->setDescription($this->description);
-        $feed->setLink("https://wordpress.org/plugins/{$this->plugin}/");
-        $feed->setFeedLink($this->link, 'atom');
+        $feed->setLink($this->link);
+        $feed->setFeedLink($this->feed_link, 'atom');
         $feed->setDateModified($time);
         $feed->addHub('http://pubsubhubbub.appspot.com/');
+        
+        if(!is_null($this->description))
+        {
+            $feed->setDescription($this->description);
+        }
         
         $feed->setImage(
         [
             'height' => 128,
             'link' => $feed->getLink(),
             'title' => $this->title,
-            'uri' => "http://ps.w.org/{$this->plugin}/assets/icon-128x128.png",
+            'uri' => $this->image,
             'width' => 128
         ]);
         
