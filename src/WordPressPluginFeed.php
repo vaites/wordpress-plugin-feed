@@ -295,7 +295,8 @@ class WordPressPluginFeed
             }
             
             // add warning to title if detail has "security"
-            if(preg_match('/(security|CSRF|XSS)/i', $release->content))
+            $keywords = 'security|vulnerability|CSRF|XSS';
+            if(preg_match("/($keywords)/i", $release->content))
             {
                 $release->title .= ' (Security update)';
             }
