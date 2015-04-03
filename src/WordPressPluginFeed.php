@@ -29,6 +29,13 @@ class WordPressPluginFeed
     protected $link = null;
     
     /**
+     * Last release date
+     *
+     * @var \Carbon\Carbon
+     */
+    protected $modified = null;
+    
+    /**
      * Release list
      *
      * @var array
@@ -254,6 +261,12 @@ class WordPressPluginFeed
             // tag instance
             $tag =& $this->tags[$version];
             
+            // sets the feed modification time
+            if(is_null($this->modified))
+            {
+                $this->modified = $tag->created;
+            }
+            
             // link to Track browser listing commits between since previous tag
             $release->link = 'https://plugins.trac.wordpress.org/log/'
                     . $this->plugin . '/trunk?action=stop_on_copy'
@@ -290,13 +303,23 @@ class WordPressPluginFeed
      */
     public function generate($format = 'atom')
     {
+        $time = is_null($this->modified) ? time() : $this->modified->timestamp;
 
         $feed = new Feed();
         $feed->setTitle($this->title);
         $feed->setLink("https://wordpress.org/plugins/{$this->plugin}/");
         $feed->setFeedLink($this->link, 'atom');
-        $feed->setDateModified(time());
+        $feed->setDateModified($time);
         $feed->addHub('http://pubsubhubbub.appspot.com/');
+        
+        $feed->setImage(
+        [
+            'height' => 128,
+            'link' => $feed->getLink(),
+            'title' => $this->title,
+            'uri' => "http://ps.w.org/{$this->plugin}/assets/icon-128x128.png",
+            'width' => 128
+        ]);
         
         foreach($this->releases as $release)
         {
