@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use Symfony\Component\DomCrawler\Crawler;
 use Zend\Cache\StorageFactory;
 use Zend\Feed\Writer\Feed;
@@ -71,6 +72,13 @@ class WordPressPluginFeed
     protected $tags = [];
     
     /**
+     * HTTP client instance
+     *
+     * @var \GuzzleHttp\Client
+     */
+    protected $http = null;
+    
+    /**
      * Cache handler instance
      *
      * @var \Zend\Cache\StorageFactory
@@ -94,6 +102,8 @@ class WordPressPluginFeed
         $this->image = "http://ps.w.org/$plugin/assets/icon-128x128.png";
         
         $this->feed_link = "http://{$host}{$request}";
+        
+        $this->http = new Client();
         
         $this->cache = StorageFactory::factory(
         [
@@ -152,18 +162,12 @@ class WordPressPluginFeed
         $code = $this->cache->getItem($key, $success);
         if($success == false)
         {
-            $stream = fopen($source, 'r');
-            
-            if(is_resource($stream))
+            $response = $this->http->get($source);
+            if(!empty($response->getBody()))
             {
-                stream_set_timeout($stream, 60);
-                $code = stream_get_contents($stream);
-                fclose($stream);
-
-                if(!empty($code))
-                {
-                    $this->cache->setItem($key, $code);
-                }
+                $code = $response->getBody()->getContents();
+                
+                $this->cache->setItem($key, $code);
             }
         }        
         
@@ -381,7 +385,7 @@ class WordPressPluginFeed
      * @param   int     $errno
      * @param   string  $errstr
      */
-    protected function error($errno, $errstr)
+    public function error($errno, $errstr)
     {
         throw new Exception($errstr, $errno);
     }
@@ -391,7 +395,7 @@ class WordPressPluginFeed
      * 
      * @param Exception $exception
      */
-    protected function exception(Exception $exception)
+    public function exception(Exception $exception)
     {
         $this->title = 'WordPress Plugin Feed';
         
