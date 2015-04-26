@@ -22,7 +22,8 @@ class WordPressPluginFeed
      */
     public static $proprietary = 
     [
-        'revslider' => 'RevolutionSliderFeed',
+        'revslider'                     => 'RevolutionSliderFeed',
+        'sitepress-multilingual-cms'    => 'WPMLFeed'
     ];
     
     /**
@@ -49,9 +50,14 @@ class WordPressPluginFeed
     /**
      * Plugin image
      * 
-     * @var string
+     * @var array
      */
-    protected $image = null;
+    protected $image = 
+    [
+        'uri' => "http://ps.w.org/%s/assets/icon-128x128.png",
+        'height' => 128,
+        'width' => 128        
+    ];
 
     /**
      * Plugin URL at WordPress.org
@@ -135,12 +141,6 @@ class WordPressPluginFeed
             $this->link = "https://wordpress.org/plugins/$plugin/";
         }
         
-        // default image if not defined
-        if(empty($this->image))
-        {
-            $this->image = "http://ps.w.org/$plugin/assets/icon-128x128.png";
-        }
-        
         // Guzzle instance
         $this->http = new Client();
         
@@ -182,15 +182,16 @@ class WordPressPluginFeed
      * Get HTML code from changelog tab (results are cached)
      * 
      * @param   string  $type   profile, tags or image
+     * @param   strign  $append query string or other parameters
      * @return  string
      */
-    public function fetch($type = 'profile')
+    public function fetch($type = 'profile', $append = null)
     {
         $code = false;
         
         if(isset($this->sources[$type]) && $this->sources[$type])
         {
-            $url = $this->sources[$type];
+            $url = $this->sources[$type] . $append;
             $source = sprintf($url, $this->plugin);
             $key = sha1($source);
 
@@ -198,7 +199,7 @@ class WordPressPluginFeed
             if($success == false)
             {
                 $response = $this->http->get($source);
-                if(!empty($response->getBody()))
+                if($response->getBody())
                 {
                     $code = $response->getBody()->getContents();
 
@@ -372,6 +373,7 @@ class WordPressPluginFeed
      */
     public function generate($format = 'atom')
     {
+        $plugin = $this->plugin;
         $time = is_null($this->modified) ? time() : $this->modified->timestamp;
         
         $feed = new Feed();
@@ -386,14 +388,17 @@ class WordPressPluginFeed
             $feed->setDescription($this->description);
         }
         
-        $feed->setImage(
-        [
-            'height' => 128,
-            'link' => $feed->getLink(),
-            'title' => $this->title,
-            'uri' => $this->image,
-            'width' => 128
-        ]);
+        if(!empty($this->image['uri']))
+        {
+            $feed->setImage(
+            [
+                'height' => $this->image['height'],
+                'link' => $feed->getLink(),
+                'title' => $this->title,
+                'uri' => sprintf($this->image['uri'], $this->plugin),
+                'width' => $this->image['width']
+            ]);
+        }
         
         foreach($this->releases as $release)
         {

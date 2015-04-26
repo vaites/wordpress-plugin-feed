@@ -11,12 +11,34 @@ use Symfony\Component\DomCrawler\Crawler;
 class RevolutionSliderFeed extends WordPressPluginFeed
 {
     /**
+     * Plugin title
+     *
+     * @var string
+     */
+    protected $title = 'Revolution Slider';
+    
+    /**
+     * Plugin short description
+     *
+     * @var string
+     */
+    protected $description = 'Create a responsive(mobile friendly) '
+            . 'or fullwidth slider with must-see-effects and meanwhile '
+            . 'keep or build your SEO optimization (all content always '
+            . 'readable for search engines)';
+    
+    /**
      * Plugin image
      * 
      * @var string
      */
-    protected $image = 'https://0.s3.envato.com/files/104347001/smallicon2.png';
-    
+    protected $image = 
+    [
+        'uri' => 'https://0.s3.envato.com/files/104347001/smallicon2.png',
+        'height' => 80,
+        'width' => 80
+    ];
+
     /**
      * Source URLs 
      *
@@ -24,7 +46,8 @@ class RevolutionSliderFeed extends WordPressPluginFeed
      */    
     protected $sources = 
     [
-        'profile'   => 'http://codecanyon.net/item/slider-revolution-responsive-wordpress-plugin/2751380',
+        'profile'   => 'http://codecanyon.net/item/slider-revolution-responsive'
+                     . '-wordpress-plugin/2751380',
     ];
     
     /**
@@ -34,23 +57,6 @@ class RevolutionSliderFeed extends WordPressPluginFeed
     {
         // profile 
         $crawler = new Crawler($this->fetch('profile'));
-        
-        // plugin title (used for feed title)
-        $this->title = 'Slider Revolution';
-        
-        // short description
-        $description = $crawler->filter('.item-description h3')->nextAll();
-        foreach($description as $index=>$node)
-        {
-            if($node->tagName != 'h4')
-            {
-                $this->description .= $description->eq($index)->text();
-            }
-            else
-            {
-                break;
-            }
-        }
         
         // need to parse changelog block
         $changelog = $crawler->filter('img')->reduce(function($node, $index)
@@ -96,7 +102,7 @@ class RevolutionSliderFeed extends WordPressPluginFeed
             }
             
             // pubdate needs to be parsed
-            $release->created = $this->modified = Carbon::parse($pubdate[2]);
+            $release->created = Carbon::parse($pubdate[2]);
             
             $this->releases[$version] = $release;
         }
