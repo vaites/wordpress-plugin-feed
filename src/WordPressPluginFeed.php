@@ -6,8 +6,25 @@ use Symfony\Component\DomCrawler\Crawler;
 use Zend\Cache\StorageFactory;
 use Zend\Feed\Writer\Feed;
 
+/**
+ * Main class that parses WordPress.org plugin profiles
+ * 
+ * @author  David Martínez <contacto@davidmartinez.net>
+ */
 class WordPressPluginFeed 
 {
+    /**
+     * List of proprietary plugins with specific update log:
+     * 
+     *      plugin-name     => ClassName
+     *
+     * @var array
+     */
+    public static $proprietary = 
+    [
+        'revslider' => 'RevolutionSliderFeed',
+    ];
+    
     /**
      * Plugin name
      *
@@ -72,6 +89,17 @@ class WordPressPluginFeed
     protected $tags = [];
     
     /**
+     * Source URLs 
+     *
+     * @var array
+     */
+    protected $sources = 
+    [
+        'profile'   => 'https://wordpress.org/plugins/%s/changelog/',
+        'tags'      => 'https://plugins.trac.wordpress.org/browser/%s/tags?order=date&desc=1'
+    ];
+
+    /**
      * HTTP client instance
      *
      * @var \GuzzleHttp\Client
@@ -93,18 +121,30 @@ class WordPressPluginFeed
     public function __construct($plugin) 
     {
         set_error_handler([$this, 'error']);
-        
+
+        // feed link
         $host = filter_input(INPUT_SERVER, 'HTTP_HOST');
         $request = filter_input(INPUT_SERVER, 'REQUEST_URI');
-        
-        $this->plugin = $plugin;
-        $this->link = "https://wordpress.org/plugins/$plugin/";
-        $this->image = "http://ps.w.org/$plugin/assets/icon-128x128.png";
-        
         $this->feed_link = "http://{$host}{$request}";
         
+        $this->plugin = $plugin;
+        
+        // external link if not defined
+        if(empty($this->link))
+        {
+            $this->link = "https://wordpress.org/plugins/$plugin/";
+        }
+        
+        // default image if not defined
+        if(empty($this->image))
+        {
+            $this->image = "http://ps.w.org/$plugin/assets/icon-128x128.png";
+        }
+        
+        // Guzzle instance
         $this->http = new Client();
         
+        // cache instance
         $this->cache = StorageFactory::factory(
         [
             'adapter' => [
@@ -119,9 +159,9 @@ class WordPressPluginFeed
             ]
         ]);
         
+        // load releases after class config
         try
         {
-            $this->loadTags();
             $this->loadReleases();
         }
         catch(Exception $exception)
@@ -146,30 +186,26 @@ class WordPressPluginFeed
      */
     public function fetch($type = 'profile')
     {
-        if($type == 'profile')
-        {
-            $url = 'https://wordpress.org/plugins/%s/changelog/';
-        }
-        elseif($type == 'tags')
-        {
-            $url = "https://plugins.trac.wordpress.org/browser/%s/tags"
-                 . "?order=date&desc=1";
-        }
+        $code = false;
         
-        $source = sprintf($url, $this->plugin);
-        $key = sha1($source);
-        
-        $code = $this->cache->getItem($key, $success);
-        if($success == false)
+        if(isset($this->sources[$type]) && $this->sources[$type])
         {
-            $response = $this->http->get($source);
-            if(!empty($response->getBody()))
+            $url = $this->sources[$type];
+            $source = sprintf($url, $this->plugin);
+            $key = sha1($source);
+
+            $code = $this->cache->getItem($key, $success);
+            if($success == false)
             {
-                $code = $response->getBody()->getContents();
-                
-                $this->cache->setItem($key, $code);
-            }
-        }        
+                $response = $this->http->get($source);
+                if(!empty($response->getBody()))
+                {
+                    $code = $response->getBody()->getContents();
+
+                    $this->cache->setItem($key, $code);
+                }
+            }        
+        }
         
         return $code;
     }
@@ -214,6 +250,9 @@ class WordPressPluginFeed
      */
     protected function loadReleases()
     {
+        // tags need to be loaded before parse releases
+        $this->loadTags();
+        
         // profile 
         $crawler = new Crawler($this->fetch('profile'));
 
@@ -322,13 +361,6 @@ class WordPressPluginFeed
                 $release->link .= '&stop_rev=' . $previous->revision;
             }
             
-            // add warning to title if detail has "security"
-            $keywords = 'security|vulnerability|CSRF|XSS';
-            if(preg_match("/($keywords)/i", $release->content))
-            {
-                $release->title .= ' (Security update)';
-            }
-            
             $this->releases[$version] = $release;
         }
     }
@@ -365,6 +397,13 @@ class WordPressPluginFeed
         
         foreach($this->releases as $release)
         {
+            // add warning to title if detail has "security"
+            $keywords = 'security|vulnerability|CSRF|XSS';
+            if(preg_match("/($keywords)/i", $release->content))
+            {
+                $release->title .= ' (Security update)';
+            }
+            
             $entry = $feed->createEntry();
             $entry->setTitle($release->title);
             $entry->setLink($release->link);
