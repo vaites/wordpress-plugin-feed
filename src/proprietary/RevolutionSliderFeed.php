@@ -68,9 +68,7 @@ class RevolutionSliderFeed extends WordPressPluginFeed
         foreach($changelog->filter('h3') as $index=>$node)
         {
             // convert release title to version
-            $version = $node->textContent;
-            $version = preg_replace('/^v(ersion\s*)?/i', '', trim($version));
-            $version = preg_replace('/\s+(.+)$/', '', trim($version));
+            $version = $this->parseVersion($node->textContent);
             
             // title must have pubdate
             if(!preg_match('/(.+) \((.+)\)/i', $node->textContent, $pubdate))

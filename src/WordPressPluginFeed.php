@@ -22,6 +22,7 @@ class WordPressPluginFeed
      */
     public static $proprietary = 
     [
+        'gravityforms'                  => 'GravityFormsFeed',
         'revslider'                     => 'RevolutionSliderFeed',
         'sitepress-multilingual-cms'    => 'WPMLFeed'
     ];
@@ -272,9 +273,7 @@ class WordPressPluginFeed
         foreach($changelog->filter('h4') as $index=>$node)
         {
             // convert release title to version
-            $version = $node->textContent;
-            $version = preg_replace('/^v(ersion\s*)?/i', '', trim($version));
-            $version = preg_replace('/\s+(.+)$/', '', trim($version));
+            $version = $this->parseVersion($node->textContent);
             
             // version must exist in tag list
             if(!isset($this->tags[$version]))
@@ -366,6 +365,21 @@ class WordPressPluginFeed
         }
     }
     
+    /**
+     * Parses a string containing version to extract it
+     * 
+     * @param   string  $string
+     * @return  string
+     */
+    protected function parseVersion($string)
+    {
+        $version = preg_replace("/^{$this->title}\s+/i", '', $string);
+        $version = preg_replace('/^v(ersion\s*)?/i','', trim($version));
+        $version = preg_replace('/\s+(.+)$/', '', trim($version));
+
+        return $version;
+    }
+
     /**
      * Generates the feed
      * 

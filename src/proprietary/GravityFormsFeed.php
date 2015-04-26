@@ -8,23 +8,25 @@ use Zend\Feed\Reader\Reader;
  *
  * @author David Martínez <contacto@davidmartinez.net>
  */
-class WPMLFeed extends WordPressPluginFeed
+class GravityFormsFeed extends WordPressPluginFeed
 {
     /**
      * Plugin title
      *
      * @var string
      */
-    protected $title = 'The WordPress Multilingual Plugin';
+    protected $title = 'Gravity Forms';
     
     /**
      * Plugin short description
      *
      * @var string
      */
-    protected $description = 'WPML makes it easy to build multilingual sites'
-            . 'and run them. It’s powerful enough for corporate sites, '
-            . 'yet simple for blogs.';
+    protected $description = 'Gravity Forms for WordPress is a full featured '
+            . 'contact form plugin that features a drag and drop interface, '
+            . 'advanced notification routing, lead capture, conditional logic '
+            . 'fields, multi-page forms, pricing calculations and the ability '
+            . 'to create posts from external forms.';
 
     /**
      * Plugin image
@@ -33,10 +35,10 @@ class WPMLFeed extends WordPressPluginFeed
      */
     protected $image = 
     [
-        'uri' => 'https://d2salfytceyqoe.cloudfront.net/wp-content'
-            . '/uploads/2010/09/wpml_logo.png',
-        'height' => 265,
-        'width' => 101
+        'uri' => 'http://gravityforms.s3.amazonaws.com/logos/'
+        . 'gravityforms_logo_100.png',
+        'height' => 100,
+        'width' => 116
     ];
     
     /**
@@ -46,7 +48,7 @@ class WPMLFeed extends WordPressPluginFeed
      */    
     protected $sources = 
     [
-        'profile'   => 'https://wpml.org/category/changelog/feed/atom/',
+        'profile'   => 'http://www.gravityhelp.com/feed/atom/',
     ];
     
     /**
@@ -64,7 +66,8 @@ class WPMLFeed extends WordPressPluginFeed
             foreach($changelog as $entry)
             {
                 // WPML releases starts with "WPML"
-                if(!preg_match('/^WPML\s+\d+\./i', $entry->getTitle()))
+                $regexp = '/^Gravity Forms v(\d|\.)+ Released/i';
+                if(!preg_match($regexp, $entry->getTitle()))
                 {
                     continue;
                 }
@@ -72,16 +75,6 @@ class WPMLFeed extends WordPressPluginFeed
                 // convert release title to version
                 $version = $this->parseVersion($entry->getTitle());
                 
-                // avoid betas
-                if(preg_match('/b\d+/i', $version))
-                {
-                    continue;
-                }
-                elseif(preg_match('/beta/i', $entry->getLink()))
-                {
-                    continue;
-                }
-
                 // creation time
                 $created = $entry->getDateCreated()->getTimestamp();
 
