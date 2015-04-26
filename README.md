@@ -15,6 +15,10 @@ Features:
 * Accurate release date (based on Subversion commits)
 * Link to Subversion commit list between releases
 * Highlighted security updates
+* Support for (less accurate) changelog of proprietary plugins:
+  * Gravity Forms
+  * Slider Revolution
+  * The WordPress Multilingual Plugin (WPML)
 
 Because this tool parses HTML of different websites, result cannot be 100% accurate and can fail after a change in the code. So pull requests are welcome...
 
