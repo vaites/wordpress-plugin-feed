@@ -22,11 +22,7 @@ class GravityFormsFeed extends WordPressPluginFeed
      *
      * @var string
      */
-    protected $description = 'Gravity Forms for WordPress is a full featured '
-            . 'contact form plugin that features a drag and drop interface, '
-            . 'advanced notification routing, lead capture, conditional logic '
-            . 'fields, multi-page forms, pricing calculations and the ability '
-            . 'to create posts from external forms.';
+    protected $description = 'Gravity Forms for WordPress is a full featured contact form plugin that features a drag and drop interface, advanced notification routing, lead capture, conditional logic fields, multi-page forms, pricing calculations and the ability to create posts from external forms.';
 
     /**
      * Plugin image
@@ -35,8 +31,7 @@ class GravityFormsFeed extends WordPressPluginFeed
      */
     protected $image = 
     [
-        'uri' => 'http://gravityforms.s3.amazonaws.com/logos/'
-        . 'gravityforms_logo_100.png',
+        'uri' => 'http://gravityforms.s3.amazonaws.com/logos/gravityforms_logo_100.png',
         'height' => 100,
         'width' => 116
     ];

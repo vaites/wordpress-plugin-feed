@@ -22,10 +22,7 @@ class RevolutionSliderFeed extends WordPressPluginFeed
      *
      * @var string
      */
-    protected $description = 'Create a responsive(mobile friendly) '
-            . 'or fullwidth slider with must-see-effects and meanwhile '
-            . 'keep or build your SEO optimization (all content always '
-            . 'readable for search engines)';
+    protected $description = 'Create a responsive(mobile friendly) or fullwidth slider with must-see-effects and meanwhile keep or build your SEO optimization (all content always readable for search engines)';
     
     /**
      * Plugin image
@@ -46,8 +43,7 @@ class RevolutionSliderFeed extends WordPressPluginFeed
      */    
     protected $sources = 
     [
-        'profile'   => 'http://codecanyon.net/item/slider-revolution-responsive'
-                     . '-wordpress-plugin/2751380',
+        'profile'   => 'http://codecanyon.net/item/slider-revolution-responsive-wordpress-plugin/2751380',
     ];
     
     /**

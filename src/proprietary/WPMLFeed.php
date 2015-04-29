@@ -22,9 +22,7 @@ class WPMLFeed extends WordPressPluginFeed
      *
      * @var string
      */
-    protected $description = 'WPML makes it easy to build multilingual sites'
-            . 'and run them. It’s powerful enough for corporate sites, '
-            . 'yet simple for blogs.';
+    protected $description = 'WPML makes it easy to build multilingual sites and run them. It’s powerful enough for corporate sites,  yet simple for blogs.';
 
     /**
      * Plugin image
@@ -33,8 +31,7 @@ class WPMLFeed extends WordPressPluginFeed
      */
     protected $image = 
     [
-        'uri' => 'https://d2salfytceyqoe.cloudfront.net/wp-content'
-            . '/uploads/2010/09/wpml_logo.png',
+        'uri' => 'https://d2salfytceyqoe.cloudfront.net/wp-content/uploads/2010/09/wpml_logo.png',
         'height' => 265,
         'width' => 101
     ];
