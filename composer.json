@@ -6,6 +6,6 @@
         "zendframework/zend-servicemanager": "~2.4",
         "zendframework/zend-cache": "~2.4",
         "nesbot/carbon": "~1.18",
-        "guzzle/guzzle": "~3.9"
+        "guzzlehttp/guzzle": "~5.2"
     }
 }
