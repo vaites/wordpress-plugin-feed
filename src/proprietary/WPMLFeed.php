@@ -78,7 +78,7 @@ class WPMLFeed extends WordPressPluginFeed
                 {
                     continue;
                 }
-
+                
                 // creation time
                 $created = $entry->getDateCreated()->getTimestamp();
 

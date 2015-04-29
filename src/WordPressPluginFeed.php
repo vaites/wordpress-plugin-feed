@@ -373,9 +373,15 @@ class WordPressPluginFeed
      */
     protected function parseVersion($string)
     {
-        $version = preg_replace("/^{$this->title}\s+/i", '', $string);
-        $version = preg_replace('/^v(ersion\s*)?/i','', trim($version));
-        $version = preg_replace('/\s+(.+)$/', '', trim($version));
+        $version = false;
+        
+        $string = preg_replace("/^{$this->title}\s+/i", '', $string);
+        $string = preg_replace('/^v(ersion\s*)?/i', '', trim($string));
+        
+        if(preg_match('/(\d|\.)+/', $string, $match))     
+        {
+            $version = $match[0];
+        }                
 
         return $version;
     }
