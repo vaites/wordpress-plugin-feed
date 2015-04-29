@@ -121,6 +121,13 @@ class WordPressPluginFeed
     protected $cache = null;
     
     /**
+     * HTMLPurifier instance
+     *
+     * @var \HTMLPurifier
+     */
+    protected $purifier = null;
+    
+    /**
      * Load plugin data
      * 
      * @param   string  $plugin
@@ -159,6 +166,9 @@ class WordPressPluginFeed
                 'exception_handler' => ['throw_exceptions' => false]
             ]
         ]);
+        
+        // HTMLPurifier instance
+        $this->purifier = new HTMLPurifier(HTMLPurifier_Config::createDefault());
         
         // load releases after class config
         try
@@ -434,7 +444,7 @@ class WordPressPluginFeed
             $entry->setLink($release->link);
             $entry->setDateModified($release->created->timestamp);
             $entry->setDateCreated($release->created->timestamp);
-            $entry->setContent($release->content);
+            $entry->setContent($this->purifier->purify($release->content));
             
             $feed->addEntry($entry);
         }
