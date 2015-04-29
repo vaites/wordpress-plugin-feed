@@ -60,7 +60,7 @@ class RevolutionSliderFeed extends WordPressPluginFeed
             return (bool) preg_match('/tpbanner_updates/', $node->attr('src'));
         })->parents()->nextAll();
         
-        // each h4 is a release
+        // each h3 is a release
         foreach($changelog->filter('h3') as $index=>$node)
         {
             // convert release title to version
@@ -71,15 +71,19 @@ class RevolutionSliderFeed extends WordPressPluginFeed
             {
                 continue;
             }
+            
+            # get the ID to build link
+            $id = $changelog->filter('h3')->eq($index)->attr('id');
+            
             // release object
             $release = new stdClass();
-            $release->link = $this->sources['profile'];
+            $release->link = "{$this->sources['profile']}#{$id}";
             $release->title = "{$this->title} $version";
             $release->description = false;
             $release->created = time();
             $release->content = '';
 
-            // nodes that follows h4 are the details
+            // nodes that follows h3 are the details
             $details = $changelog->filter('h3')->eq($index)->nextAll();
             foreach($details as $index=>$node)
             {
