@@ -271,7 +271,7 @@ class WordPressPluginFeed
 
         // plugin title (used for feed title)
         $this->title = $crawler->filter('#plugin-title h2')->text();
-        $this->title = preg_replace('/\s*(:|\-|\|)(.+)/', '', $this->title);
+        $this->title = preg_replace('/\s*(:|\s+\-|\|)(.+)/', '', $this->title);
         $this->title = preg_replace('/\s+\((.+)\)$/', '', $this->title);
         
         // short description
