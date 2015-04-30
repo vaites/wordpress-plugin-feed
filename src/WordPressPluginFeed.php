@@ -22,6 +22,7 @@ class WordPressPluginFeed
      */
     public static $proprietary = 
     [
+        'buddypress'                    => 'BuddyPressFeed',
         'gravityforms'                  => 'GravityFormsFeed',
         'revslider'                     => 'RevolutionSliderFeed',
         'sitepress-multilingual-cms'    => 'WPMLFeed'
@@ -433,7 +434,7 @@ class WordPressPluginFeed
         foreach($this->releases as $release)
         {
             // add warning to title if detail has "security"
-            $keywords = 'security|vulnerability|CSRF|XSS';
+            $keywords = 'safe|security|vulnerability|CSRF|XSS';
             if(preg_match("/($keywords)/i", $release->content))
             {
                 $release->title .= ' (Security update)';
