@@ -15,6 +15,7 @@ Features:
 * Accurate release date (based on Subversion commits)
 * Link to Subversion commit list between releases
 * Highlighted security updates
+* Semantic Versioning syntax
 * Support for (less accurate) changelog of proprietary plugins:
   * Gravity Forms
   * Slider Revolution
@@ -33,6 +34,8 @@ Just place the code on any web server that supports PHP and run `composer update
 
 Then, add to your favorite feed reader:
 
-    http://your/web/server/wordpress-plugin-feed/index.php?plugin=PLUGIN
+    http://your/web/server/wordpress-plugin-feed/index.php?plugin=PLUGIN&stability=any
 
 Replace *PLUGIN* with the name of the plugin you want to track, the same as WordPress uses in plugin URL (like *better-wp-security* for [iThemes Security](https://wordpress.org/plugins/better-wp-security)).
+
+The *stability* parameter (options: any, stable, alpha, beta, rc) filters the release list using [Semantic Versioning](http://semver.org/). Options can be combined separated by commas (stable,rc).

@@ -55,12 +55,6 @@ class BuddyPressFeed extends WordPressPluginFeed
                     continue;
                 }
                 
-                // skip betas and release candidates
-                if(preg_match('/(beta|candidate)/i', $entry->getTitle()))
-                {
-                    continue;
-                }
-
                 // convert release title to version
                 $version = $this->parseVersion($entry->getTitle());
                 
@@ -72,6 +66,7 @@ class BuddyPressFeed extends WordPressPluginFeed
                 $release->link = $entry->getLink();
                 $release->title = "{$this->title} $version";
                 $release->description = $entry->getDescription();
+                $release->stability = $this->parseStability($entry->getTitle());
                 $release->created = Carbon::createFromTimestamp($created);
                 $release->content = $entry->getContent();
 

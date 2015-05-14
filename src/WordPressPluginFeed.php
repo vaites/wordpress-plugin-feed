@@ -36,6 +36,13 @@ class WordPressPluginFeed
     protected $plugin = null;
     
     /**
+     * Stability filter
+     *
+     * @var string
+     */
+    protected $stability = 'stable';
+    
+    /**
      * Plugin title
      *
      * @var string
@@ -132,17 +139,28 @@ class WordPressPluginFeed
      * Load plugin data
      * 
      * @param   string  $plugin
+     * @param   string  $stability
      */
-    public function __construct($plugin) 
+    public function __construct($plugin, $stability) 
     {
         set_error_handler([$this, 'error']);
 
+        $this->plugin = $plugin;
+        
         // feed link
         $host = filter_input(INPUT_SERVER, 'HTTP_HOST');
         $request = filter_input(INPUT_SERVER, 'REQUEST_URI');
         $this->feed_link = "http://{$host}{$request}";
         
-        $this->plugin = $plugin;
+        // stability
+        if($stability == 'any')
+        {
+            $this->stability = false;
+        }
+        else
+        {
+            $this->stability = '/(' . str_replace(',', '|', $stability) . ')/';
+        }
         
         // external link if not defined
         if(empty($this->link))
@@ -248,7 +266,6 @@ class WordPressPluginFeed
                 $tag->revision = trim($row->filter('.rev a')->first()->text());
                 $tag->description = trim($row->filter('.change')->text());
                 $tag->created = Carbon::parse($time);
-                $tag->release = false; // betas and other tags aren't releases
                 
                 // fixes to tag name
                 $tag->name = preg_replace('/^v/', '', $tag->name);
@@ -294,12 +311,12 @@ class WordPressPluginFeed
             
             // tag instance
             $tag =& $this->tags[$version];
-            $tag->release = true;
 
             // release object
             $release = new stdClass();
             $release->title = "{$this->title} $version";
             $release->description = $tag->description;
+            $release->stability = $this->parseStability($node->textContent);
             $release->created = $tag->created;
             $release->content = '';
 
@@ -332,6 +349,7 @@ class WordPressPluginFeed
                 $release = new stdClass();
                 $release->title = "{$this->title} $version";
                 $release->description = $tag->description;
+                $release->stability = $this->parseStability($node->textContent);
                 $release->created = $tag->created;
                 $release->content = "Commit message: " . $tag->description;
 
@@ -396,6 +414,39 @@ class WordPressPluginFeed
 
         return $version;
     }
+    
+    /**
+     * Parses a string containing version to extract its type (alpha, beta...)
+     * 
+     * @param   string  $string
+     * @return  strign
+     */
+    protected function parseStability($string)
+    {
+        $stability = 'stable';
+        
+        $versions = array
+        (
+            'alpha' => "/(alpha)(\s*\d+)?/i",
+            'beta' => "/(beta)(\s*\d+)?/i",
+            'rc' => "/(rc|release\s+candidate)(\s*\d+)?/i",
+        );
+        
+        foreach($versions as $version=>$regexp)
+        {
+            if(preg_match($regexp, $string, $match))
+            {
+                $stability = $version;
+                
+                if(!empty($match[2]))
+                {
+                    $stability .= '.' . trim($match[2]);
+                }
+            }
+        }
+        
+        return $stability;
+    }
 
     /**
      * Generates the feed
@@ -433,6 +484,21 @@ class WordPressPluginFeed
         
         foreach($this->releases as $release)
         {
+            // stability filter
+            if($this->stability != false)
+            {
+                if(!preg_match($this->stability, $release->stability))
+                {
+                    continue;
+                }
+            }
+            
+            // add release type
+            if($release->stability != 'stable')
+            {
+                $release->title .= '-' . $release->stability;
+            }
+            
             // add warning to title if detail has "security"
             $keywords = 'safe|security|vulnerability|CSRF|XSS';
             if(preg_match("/($keywords)/i", $release->content))

@@ -87,6 +87,7 @@ class WPMLFeed extends WordPressPluginFeed
                 $release->link = $entry->getLink();
                 $release->title = "{$this->title} $version";
                 $release->description = $entry->getDescription();
+                $release->stability = $this->parseStability($entry->getTitle());
                 $release->created = Carbon::createFromTimestamp($created);
                 $release->content = $entry->getContent();
 

@@ -80,6 +80,7 @@ class RevolutionSliderFeed extends WordPressPluginFeed
             $release->link = "{$this->sources['profile']}#{$id}";
             $release->title = "{$this->title} $version";
             $release->description = false;
+            $release->stability = $this->parseStability($node->textContent);
             $release->created = time();
             $release->content = '';
 
