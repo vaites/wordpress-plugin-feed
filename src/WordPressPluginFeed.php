@@ -170,6 +170,7 @@ class WordPressPluginFeed
         
         // Guzzle instance
         $this->http = new Client();
+        $this->http->setDefaultOption('timeout', 15);
         
         // cache instance
         $this->cache = StorageFactory::factory(
@@ -538,14 +539,9 @@ class WordPressPluginFeed
      */
     public function exception(Exception $exception)
     {
-        $this->title = 'WordPress Plugin Feed';
-        
-        $error = new stdClass();
-        $error->title = "Error " . $exception->getCode();
-        $error->link = $this->link;
-        $error->created = Carbon::now();
-        $error->content = $exception->getMessage();
-        
-        $this->releases = [$error];        
+        header('HTTP/1.1 500');
+        echo '<h1>Error ' . $exception->getCode() . '</h1>';
+        echo '<p>' . $this->plugin . ': ' . $exception->getMessage() . '</p>';
+        exit;
     }
 }
