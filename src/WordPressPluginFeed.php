@@ -22,6 +22,7 @@ class WordPressPluginFeed
      */
     public static $proprietary = 
     [
+        'all-in-one-seo-pack'           => 'AllInOneSEOPackFeed',
         'buddypress'                    => 'BuddyPressFeed',
         'gravityforms'                  => 'GravityFormsFeed',
         'revslider'                     => 'RevolutionSliderFeed',
