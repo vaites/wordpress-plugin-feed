@@ -350,7 +350,7 @@ class WordPressPluginFeed
                 $release = new stdClass();
                 $release->title = "{$this->title} $version";
                 $release->description = $tag->description;
-                $release->stability = $this->parseStability($node->textContent);
+                $release->stability = $this->parseStability($tag->name);
                 $release->created = $tag->created;
                 $release->content = "Commit message: " . $tag->description;
 
@@ -527,9 +527,14 @@ class WordPressPluginFeed
      * @param   int     $errno
      * @param   string  $errstr
      */
-    public function error($errno, $errstr)
+    public function error($errno, $errstr, $errfile, $errline, $errcontext)
     {
-        throw new Exception($errstr, $errno);
+        header('HTTP/1.1 500');
+        echo "<h1>Error $errno</h1>";
+        echo "<p><strong>Plugin:</strong> {$this->plugin}<br />";
+        echo "<strong>Message:</strong>: $errstr<br />";
+        echo "<strong>File:</strong> $errfile ($errline)</p>";
+        exit;
     }
 
     /**
@@ -539,9 +544,13 @@ class WordPressPluginFeed
      */
     public function exception(Exception $exception)
     {
-        header('HTTP/1.1 500');
-        echo '<h1>Error ' . $exception->getCode() . '</h1>';
-        echo '<p>' . $this->plugin . ': ' . $exception->getMessage() . '</p>';
-        exit;
+        $this->error
+        (
+            $exception->getCode(), 
+            $exception->getMessage(), 
+            $exception->getFile(), 
+            $exception->getLine(), 
+            $exception->getTrace()
+        );
     }
 }
