@@ -455,6 +455,44 @@ class WordPressPluginFeed
         
         return $stability;
     }
+    
+    /**
+     * Filter a release adding type, warnings and other stuff
+     * 
+     * @param   stdClass    $release
+     * @return  stdClass
+     */
+    public function filterRelease($release)
+    {
+        // add release type
+        if($release->stability != 'stable')
+        {
+            $release->title .= '-' . $release->stability;
+        }
+        
+        // add warning to title if detail has "security"
+        $keywords = 'safe|security|vulnerability|CSRF|SQLi|XSS';
+        if(preg_match("/($keywords)/i", $release->content, $match))
+        {
+            $release->title .= ' (Security update)';
+            
+            $match = array_unique($match);
+            foreach($match as $keyword)
+            {
+                $release->content = preg_replace
+                (
+                    "/$keyword/i", 
+                    '<strong><code>' . $keyword . '</code></strong>', 
+                    $release->content
+                );
+            }
+        }        
+        
+        // purify HTML
+        $release->content = $this->purifier->purify($release->content);
+
+        return $release;
+    }
 
     /**
      * Generates the feed
@@ -501,25 +539,16 @@ class WordPressPluginFeed
                 }
             }
             
-            // add release type
-            if($release->stability != 'stable')
-            {
-                $release->title .= '-' . $release->stability;
-            }
+            // filters
+            $release = $this->filterRelease($release);
             
-            // add warning to title if detail has "security"
-            $keywords = 'safe|security|vulnerability|CSRF|XSS';
-            if(preg_match("/($keywords)/i", $release->content))
-            {
-                $release->title .= ' (Security update)';
-            }
-            
+            // feed entry
             $entry = $feed->createEntry();
             $entry->setTitle($release->title);
             $entry->setLink($release->link);
             $entry->setDateModified($release->created->timestamp);
             $entry->setDateCreated($release->created->timestamp);
-            $entry->setContent($this->purifier->purify($release->content));
+            $entry->setContent($release->content);
             
             $feed->addEntry($entry);
         }

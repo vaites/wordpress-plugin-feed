@@ -1,7 +1,4 @@
 {
-    "autoload": {
-        "psr-0": { "": "src/" }
-    },
     "require": {
         "ezyang/htmlpurifier": "~4.6",
         "nesbot/carbon": "~1.18",
