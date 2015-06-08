@@ -17,11 +17,13 @@ Features:
 * Highlighted security updates
 * Semantic Versioning syntax
 * Support for (less accurate) changelog of proprietary plugins:
+  * All-In-One SEO Pack
+  * BuddyPress
   * Gravity Forms
   * Slider Revolution
   * The WordPress Multilingual Plugin (WPML)
 
-Because this tool parses HTML of different websites, result cannot be 100% accurate and can fail after a change in the code. So pull requests are welcome...
+Because this tool parses HTML of different websites, result cannot be 100% accurate and can fail after a change in the code. So issues and pull requests are welcome...
 
 Usage
 -----
