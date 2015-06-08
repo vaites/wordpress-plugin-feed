@@ -1,10 +1,10 @@
 <?php
 
 use Carbon\Carbon;
-use GuzzleHttp\Client;
 use Symfony\Component\DomCrawler\Crawler;
 use Zend\Cache\StorageFactory;
 use Zend\Feed\Writer\Feed;
+use Zend\Http\Client;
 
 /**
  * Main class that parses WordPress.org plugin profiles
@@ -118,7 +118,7 @@ class WordPressPluginFeed
     /**
      * HTTP client instance
      *
-     * @var \GuzzleHttp\Client
+     * @var \Zend\Http\Client
      */
     protected $http = null;
     
@@ -142,19 +142,23 @@ class WordPressPluginFeed
      * @param   string  $plugin
      * @param   string  $stability
      */
-    public function __construct($plugin, $stability) 
+    public function __construct($plugin, $stability = null) 
     {
-        set_error_handler([$this, 'error']);
-
         $this->plugin = $plugin;
         
+        // error handler only for web calls
+        if(php_sapi_name() != "cli") 
+        {
+            set_error_handler([$this, 'error']);
+        }
+
         // feed link
         $host = filter_input(INPUT_SERVER, 'HTTP_HOST');
         $request = filter_input(INPUT_SERVER, 'REQUEST_URI');
         $this->feed_link = "http://{$host}{$request}";
         
         // stability
-        if($stability == 'any')
+        if(empty($stability) || $stability == 'any')
         {
             $this->stability = false;
         }
@@ -171,7 +175,7 @@ class WordPressPluginFeed
         
         // Guzzle instance
         $this->http = new Client();
-        $this->http->setDefaultOption('timeout', 15);
+        $this->http->setOptions(array('timeout' => 30));
         
         // cache instance
         $this->cache = StorageFactory::factory(
@@ -213,6 +217,7 @@ class WordPressPluginFeed
     /**
      * Get HTML code from changelog tab (results are cached)
      * 
+     * @link    http://framework.zend.com/manual/2.4/en/modules/zend.http.client.html
      * @param   string  $type   profile, tags or image
      * @param   strign  $append query string or other parameters
      * @return  string
@@ -223,18 +228,19 @@ class WordPressPluginFeed
         
         if(isset($this->sources[$type]) && $this->sources[$type])
         {
-            $url = $this->sources[$type] . $append;
-            $source = sprintf($url, $this->plugin);
+            $uri = $this->sources[$type] . $append;
+            $source = sprintf($uri, $this->plugin);
             $key = sha1($source);
 
             $code = $this->cache->getItem($key, $success);
             if($success == false)
             {
-                $response = $this->http->get($source);
-                if($response->getBody())
+                $response = $this->http->setUri($source)->send();
+                
+                if($response->isSuccess())
                 {
-                    $code = $response->getBody()->getContents();
-
+                    $code = $response->getBody();
+                    
                     $this->cache->setItem($key, $code);
                 }
             }        
@@ -523,6 +529,16 @@ class WordPressPluginFeed
     }
     
     /**
+     * Get the parsed releases
+     * 
+     * @return  array
+     */
+    public function getReleases()
+    {
+        return $this->releases;
+    }
+    
+    /**
      * Error handler
      * 
      * @param   int     $errno
@@ -533,7 +549,7 @@ class WordPressPluginFeed
         header('HTTP/1.1 500');
         echo "<h1>Error $errno</h1>";
         echo "<p><strong>Plugin:</strong> {$this->plugin}<br />";
-        echo "<strong>Message:</strong>: $errstr<br />";
+        echo "<strong>Message:</strong> $errstr<br />";
         echo "<strong>File:</strong> $errfile ($errline)</p>";
         exit;
     }
