@@ -173,9 +173,13 @@ class WordPressPluginFeed
             $this->link = "https://wordpress.org/plugins/$plugin/";
         }
         
-        // Guzzle instance
+        // Zend HTTP Client instance
         $this->http = new Client();
-        $this->http->setOptions(array('timeout' => 30));
+        $this->http->setOptions(array
+        (
+	    	'adapter' => 'Zend\Http\Client\Adapter\Curl',
+            'timeout' => 30
+        ));
         
         // cache instance
         $this->cache = StorageFactory::factory(
