@@ -197,7 +197,10 @@ class WordPressPluginFeed
         ]);
         
         // HTMLPurifier instance
-        $this->purifier = new HTMLPurifier(HTMLPurifier_Config::createDefault());
+        $this->purifier = new HTMLPurifier(HTMLPurifier_Config::create(array
+        (
+            'Attr.AllowedFrameTargets' => array('_blank')
+        )));
         
         // load releases after class config
         try
@@ -468,25 +471,44 @@ class WordPressPluginFeed
      */
     public function filterRelease($release)
     {
+        $highlight = array();
+        
         // add release type
         if($release->stability != 'stable')
         {
             $release->title .= '-' . $release->stability;
         }
         
-        // add warning to title if detail has "security"
+        // detect security keywordks
         $keywords = 'safe|security|vulnerability|CSRF|SQLi|XSS';
-        if(preg_match("/($keywords)/i", $release->content, $match))
+        if(preg_match_all("/($keywords)/i", $release->content, $match))
+        {
+            foreach(array_unique($match[1]) as $keyword)
+            {
+                $highlight[$keyword] = $keyword;
+            }
+        }
+        
+        // detect Common Vulnerabilities and Exposures
+        if(preg_match('/CVE-(\d{4})-(\d{4})/i', $release->content, $match))
+        {
+            $link = '<a href="http://www.cvedetails.com/cve/%s/" '
+                  . 'target="_blank">%s</a>';
+            
+            $highlight[$match[0]] = sprintf($link, $match[0], $match[0]);
+        }
+        
+        // add warning to title and highlight security keywords
+        if(!empty($highlight))
         {
             $release->title .= ' (Security update)';
             
-            $match = array_unique($match);
-            foreach($match as $keyword)
+            foreach($highlight as $search=>$replace)
             {
                 $release->content = preg_replace
                 (
-                    "/$keyword/i", 
-                    '<strong><code>' . $keyword . '</code></strong>', 
+                    "/$search/i", 
+                    '<strong><code>' . $replace . '</code></strong>', 
                     $release->content
                 );
             }

@@ -15,6 +15,7 @@ Features:
 * Accurate release date (based on Subversion commits)
 * Link to Subversion commit list between releases
 * Highlighted security updates
+  * Link of known vulnerabilities on [CVE Details](http://www.cvedetails.com)
 * Semantic Versioning syntax
 * Support for (less accurate) changelog of proprietary plugins:
   * All-In-One SEO Pack
