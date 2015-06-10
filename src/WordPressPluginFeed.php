@@ -509,7 +509,7 @@ class WordPressPluginFeed
         // add warning to title and highlight security keywords
         if(!empty($highlight))
         {
-            $release->title .= ' (Security update)';
+            $release->title .= ' (Security release)';
             
             foreach($highlight as $search=>$replace)
             {
