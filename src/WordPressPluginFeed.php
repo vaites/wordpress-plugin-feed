@@ -515,7 +515,7 @@ class WordPressPluginFeed
             {
                 $release->content = preg_replace
                 (
-                    "/$search/i", 
+                    "/$search/", 
                     '<strong><code>' . $replace . '</code></strong>', 
                     $release->content
                 );
