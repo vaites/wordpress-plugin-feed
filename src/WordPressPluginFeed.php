@@ -488,7 +488,7 @@ class WordPressPluginFeed
         }
         
         // detect security keywordks
-        $keywords = 'safe|security|vulnerability|CSRF|SQLi|XSS';
+        $keywords = 'safe|trusted|security|vulnerability|CSRF|SQLi|XSS';
         if(preg_match_all("/($keywords)/i", $release->content, $match))
         {
             foreach(array_unique($match[1]) as $keyword)
@@ -497,6 +497,9 @@ class WordPressPluginFeed
             }
         }
         
+        // purify HTML
+        $release->content = $this->purifier->purify($release->content);
+
         // detect Common Vulnerabilities and Exposures
         if(preg_match('/CVE-(\d{4})-(\d{4})/i', $release->content, $match))
         {
@@ -516,15 +519,12 @@ class WordPressPluginFeed
                 $release->content = preg_replace
                 (
                     "/$search/", 
-                    '<strong><code>' . $replace . '</code></strong>', 
+                    '<strong style="color:red">' . $replace . '</strong>', 
                     $release->content
                 );
             }
         }        
         
-        // purify HTML
-        $release->content = $this->purifier->purify($release->content);
-
         return $release;
     }
 
