@@ -582,7 +582,7 @@ class WordPressPluginFeed
             $entry->setLink($release->link);
             $entry->setDateModified($release->created->timestamp);
             $entry->setDateCreated($release->created->timestamp);
-            $entry->setContent($release->content);
+            $entry->setDescription($release->content);
             
             $feed->addEntry($entry);
         }
