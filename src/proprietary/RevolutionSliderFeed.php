@@ -51,14 +51,12 @@ class RevolutionSliderFeed extends WordPressPluginFeed
      */    
     protected function loadReleases()
     {
-        // profile 
+        // profile
         $crawler = new Crawler($this->fetch('profile'));
         
         // need to parse changelog block
-        $changelog = $crawler->filter('img')->reduce(function($node, $index)
-        {
-            return (bool) preg_match('/tpbanner_updates/', $node->attr('src'));
-        })->parents()->nextAll();
+        $changelog = $crawler->filter('#item-description__ressources-credits')
+                    ->nextAll();
         
         // each h3 is a release
         foreach($changelog->filter('h3') as $index=>$node)
