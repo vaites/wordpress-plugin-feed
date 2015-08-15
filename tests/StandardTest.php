@@ -83,4 +83,59 @@ class StandardTest extends PHPUnit_Framework_TestCase
 
         $this->assertGreaterThan(0, count($releases));
     }
+
+    /**
+     * Standard plugin 8: Yoast SEO
+     */
+    public function testYoastSEO()
+    {
+        $feed = new WordPressPluginFeed('wordpress-seo');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Standard plugin 9: W3 Total Cache
+     */
+    public function testW3TotalCache()
+    {
+        $feed = new WordPressPluginFeed('w3-total-cache');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Standard plugin 10: UpdraftPlus
+     */
+    public function testUpdraftPlus()
+    {
+        $feed = new WordPressPluginFeed('updraftplus');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Standard plugin 11: Shortcodes Ultimate
+     */
+    public function testShortcodesUltimate()
+    {
+        $feed = new WordPressPluginFeed('shortcodes-ultimate');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Standard plugin 12: MailChimp for WordPress
+     */
+    public function testMailChimpForWordPress()
+    {
+        $feed = new WordPressPluginFeed('mailchimp-for-wp');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
 }
