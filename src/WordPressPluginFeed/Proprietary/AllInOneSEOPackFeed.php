@@ -1,7 +1,11 @@
-<?php
+<?php namespace WordPressPluginFeed\Proprietary;
+
+use stdClass;
 
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
+
+use WordPressPluginFeed\WordPressPluginFeed;
 
 /**
  * All in One SEO Pack custom parser

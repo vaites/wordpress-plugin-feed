@@ -1,10 +1,14 @@
-<?php
+<?php namespace WordPressPluginFeed\Proprietary;
+
+use stdClass;
 
 use Carbon\Carbon;
 use Zend\Feed\Reader\Reader;
 
+use WordPressPluginFeed\WordPressPluginFeed;
+
 /**
- * Slider Revolution custom parser
+ * The WordPress Multilingual Plugin custom parser
  *
  * @author David Martínez <contacto@davidmartinez.net>
  */

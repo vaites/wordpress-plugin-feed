@@ -1,29 +1,45 @@
-<?php
+<?php namespace WordPressPluginFeed\Proprietary;
+
+use stdClass;
 
 use Carbon\Carbon;
 use Zend\Feed\Reader\Reader;
 
+use WordPressPluginFeed\WordPressPluginFeed;
+
 /**
- * BuddyPress custom parser
+ * Gravity Forms custom parser
  *
  * @author David Martínez <contacto@davidmartinez.net>
  */
-class BuddyPressFeed extends WordPressPluginFeed
+class GravityFormsFeed extends WordPressPluginFeed
 {
     /**
      * Plugin title
      *
      * @var string
      */
-    protected $title = 'BuddyPress';
+    protected $title = 'Gravity Forms';
     
     /**
      * Plugin short description
      *
      * @var string
      */
-    protected $description = 'BuddyPress helps you run any kind of social network on your WordPress, with member profiles, activity streams, user groups, messaging, and more.';
+    protected $description = 'Gravity Forms for WordPress is a full featured contact form plugin that features a drag and drop interface, advanced notification routing, lead capture, conditional logic fields, multi-page forms, pricing calculations and the ability to create posts from external forms.';
 
+    /**
+     * Plugin image
+     * 
+     * @var string
+     */
+    protected $image = 
+    [
+        'uri' => 'http://gravityforms.s3.amazonaws.com/logos/gravityforms_logo_100.png',
+        'height' => 100,
+        'width' => 116
+    ];
+    
     /**
      * Source URLs 
      *
@@ -31,7 +47,7 @@ class BuddyPressFeed extends WordPressPluginFeed
      */    
     protected $sources = 
     [
-        'profile'   => 'https://buddypress.org/blog/feed/atom/',
+        'profile'   => 'http://www.gravityhelp.com/feed/atom/',
     ];
     
     /**
@@ -48,13 +64,13 @@ class BuddyPressFeed extends WordPressPluginFeed
             // each entry can be a release
             foreach($changelog as $entry)
             {
-                // BuddyPress releases starts with "BuddyPress"
-                $regexp = '/^BuddyPress\s+(\d|\.)/i';
+                // Gravity Forms releases starts with "Gravity Forms"
+                $regexp = '/^Gravity Forms v(\d|\.)+ Released/i';
                 if(!preg_match($regexp, $entry->getTitle()))
                 {
                     continue;
                 }
-                
+
                 // convert release title to version
                 $version = $this->parseVersion($entry->getTitle());
                 

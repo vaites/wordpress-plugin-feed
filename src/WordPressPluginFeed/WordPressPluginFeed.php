@@ -1,4 +1,9 @@
-<?php
+<?php namespace WordPressPluginFeed;
+
+use Exception;
+use HTMLPurifier;
+use HTMLPurifier_Config;
+use stdClass;
 
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
@@ -11,7 +16,7 @@ use Zend\Http\Client;
  * 
  * @author  David Martínez <contacto@davidmartinez.net>
  */
-class WordPressPluginFeed 
+class WordPressPluginFeed
 {
     /**
      * List of proprietary plugins with specific update log:
@@ -20,13 +25,13 @@ class WordPressPluginFeed
      *
      * @var array
      */
-    public static $proprietary = 
+    protected static $aliases =
     [
-        'all-in-one-seo-pack'           => 'AllInOneSEOPackFeed',
-        'buddypress'                    => 'BuddyPressFeed',
-        'gravityforms'                  => 'GravityFormsFeed',
-        'revslider'                     => 'RevolutionSliderFeed',
-        'sitepress-multilingual-cms'    => 'WPMLFeed'
+        'all-in-one-seo-pack'           => 'Proprietary\\AllInOneSEOPackFeed',
+        'buddypress'                    => 'OpenSource\\BuddyPressFeed',
+        'gravityforms'                  => 'Proprietary\\GravityFormsFeed',
+        'revslider'                     => 'Proprietary\\RevolutionSliderFeed',
+        'sitepress-multilingual-cms'    => 'Proprietary\\WPMLFeed'
     ];
     
     /**
@@ -68,6 +73,13 @@ class WordPressPluginFeed
         'height' => 128,
         'width' => 128        
     ];
+
+    /**
+     * CLI call
+     *
+     * @var bool
+     */
+    protected $cli = false;
 
     /**
      * Plugin URL at WordPress.org
@@ -149,6 +161,7 @@ class WordPressPluginFeed
         // error handler only for web calls
         if(php_sapi_name() != "cli") 
         {
+            $this->cli = true;
             set_error_handler([$this, 'error']);
         }
 
@@ -195,7 +208,7 @@ class WordPressPluginFeed
             'adapter' => [
                 'name' => 'filesystem', 
                 'options' => [
-                    'cache_dir' => dirname(dirname(__FILE__)) . '/cache',
+                    'cache_dir' => dirname(dirname(__DIR__)) . '/cache',
                     'ttl' => 3600
                 ]
             ],
@@ -209,7 +222,7 @@ class WordPressPluginFeed
         (
             'Attr.AllowedFrameTargets' => array('_blank')
         )));
-        
+
         // load releases after class config
         try
         {
@@ -227,6 +240,27 @@ class WordPressPluginFeed
     public function __destruct() 
     {
         $this->cache->clearExpired();
+    }
+
+    /**
+     * Get an instance based on plugin name
+     *
+     * @param   string  $plugin
+     * @param   string  $stability
+     * @return  \WordPressPluginFeed\WordPressPluginFeed
+     */
+    public static function getInstance($plugin, $stability = null)
+    {
+        if(isset(self::$aliases[$plugin]))
+        {
+            $class = 'WordPressPluginFeed\\' . self::$aliases[$plugin];
+        }
+        else
+        {
+            $class = 'WordPressPluginFeed\\WordPressPluginFeed';
+        }
+
+        return new $class($plugin, $stability);
     }
     
     /**
@@ -609,12 +643,15 @@ class WordPressPluginFeed
      */
     public function error($errno, $errstr, $errfile, $errline, $errcontext)
     {
-        header('HTTP/1.1 500');
-        echo "<h1>Error $errno</h1>";
-        echo "<p><strong>Plugin:</strong> {$this->plugin}<br />";
-        echo "<strong>Message:</strong> $errstr<br />";
-        echo "<strong>File:</strong> $errfile ($errline)</p>";
-        exit;
+        if($this->cli === true)
+        {
+            header('HTTP/1.1 500');
+            echo "<h1>Error $errno</h1>";
+            echo "<p><strong>Plugin:</strong> {$this->plugin}<br />";
+            echo "<strong>Message:</strong> $errstr<br />";
+            echo "<strong>File:</strong> $errfile ($errline)</p>";
+            exit;
+        }
     }
 
     /**

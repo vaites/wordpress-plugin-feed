@@ -1,4 +1,9 @@
 {
+    "autoload": {
+        "psr-0": {
+            "WordPressPluginFeed": "src/"
+        }
+    },
     "require": {
         "ezyang/htmlpurifier": "~4.6",
         "nesbot/carbon": "~1.18",
@@ -10,6 +15,6 @@
         "zendframework/zend-servicemanager": "~2.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.7"
+        "phpunit/phpunit": "~4.8"
     }
 }

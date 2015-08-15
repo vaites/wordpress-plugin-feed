@@ -1,7 +1,11 @@
-<?php
+<?php namespace WordPressPluginFeed\Proprietary;
+
+use stdClass;
 
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
+
+use WordPressPluginFeed\WordPressPluginFeed;
 
 /**
  * Slider Revolution custom parser
@@ -70,7 +74,7 @@ class RevolutionSliderFeed extends WordPressPluginFeed
                 continue;
             }
             
-            # get the ID to build link
+            // get the ID to build link
             $id = $changelog->filter('h3')->eq($index)->attr('id');
             
             // release object
