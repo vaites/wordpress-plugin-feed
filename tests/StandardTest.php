@@ -138,4 +138,92 @@ class StandardTest extends PHPUnit_Framework_TestCase
 
         $this->assertGreaterThan(0, count($releases));
     }
+
+    /**
+     * Standard plugin 13: User Role Editor
+     */
+    public function testUserRoleEditor()
+    {
+        $feed = new WordPressPluginFeed('user-role-editor');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Standard plugin 14: MailPoet Newsletters
+     */
+    public function testMailPoetNewsletters()
+    {
+        $feed = new WordPressPluginFeed('wysija-newsletters');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Standard plugin 15: SEO Ultimate
+     */
+    public function testSEOUltimate()
+    {
+        $feed = new WordPressPluginFeed('seo-ultimate');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Standard plugin 16: Ninja Forms
+     */
+    public function testNinjaForms()
+    {
+        $feed = new WordPressPluginFeed('ninja-forms');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Standard plugin 17: Sucuri Security
+     */
+    public function testSucuriSecurity()
+    {
+        $feed = new WordPressPluginFeed('sucuri-scanner');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Standard plugin 18: PHP Code Widget
+     */
+    public function testPHPCodeWidget()
+    {
+        $feed = new WordPressPluginFeed('php-code-widget');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Standard plugin 19: Newsletter
+     */
+    public function testNewsletter()
+    {
+        $feed = new WordPressPluginFeed('newsletter');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Standard plugin 20: Cookie Law Info
+     */
+    public function testCookieLawInfo()
+    {
+        $feed = new WordPressPluginFeed('cookie-law-info');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
 }
