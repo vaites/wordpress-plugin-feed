@@ -25,14 +25,25 @@ class WordPressPluginFeed
      *
      * @var array
      */
-    protected static $aliases =
-    [
+    protected static $aliases = array
+    (
         'all-in-one-seo-pack'           => 'Proprietary\\AllInOneSEOPackFeed',
         'buddypress'                    => 'OpenSource\\BuddyPressFeed',
         'gravityforms'                  => 'Proprietary\\GravityFormsFeed',
         'revslider'                     => 'Proprietary\\RevolutionSliderFeed',
         'sitepress-multilingual-cms'    => 'Proprietary\\WPMLFeed'
-    ];
+    );
+
+    /**
+     * Keywords that activate "Security Release" message
+     *
+     * @var array
+     */
+    protected static $keywords = array
+    (
+        'safe', 'trusted', 'security', 'vulnerability', 'leak', 'attack',
+        'CSRF', 'SQLi', 'XSS', 'LFI', 'RFI'
+    );
     
     /**
      * Plugin name
@@ -520,10 +531,14 @@ class WordPressPluginFeed
         {
             $release->title .= '-' . $release->stability;
         }
-        
-        // detect security keywordks
-        $keywords = 'safe|trusted|security|vulnerability|CSRF|SQLi|XSS';
-        if(preg_match_all("/($keywords)/i", $release->content, $match))
+
+        // purify HTML
+        $release->content = $this->purifier->purify($release->content);
+
+        // detect security keywords
+        $content = strip_tags($release->content);
+        $keywords = implode('|', self::$keywords);
+        if(preg_match_all("/\W($keywords)\W/i", $release->content, $match))
         {
             foreach(array_unique($match[1]) as $keyword)
             {
@@ -531,9 +546,6 @@ class WordPressPluginFeed
             }
         }
         
-        // purify HTML
-        $release->content = $this->purifier->purify($release->content);
-
         // detect Common Vulnerabilities and Exposures
         if(preg_match('/CVE-(\d{4})-(\d{4})/i', $release->content, $match))
         {
