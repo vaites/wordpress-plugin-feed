@@ -32,7 +32,9 @@ class WordPressPluginFeed
         'gravityforms'                  => 'Proprietary\\GravityFormsFeed',
         'revslider'                     => 'Proprietary\\RevolutionSliderFeed',
         'js-composer'                   => 'Proprietary\\VisualComposerFeed',
-        'sitepress-multilingual-cms'    => 'Proprietary\\WPMLFeed'
+        'sitepress-multilingual-cms'    => 'Proprietary\\WPMLFeed',
+        'ubermenu'                      => 'Proprietary\\UberMenuFeed',
+        'ultimate-vc-addons'            => 'Proprietary\\UltimateVCAddonsFeed'
     );
 
     /**
@@ -79,12 +81,12 @@ class WordPressPluginFeed
      * 
      * @var array
      */
-    protected $image = 
-    [
+    protected $image = array
+    (
         'uri' => "http://ps.w.org/%s/assets/icon-128x128.png",
         'height' => 128,
         'width' => 128        
-    ];
+    );
 
     /**
      * CLI call
@@ -133,11 +135,11 @@ class WordPressPluginFeed
      *
      * @var array
      */
-    protected $sources = 
-    [
+    protected $sources = array
+    (
         'profile'   => 'https://wordpress.org/plugins/%s/changelog/',
         'tags'      => 'https://plugins.trac.wordpress.org/browser/%s/tags?order=date&desc=1'
-    ];
+    );
 
     /**
      * HTTP client instance
@@ -174,7 +176,7 @@ class WordPressPluginFeed
         if(php_sapi_name() != "cli") 
         {
             $this->cli = true;
-            set_error_handler([$this, 'error']);
+            set_error_handler(array($this, 'error'));
         }
 
         // feed link
@@ -215,19 +217,22 @@ class WordPressPluginFeed
         }
         
         // cache instance
-        $this->cache = StorageFactory::factory(
-        [
-            'adapter' => [
+        $this->cache = StorageFactory::factory(array
+        (
+            'adapter' => array
+            (
                 'name' => 'filesystem', 
-                'options' => [
+                'options' => array
+                (
                     'cache_dir' => dirname(dirname(__DIR__)) . '/cache',
                     'ttl' => 3600
-                ]
-            ],
-            'plugins' => [
-                'exception_handler' => ['throw_exceptions' => false]
-            ]
-        ]);
+                )
+            ),
+            'plugins' => array
+            (
+                'exception_handler' => array('throw_exceptions' => false)
+            )
+        ));
         
         // HTMLPurifier instance
         $this->purifier = new HTMLPurifier(HTMLPurifier_Config::create(array
@@ -539,7 +544,7 @@ class WordPressPluginFeed
         // detect security keywords
         $content = strip_tags($release->content);
         $keywords = implode('|', self::$keywords);
-        if(preg_match_all("/\W($keywords)\W/i", $release->content, $match))
+        if(preg_match_all("/\W($keywords)\W/i", $content, $match))
         {
             foreach(array_unique($match[1]) as $keyword)
             {
@@ -599,14 +604,14 @@ class WordPressPluginFeed
         
         if(!empty($this->image['uri']))
         {
-            $feed->setImage(
-            [
+            $feed->setImage(array
+            (
                 'height' => $this->image['height'],
                 'link' => $feed->getLink(),
                 'title' => $this->title,
                 'uri' => sprintf($this->image['uri'], $this->plugin),
                 'width' => $this->image['width']
-            ]);
+            ));
         }
         
         foreach($this->releases as $release)

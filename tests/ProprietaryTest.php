@@ -3,6 +3,8 @@
 use WordPressPluginFeed\Proprietary\AllInOneSEOPackFeed;
 use WordPressPluginFeed\Proprietary\GravityFormsFeed;
 use WordPressPluginFeed\Proprietary\RevolutionSliderFeed;
+use WordPressPluginFeed\Proprietary\UberMenuFeed;
+use WordPressPluginFeed\Proprietary\UltimateVCAddonsFeed;
 use WordPressPluginFeed\Proprietary\VisualComposerFeed;
 use WordPressPluginFeed\Proprietary\WPMLFeed;
 
@@ -60,7 +62,29 @@ class ProprietaryTest extends PHPUnit_Framework_TestCase
      */
     public function testVisualComposer()
     {
-        $feed = new WPMLFeed('js-composer');
+        $feed = new VisualComposerFeed('js-composer');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Proprietary plugin 6: Ultimate Addons for Visual Composer
+     */
+    public function testUltimateVCAddons()
+    {
+        $feed = new UltimateVCAddonsFeed('ultimate-vc-addons');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Proprietary plugin 7: UberMenu
+     */
+    public function testUberMenu()
+    {
+        $feed = new UberMenuFeed('ubermenu');
         $releases = $feed->getReleases();
 
         $this->assertGreaterThan(0, count($releases));

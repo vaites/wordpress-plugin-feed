@@ -33,11 +33,11 @@ class AllInOneSEOPackFeed extends WordPressPluginFeed
      *
      * @var array
      */    
-    protected $sources = 
-    [
+    protected $sources = array
+    (
         'profile'   => 'http://semperfiwebdesign.com/blog/all-in-one-seo-pack/all-in-one-seo-pack-release-history/',
         'tags'      => 'https://plugins.trac.wordpress.org/browser/%s/tags?order=date&desc=1'
-    ];
+    );
     
     /**
      * Parse public releases using changelog of developer web

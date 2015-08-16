@@ -33,10 +33,10 @@ class BuddyPressFeed extends WordPressPluginFeed
      *
      * @var array
      */    
-    protected $sources = 
-    [
+    protected $sources = array
+    (
         'profile'   => 'https://buddypress.org/blog/feed/atom/',
-    ];
+    );
     
     /**
      * Parse public releases using feed from official blog

@@ -33,22 +33,22 @@ class GravityFormsFeed extends WordPressPluginFeed
      * 
      * @var string
      */
-    protected $image = 
-    [
+    protected $image = array
+    (
         'uri' => 'http://gravityforms.s3.amazonaws.com/logos/gravityforms_logo_100.png',
         'height' => 100,
         'width' => 116
-    ];
+    );
     
     /**
      * Source URLs 
      *
      * @var array
      */    
-    protected $sources = 
-    [
+    protected $sources = array
+    (
         'profile'   => 'http://www.gravityhelp.com/feed/atom/',
-    ];
+    );
     
     /**
      * Parse public releases using feed from official blog

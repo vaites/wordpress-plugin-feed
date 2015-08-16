@@ -8,25 +8,25 @@ use Symfony\Component\DomCrawler\Crawler;
 use WordPressPluginFeed\WordPressPluginFeed;
 
 /**
- * Visual Composer custom parser
+ * Ultimate Addons for Visual Composer custom parser
  *
  * @author David Martínez <contacto@davidmartinez.net>
  */
-class VisualComposerFeed extends WordPressPluginFeed
+class UltimateVCAddonsFeed extends WordPressPluginFeed
 {
     /**
      * Plugin title
      *
      * @var string
      */
-    protected $title = 'Visual composer';
+    protected $title = 'Ultimate Addons for Visual Composer';
     
     /**
      * Plugin short description
      *
      * @var string
      */
-    protected $description = 'Visual Composer for WordPress is drag and drop frontend and backend page builder plugin that will save you tons of time working on the site content.';
+    protected $description = 'This plugin adds several premium elements in your Visual Composer on top of the built-in ones given by WPBakery.';
     
     /**
      * Plugin image
@@ -35,7 +35,7 @@ class VisualComposerFeed extends WordPressPluginFeed
      */
     protected $image = array
     (
-        'uri' => 'https://thumb-cc.s3.envato.com/files/140080840/th-4.6.png',
+        'uri' => 'https://thumb-cc.s3.envato.com/files/86787603/80x80.png',
         'height' => 80,
         'width' => 80
     );
@@ -47,7 +47,7 @@ class VisualComposerFeed extends WordPressPluginFeed
      */    
     protected $sources = array
     (
-        'profile'   => 'http://codecanyon.net/item/visual-composer-page-builder-for-wordpress/242431',
+        'profile'   => 'http://codecanyon.net/item/ultimate-addons-for-visual-composer/6892199',
     );
     
     /**
@@ -59,18 +59,16 @@ class VisualComposerFeed extends WordPressPluginFeed
         $crawler = new Crawler($this->fetch('profile'));
         
         // need to parse changelog block
-        $changelog = $crawler->filter('#item-description__updates')
-                    ->nextAll()->filter('pre')->eq(0);
+        $changelog = $crawler->filter('#item-description__changelog')
+                    ->nextAll();
 
-        // each release has a title with date and version followed by changes
-        foreach(explode("\n\n", $changelog->text()) as $block)
+        // each p is a release
+        foreach($changelog->filter('p') as $index=>$node)
         {
-            $block = explode("\n", $block);
-
             // title must have pubdate and version
-            $title = array_shift($block);
-            $regexp = '/(\d+)\.(\d+)\.(\d+) - ver (.+)/i';
-            if(!preg_match($regexp, $title, $match) || empty($block))
+            $title = $node->textContent;
+            $regexp = '/(\w+)\s+(\d+),\s+(\d+).+Version\s+(.+)/i';
+            if(!preg_match($regexp, $title, $match))
             {
                 continue;
             }
@@ -79,7 +77,7 @@ class VisualComposerFeed extends WordPressPluginFeed
             $version = $this->parseVersion($match[4]);
 
             // get de ID to build the link
-            $id = 'item-description__updates';
+            $id = 'item-description__changelog';
 
             // release object
             $release = new stdClass();
@@ -87,10 +85,25 @@ class VisualComposerFeed extends WordPressPluginFeed
             $release->title = "{$this->title} $version";
             $release->description = false;
             $release->stability = $this->parseStability($version);
-            $release->content = implode("<br />\n", $block);
+            $release->content = '';
+
+            // pre that follows p are the details
+            $details = $changelog->filter('p')->eq($index)->nextAll();
+            foreach($details as $index=>$node)
+            {
+                if($node->tagName == 'pre')
+                {
+                    $text = $details->eq($index)->text();
+                    $release->content .= str_replace("\n", "<br />\n", $text);
+                }
+                else
+                {
+                    break;
+                }
+            }
 
             // pubdate needs to be parsed
-            $pubdate = $match[3] . '-' . $match[2] . '-' . $match[1];
+            $pubdate = $match[1] . ' ' . $match[2] . ', ' . $match[3];
             $release->created = Carbon::parse($pubdate);
 
             $this->releases[$version] = $release;

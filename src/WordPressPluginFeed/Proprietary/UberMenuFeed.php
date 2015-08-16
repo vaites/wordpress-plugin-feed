@@ -8,25 +8,25 @@ use Symfony\Component\DomCrawler\Crawler;
 use WordPressPluginFeed\WordPressPluginFeed;
 
 /**
- * Visual Composer custom parser
+ * UberMenu custom parser
  *
  * @author David Martínez <contacto@davidmartinez.net>
  */
-class VisualComposerFeed extends WordPressPluginFeed
+class UberMenuFeed extends WordPressPluginFeed
 {
     /**
      * Plugin title
      *
      * @var string
      */
-    protected $title = 'Visual composer';
+    protected $title = 'UberMenu';
     
     /**
      * Plugin short description
      *
      * @var string
      */
-    protected $description = 'Visual Composer for WordPress is drag and drop frontend and backend page builder plugin that will save you tons of time working on the site content.';
+    protected $description = 'UberMenu™ is a user-friendly, highly customizable, responsive Mega Menu WordPress plugin. It works out of the box with the WordPress 3 Menu System, making it simple to get started but powerful enough to create highly customized and creative mega menu configurations.';
     
     /**
      * Plugin image
@@ -35,7 +35,7 @@ class VisualComposerFeed extends WordPressPluginFeed
      */
     protected $image = array
     (
-        'uri' => 'https://thumb-cc.s3.envato.com/files/140080840/th-4.6.png',
+        'uri' => 'https://thumb-cc.s3.envato.com/files/100231922/ubermenu-3.0.thumb.jpg',
         'height' => 80,
         'width' => 80
     );
@@ -47,7 +47,7 @@ class VisualComposerFeed extends WordPressPluginFeed
      */    
     protected $sources = array
     (
-        'profile'   => 'http://codecanyon.net/item/visual-composer-page-builder-for-wordpress/242431',
+        'profile'   => 'http://codecanyon.net/item/ubermenu-wordpress-mega-menu-plugin/154703',
     );
     
     /**
@@ -59,27 +59,27 @@ class VisualComposerFeed extends WordPressPluginFeed
         $crawler = new Crawler($this->fetch('profile'));
         
         // need to parse changelog block
-        $changelog = $crawler->filter('#item-description__updates')
+        $changelog = $crawler->filter('#item-description__changelog')
                     ->nextAll()->filter('pre')->eq(0);
 
         // each release has a title with date and version followed by changes
-        foreach(explode("\n\n", $changelog->text()) as $block)
+        foreach(preg_split("/(-|=){10,}/", $changelog->text()) as $block)
         {
-            $block = explode("\n", $block);
+            $block = explode("\n", trim($block));
 
             // title must have pubdate and version
             $title = array_shift($block);
-            $regexp = '/(\d+)\.(\d+)\.(\d+) - ver (.+)/i';
+            $regexp = '/v([\d|\.]+)\s\(?(.+)\)?/i';
             if(!preg_match($regexp, $title, $match) || empty($block))
             {
                 continue;
             }
 
             // convert release title to version
-            $version = $this->parseVersion($match[4]);
+            $version = $this->parseVersion($match[1]);
 
             // get de ID to build the link
-            $id = 'item-description__updates';
+            $id = 'item-description__changelog';
 
             // release object
             $release = new stdClass();
@@ -90,8 +90,8 @@ class VisualComposerFeed extends WordPressPluginFeed
             $release->content = implode("<br />\n", $block);
 
             // pubdate needs to be parsed
-            $pubdate = $match[3] . '-' . $match[2] . '-' . $match[1];
-            $release->created = Carbon::parse($pubdate);
+            $pubdate = strtotime($match[2]);
+            $release->created = Carbon::createFromTimestamp($pubdate);
 
             $this->releases[$version] = $release;
         }

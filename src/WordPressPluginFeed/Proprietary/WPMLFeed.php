@@ -33,22 +33,22 @@ class WPMLFeed extends WordPressPluginFeed
      * 
      * @var string
      */
-    protected $image = 
-    [
+    protected $image = array
+    (
         'uri' => 'https://d2salfytceyqoe.cloudfront.net/wp-content/uploads/2010/09/wpml_logo.png',
         'height' => 265,
         'width' => 101
-    ];
+    );
     
     /**
      * Source URLs 
      *
      * @var array
      */    
-    protected $sources = 
-    [
-        'profile'   => 'https://wpml.org/category/changelog/feed/atom/',
-    ];
+    protected $sources = array
+    (
+        'profile'   => 'https://wpml.org/category/changelog/feed/atom/'
+    );
     
     /**
      * Parse public releases using feed from official blog

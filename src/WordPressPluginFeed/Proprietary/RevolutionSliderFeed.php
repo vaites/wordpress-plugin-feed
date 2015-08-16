@@ -33,22 +33,22 @@ class RevolutionSliderFeed extends WordPressPluginFeed
      * 
      * @var string
      */
-    protected $image = 
-    [
+    protected $image = array
+    (
         'uri' => 'https://0.s3.envato.com/files/104347001/smallicon2.png',
         'height' => 80,
         'width' => 80
-    ];
+    );
 
     /**
      * Source URLs 
      *
      * @var array
      */    
-    protected $sources = 
-    [
+    protected $sources = array
+    (
         'profile'   => 'http://codecanyon.net/item/slider-revolution-responsive-wordpress-plugin/2751380',
-    ];
+    );
     
     /**
      * Parse public releases using "release log" block on Code Canyon profile
