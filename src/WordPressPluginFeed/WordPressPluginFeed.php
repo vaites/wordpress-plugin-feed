@@ -31,6 +31,7 @@ class WordPressPluginFeed
         'buddypress'                    => 'OpenSource\\BuddyPressFeed',
         'gravityforms'                  => 'Proprietary\\GravityFormsFeed',
         'revslider'                     => 'Proprietary\\RevolutionSliderFeed',
+        'js-composer'                   => 'Proprietary\\VisualComposerFeed',
         'sitepress-multilingual-cms'    => 'Proprietary\\WPMLFeed'
     );
 
@@ -473,9 +474,9 @@ class WordPressPluginFeed
         $version = false;
         
         $string = preg_replace("/^{$this->title}\s+/i", '', $string);
-        $string = preg_replace('/^v(ersion\s*)?/i', '', trim($string));
-        
-        if(preg_match('/(\d|\.)+/', $string, $match))     
+        $string = preg_replace('/^v(er)?(sion\s*)?/i', '', trim($string));
+
+        if(preg_match('/(\d|\.)+/', $string, $match))
         {
             $version = $match[0];
         }                

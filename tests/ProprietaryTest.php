@@ -3,6 +3,7 @@
 use WordPressPluginFeed\Proprietary\AllInOneSEOPackFeed;
 use WordPressPluginFeed\Proprietary\GravityFormsFeed;
 use WordPressPluginFeed\Proprietary\RevolutionSliderFeed;
+use WordPressPluginFeed\Proprietary\VisualComposerFeed;
 use WordPressPluginFeed\Proprietary\WPMLFeed;
 
 /**
@@ -49,6 +50,17 @@ class ProprietaryTest extends PHPUnit_Framework_TestCase
     public function testWPML()
     {
         $feed = new WPMLFeed('sitepress-multilingual-cms');
+        $releases = $feed->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Proprietary plugin 5: Visual Composer
+     */
+    public function testVisualComposer()
+    {
+        $feed = new WPMLFeed('js-composer');
         $releases = $feed->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
