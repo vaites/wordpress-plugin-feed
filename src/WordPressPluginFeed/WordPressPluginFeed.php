@@ -38,14 +38,14 @@ class WordPressPluginFeed
     );
 
     /**
-     * Keywords that activate "Security Release" message
+     * Keywords that activate "Security release" message
      *
      * @var array
      */
     protected static $keywords = array
     (
         'safe', 'trusted', 'security', 'vulnerability', 'leak', 'attack',
-        'CSRF', 'SQLi', 'XSS', 'LFI', 'RFI'
+        'CSRF', 'SQLi', 'XSS', 'LFI', 'RFI', 'CVE-'
     );
     
     /**
@@ -554,9 +554,10 @@ class WordPressPluginFeed
         // detect security keywords
         $content = strip_tags($release->content);
         $keywords = implode('|', self::$keywords);
-        if(preg_match_all("/\W($keywords)\W/i", $content, $match))
+
+        if(preg_match_all("/(^|\W)($keywords)(\W|$)/i", $content, $match))
         {
-            foreach(array_unique($match[1]) as $keyword)
+            foreach(array_unique($match[2]) as $keyword)
             {
                 $highlight[$keyword] = $keyword;
             }
@@ -571,6 +572,22 @@ class WordPressPluginFeed
             $highlight[$match[0]] = sprintf($link, $match[0], $match[0]);
         }
         
+        // add warning to title and highlight security keywords
+        if(!empty($highlight))
+        {
+            $release->title .= ' (Security release)';
+
+            foreach($highlight as $search=>$replace)
+            {
+                $release->content = preg_replace
+                (
+                    "/$search/",
+                    '<strong style="color:red">' . $replace . '</strong>',
+                    $release->content
+                );
+            }
+        }
+
         return $release;
     }
 
