@@ -625,7 +625,7 @@ class WordPressPluginFeed
             ));
         }
         
-        foreach($this->releases as $release)
+        foreach($this->getReleases() as $release)
         {
             // stability filter
             if($this->stability != false)
@@ -635,9 +635,6 @@ class WordPressPluginFeed
                     continue;
                 }
             }
-            
-            // filters
-            $release = $this->filterRelease($release);
             
             // feed entry
             $entry = $feed->createEntry();
@@ -662,7 +659,11 @@ class WordPressPluginFeed
      */
     public function getReleases()
     {
-        return $this->releases;
+        $releases = $this->releases;
+
+        array_map(array($this, 'filterRelease'), $releases);
+
+        return $releases;
     }
     
     /**
