@@ -624,6 +624,7 @@ class WordPressPluginFeed
             
             // feed entry
             $entry = $feed->createEntry();
+            $entry->setId(sha1($release->title));
             $entry->setTitle($release->title);
             $entry->setLink($release->link);
             $entry->setDateModified($release->created->timestamp);
@@ -634,7 +635,7 @@ class WordPressPluginFeed
         }
 
         header('Content-Type: text/xml;charset=utf-8');
-        echo $feed->export($format);        
+        echo $feed->export($format);
     }
     
     /**
