@@ -41,7 +41,7 @@ Replace *PLUGIN* with the name of the plugin you want to track, the same as Word
 
 The *stability* parameter (options: any, stable, alpha, beta, rc) filters the release list using [Semantic Versioning](http://semver.org/). Options can be combined separated by commas (stable,rc).
 
-You clan also clone the repository and run `composer update`:
+You can also clone the repository and run `composer update`:
 
     git clone https://github.com/vaites/wordpress-plugin-feed
     cd wordpress-plugin-feed

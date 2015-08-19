@@ -541,6 +541,16 @@ class WordPressPluginFeed
         // purify HTML
         $release->content = $this->purifier->purify($release->content);
 
+        // create a DOM crawler to modify HTML
+        $crawler = new Crawler($release->content);
+
+        // add target="_blank" to all links
+        foreach($crawler->filter('a') as $index=>$node)
+        {
+            $node->setAttribute('target', '_blank');
+        }
+        $release->content = $crawler->html();
+
         // detect security keywords
         $content = strip_tags($release->content);
         $keywords = implode('|', self::$keywords);
@@ -551,7 +561,7 @@ class WordPressPluginFeed
                 $highlight[$keyword] = $keyword;
             }
         }
-        
+
         // detect Common Vulnerabilities and Exposures
         if(preg_match('/CVE-(\d{4})-(\d{4})/i', $release->content, $match))
         {
@@ -560,22 +570,6 @@ class WordPressPluginFeed
             
             $highlight[$match[0]] = sprintf($link, $match[0], $match[0]);
         }
-        
-        // add warning to title and highlight security keywords
-        if(!empty($highlight))
-        {
-            $release->title .= ' (Security release)';
-            
-            foreach($highlight as $search=>$replace)
-            {
-                $release->content = preg_replace
-                (
-                    "/$search/", 
-                    '<strong style="color:red">' . $replace . '</strong>', 
-                    $release->content
-                );
-            }
-        }        
         
         return $release;
     }
