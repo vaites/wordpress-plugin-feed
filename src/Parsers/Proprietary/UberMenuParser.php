@@ -1,39 +1,38 @@
-<?php namespace WordPressPluginFeed\Proprietary;
-
-use stdClass;
+<?php namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
 
-use WordPressPluginFeed\WordPressPluginFeed;
+use WordPressPluginFeed\Release;
+use WordPressPluginFeed\Parsers\Parser;
 
 /**
  * UberMenu custom parser
  *
  * @author David Martínez <contacto@davidmartinez.net>
  */
-class UberMenuFeed extends WordPressPluginFeed
+class UberMenuParser extends Parser
 {
     /**
      * Plugin title
      *
      * @var string
      */
-    protected $title = 'UberMenu';
+    public $title = 'UberMenu';
     
     /**
      * Plugin short description
      *
      * @var string
      */
-    protected $description = 'UberMenu™ is a user-friendly, highly customizable, responsive Mega Menu WordPress plugin. It works out of the box with the WordPress 3 Menu System, making it simple to get started but powerful enough to create highly customized and creative mega menu configurations.';
+    public $description = 'UberMenu™ is a user-friendly, highly customizable, responsive Mega Menu WordPress plugin. It works out of the box with the WordPress 3 Menu System, making it simple to get started but powerful enough to create highly customized and creative mega menu configurations.';
     
     /**
      * Plugin image
      * 
      * @var string
      */
-    protected $image = array
+    public $image = array
     (
         'uri' => 'https://thumb-cc.s3.envato.com/files/100231922/ubermenu-3.0.thumb.jpg',
         'height' => 80,
@@ -82,7 +81,7 @@ class UberMenuFeed extends WordPressPluginFeed
             $id = 'item-description__changelog';
 
             // release object
-            $release = new stdClass();
+            $release = new Release();
             $release->link = "{$this->sources['profile']}#$id";
             $release->title = "{$this->title} $version";
             $release->description = false;

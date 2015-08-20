@@ -1,6 +1,6 @@
 <?php
 
-use WordPressPluginFeed\WordPressPluginFeed;
+use WordPressPluginFeed\Parsers\Parser;
 
 /**
  * Tests for top standard plugins
@@ -12,8 +12,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testAkismet()
     {
-        $feed = new WordPressPluginFeed('akismet');
-        $releases = $feed->getReleases();
+        $parser = new Parser('akismet');
+        $releases = $parser->getReleases();
         
         $this->assertGreaterThan(0, count($releases));
     }
@@ -23,8 +23,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testWPSuperCache()
     {
-        $feed = new WordPressPluginFeed('wp-super-cache');
-        $releases = $feed->getReleases();
+        $parser = new Parser('wp-super-cache');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -34,8 +34,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testContactForm7()
     {
-        $feed = new WordPressPluginFeed('contact-form-7');
-        $releases = $feed->getReleases();
+        $parser = new Parser('contact-form-7');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -45,8 +45,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testWordfence()
     {
-        $feed = new WordPressPluginFeed('wordfence');
-        $releases = $feed->getReleases();
+        $parser = new Parser('wordfence');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -56,8 +56,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testBetterWPSecurity()
     {
-        $feed = new WordPressPluginFeed('better-wp-security');
-        $releases = $feed->getReleases();
+        $parser = new Parser('better-wp-security');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -67,8 +67,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testWooCommerce()
     {
-        $feed = new WordPressPluginFeed('woocommerce');
-        $releases = $feed->getReleases();
+        $parser = new Parser('woocommerce');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -78,8 +78,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testJetPack()
     {
-        $feed = new WordPressPluginFeed('jetpack');
-        $releases = $feed->getReleases();
+        $parser = new Parser('jetpack');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -89,8 +89,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testYoastSEO()
     {
-        $feed = new WordPressPluginFeed('wordpress-seo');
-        $releases = $feed->getReleases();
+        $parser = new Parser('wordpress-seo');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -100,8 +100,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testW3TotalCache()
     {
-        $feed = new WordPressPluginFeed('w3-total-cache');
-        $releases = $feed->getReleases();
+        $parser = new Parser('w3-total-cache');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -111,8 +111,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdraftPlus()
     {
-        $feed = new WordPressPluginFeed('updraftplus');
-        $releases = $feed->getReleases();
+        $parser = new Parser('updraftplus');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -122,8 +122,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testShortcodesUltimate()
     {
-        $feed = new WordPressPluginFeed('shortcodes-ultimate');
-        $releases = $feed->getReleases();
+        $parser = new Parser('shortcodes-ultimate');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -133,8 +133,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testMailChimpForWordPress()
     {
-        $feed = new WordPressPluginFeed('mailchimp-for-wp');
-        $releases = $feed->getReleases();
+        $parser = new Parser('mailchimp-for-wp');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -144,8 +144,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testUserRoleEditor()
     {
-        $feed = new WordPressPluginFeed('user-role-editor');
-        $releases = $feed->getReleases();
+        $parser = new Parser('user-role-editor');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -155,8 +155,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testMailPoetNewsletters()
     {
-        $feed = new WordPressPluginFeed('wysija-newsletters');
-        $releases = $feed->getReleases();
+        $parser = new Parser('wysija-newsletters');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -166,8 +166,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testSEOUltimate()
     {
-        $feed = new WordPressPluginFeed('seo-ultimate');
-        $releases = $feed->getReleases();
+        $parser = new Parser('seo-ultimate');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -177,8 +177,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testNinjaForms()
     {
-        $feed = new WordPressPluginFeed('ninja-forms');
-        $releases = $feed->getReleases();
+        $parser = new Parser('ninja-forms');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -188,8 +188,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testSucuriSecurity()
     {
-        $feed = new WordPressPluginFeed('sucuri-scanner');
-        $releases = $feed->getReleases();
+        $parser = new Parser('sucuri-scanner');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -199,8 +199,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testPHPCodeWidget()
     {
-        $feed = new WordPressPluginFeed('php-code-widget');
-        $releases = $feed->getReleases();
+        $parser = new Parser('php-code-widget');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -210,8 +210,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testNewsletter()
     {
-        $feed = new WordPressPluginFeed('newsletter');
-        $releases = $feed->getReleases();
+        $parser = new Parser('newsletter');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -221,8 +221,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testCookieLawInfo()
     {
-        $feed = new WordPressPluginFeed('cookie-law-info');
-        $releases = $feed->getReleases();
+        $parser = new Parser('cookie-law-info');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }

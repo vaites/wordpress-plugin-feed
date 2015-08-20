@@ -1,6 +1,6 @@
 <?php
 
-use WordPressPluginFeed\WordPressPluginFeed;
+use WordPressPluginFeed\Parsers\Parser;
 
 /**
  * Security detection tests
@@ -12,8 +12,8 @@ class SecurityTest extends PHPUnit_Framework_TestCase
      */
     public function testSecurityJetPack()
     {
-        $feed = new WordPressPluginFeed('jetpack');
-        $releases = $feed->getReleases();
+        $parser = new Parser('jetpack');
+        $releases = $parser->getReleases();
 
         $this->assertTrue
         (

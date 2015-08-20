@@ -1,32 +1,31 @@
-<?php namespace WordPressPluginFeed\Proprietary;
-
-use stdClass;
+<?php namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
 
-use WordPressPluginFeed\WordPressPluginFeed;
+use WordPressPluginFeed\Release;
+use WordPressPluginFeed\Parsers\Parser;
 
 /**
  * All in One SEO Pack custom parser
  *
  * @author David Martínez <contacto@davidmartinez.net>
  */
-class AllInOneSEOPackFeed extends WordPressPluginFeed
+class AllInOneSEOPackParser extends Parser
 {
     /**
      * Plugin title
      *
      * @var string
      */
-    protected $title = 'All in One SEO Pack';
+    public $title = 'All in One SEO Pack';
     
     /**
      * Plugin short description
      *
      * @var string
      */
-    protected $description = 'All in One SEO Pack is a WordPress SEO plugin to automatically optimize your WordPress blog for Search Engines such as Google.';
+    public $description = 'All in One SEO Pack is a WordPress SEO plugin to automatically optimize your WordPress blog for Search Engines such as Google.';
     
     /**
      * Source URLs 
@@ -66,7 +65,7 @@ class AllInOneSEOPackFeed extends WordPressPluginFeed
             }
             
             // release object
-            $release = new stdClass();
+            $release = new Release();
             $release->link = $this->sources['profile'];
             $release->title = "{$this->title} $version";
             $release->description = false;

@@ -1,39 +1,38 @@
-<?php namespace WordPressPluginFeed\Proprietary;
-
-use stdClass;
+<?php namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
 
-use WordPressPluginFeed\WordPressPluginFeed;
+use WordPressPluginFeed\Release;
+use WordPressPluginFeed\Parsers\Parser;
 
 /**
  * Slider Revolution custom parser
  *
  * @author David Martínez <contacto@davidmartinez.net>
  */
-class RevolutionSliderFeed extends WordPressPluginFeed
+class RevolutionSliderParser extends Parser
 {
     /**
      * Plugin title
      *
      * @var string
      */
-    protected $title = 'Revolution Slider';
+    public $title = 'Revolution Slider';
     
     /**
      * Plugin short description
      *
      * @var string
      */
-    protected $description = 'Create a responsive(mobile friendly) or fullwidth slider with must-see-effects and meanwhile keep or build your SEO optimization (all content always readable for search engines)';
+    public $description = 'Create a responsive(mobile friendly) or fullwidth slider with must-see-effects and meanwhile keep or build your SEO optimization (all content always readable for search engines)';
     
     /**
      * Plugin image
      * 
      * @var string
      */
-    protected $image = array
+    public $image = array
     (
         'uri' => 'https://0.s3.envato.com/files/104347001/smallicon2.png',
         'height' => 80,
@@ -78,7 +77,7 @@ class RevolutionSliderFeed extends WordPressPluginFeed
             $id = $changelog->filter('h3')->eq($index)->attr('id');
             
             // release object
-            $release = new stdClass();
+            $release = new Release();
             $release->link = "{$this->sources['profile']}#{$id}";
             $release->title = "{$this->title} $version";
             $release->description = false;

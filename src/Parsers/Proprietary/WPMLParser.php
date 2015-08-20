@@ -1,33 +1,44 @@
-<?php namespace WordPressPluginFeed\OpenSource;
-
-use stdClass;
+<?php namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use Carbon\Carbon;
 use Zend\Feed\Reader\Reader;
 
-use WordPressPluginFeed\WordPressPluginFeed;
+use WordPressPluginFeed\Release;
+use WordPressPluginFeed\Parsers\Parser;
 
 /**
- * BuddyPress custom parser
+ * The WordPress Multilingual Plugin custom parser
  *
  * @author David Martínez <contacto@davidmartinez.net>
  */
-class BuddyPressFeed extends WordPressPluginFeed
+class WPMLParser extends Parser
 {
     /**
      * Plugin title
      *
      * @var string
      */
-    protected $title = 'BuddyPress';
+    public $title = 'The WordPress Multilingual Plugin';
     
     /**
      * Plugin short description
      *
      * @var string
      */
-    protected $description = 'BuddyPress helps you run any kind of social network on your WordPress, with member profiles, activity streams, user groups, messaging, and more.';
+    public $description = 'WPML makes it easy to build multilingual sites and run them. It’s powerful enough for corporate sites,  yet simple for blogs.';
 
+    /**
+     * Plugin image
+     * 
+     * @var string
+     */
+    public $image = array
+    (
+        'uri' => 'https://d2salfytceyqoe.cloudfront.net/wp-content/uploads/2010/09/wpml_logo.png',
+        'height' => 265,
+        'width' => 101
+    );
+    
     /**
      * Source URLs 
      *
@@ -35,7 +46,7 @@ class BuddyPressFeed extends WordPressPluginFeed
      */    
     protected $sources = array
     (
-        'profile'   => 'https://buddypress.org/blog/feed/atom/',
+        'profile'   => 'https://wpml.org/category/changelog/feed/atom/'
     );
     
     /**
@@ -52,21 +63,30 @@ class BuddyPressFeed extends WordPressPluginFeed
             // each entry can be a release
             foreach($changelog as $entry)
             {
-                // BuddyPress releases starts with "BuddyPress"
-                $regexp = '/^BuddyPress\s+(\d|\.)/i';
-                if(!preg_match($regexp, $entry->getTitle()))
+                // WPML releases starts with "WPML"
+                if(!preg_match('/^WPML\s+\d+\./i', $entry->getTitle()))
                 {
                     continue;
                 }
-                
+
                 // convert release title to version
                 $version = $this->parseVersion($entry->getTitle());
+                
+                // avoid betas
+                if(preg_match('/b\d+/i', $version))
+                {
+                    continue;
+                }
+                elseif(preg_match('/beta/i', $entry->getLink()))
+                {
+                    continue;
+                }
                 
                 // creation time
                 $created = $entry->getDateCreated()->getTimestamp();
 
                 // release object
-                $release = new stdClass();
+                $release = new Release();
                 $release->link = $entry->getLink();
                 $release->title = "{$this->title} $version";
                 $release->description = $entry->getDescription();

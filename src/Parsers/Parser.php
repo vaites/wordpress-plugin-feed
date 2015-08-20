@@ -1,87 +1,74 @@
-<?php namespace WordPressPluginFeed;
+<?php namespace WordPressPluginFeed\Parsers;
 
 use Exception;
-use HTMLPurifier;
-use HTMLPurifier_Config;
-use stdClass;
 
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
 use Zend\Cache\StorageFactory;
-use Zend\Feed\Writer\Feed;
 use Zend\Http\Client;
+
+use WordPressPluginFeed\Release;
+use WordPressPluginFeed\Tag;
 
 /**
  * Main class that parses WordPress.org plugin profiles
  * 
  * @author  David Martínez <contacto@davidmartinez.net>
  */
-class WordPressPluginFeed
+class Parser
 {
     /**
-     * List of proprietary plugins with specific update log:
-     * 
-     *      plugin-name     => ClassName
+     * List of plugins with specific update log (plugin => class)
      *
      * @var array
      */
     protected static $aliases = array
     (
-        'all-in-one-seo-pack'           => 'Proprietary\\AllInOneSEOPackFeed',
-        'buddypress'                    => 'OpenSource\\BuddyPressFeed',
-        'gravityforms'                  => 'Proprietary\\GravityFormsFeed',
-        'revslider'                     => 'Proprietary\\RevolutionSliderFeed',
-        'js-composer'                   => 'Proprietary\\VisualComposerFeed',
-        'sitepress-multilingual-cms'    => 'Proprietary\\WPMLFeed',
-        'ubermenu'                      => 'Proprietary\\UberMenuFeed',
-        'ultimate-vc-addons'            => 'Proprietary\\UltimateVCAddonsFeed'
+        'buddypress'                 => 'OpenSource\\BuddyPressParser',
+
+        'all-in-one-seo-pack'        => 'Proprietary\\AllInOneSEOPackParser',
+        'gravityforms'               => 'Proprietary\\GravityFormsParser',
+        'revslider'                  => 'Proprietary\\RevolutionSliderParser',
+        'js-composer'                => 'Proprietary\\VisualComposerParser',
+        'sitepress-multilingual-cms' => 'Proprietary\\WPMLParser',
+        'ubermenu'                   => 'Proprietary\\UberMenuParser',
+        'ultimate-vc-addons'         => 'Proprietary\\UltimateVCAddonsParser'
     );
 
-    /**
-     * Keywords that activate "Security release" message
-     *
-     * @var array
-     */
-    protected static $keywords = array
-    (
-        'safe', 'trusted', 'security', 'vulnerability', 'leak', 'attack',
-        'CSRF', 'SQLi', 'XSS', 'LFI', 'RFI', 'CVE-'
-    );
-    
     /**
      * Plugin name
      *
      * @var string
      */
-    protected $plugin = null;
+    public $plugin = null;
     
     /**
      * Stability filter
      *
      * @var string
      */
-    protected $stability = 'stable';
+    public $stability = 'stable';
     
     /**
      * Plugin title
      *
      * @var string
      */
-    protected $title = null;
+    public $title = null;
     
     /**
      * Plugin short description
      *
      * @var string
      */
-    protected $description = null;
+    public $description = null;
     
     /**
      * Plugin image
      * 
      * @var array
      */
-    protected $image = array
+    public $image = array
     (
         'uri' => "http://ps.w.org/%s/assets/icon-128x128.png",
         'height' => 128,
@@ -89,46 +76,39 @@ class WordPressPluginFeed
     );
 
     /**
-     * CLI call
-     *
-     * @var bool
-     */
-    protected $cli = false;
-
-    /**
      * Plugin URL at WordPress.org
      *
      * @var string
      */
-    protected $link = null;
+    public $link = null;
     
     /**
      * Feed URL
      *
      * @var string
      */
-    protected $feed_link = null;
+    public $feed_link = null;
     
     /**
      * Last release date
      *
      * @var \Carbon\Carbon
      */
-    protected $modified = null;
+    public $modified = null;
     
     /**
      * Release list
      *
      * @var array
      */
-    protected $releases = [];
+    protected $releases = array();
     
     /**
      * Subversion tag list 
      * 
      * @var array
      */
-    protected $tags = [];
+    protected $tags = array();
     
     /**
      * Source URLs 
@@ -140,6 +120,13 @@ class WordPressPluginFeed
         'profile'   => 'https://wordpress.org/plugins/%s/changelog/',
         'tags'      => 'https://plugins.trac.wordpress.org/browser/%s/tags?order=date&desc=1'
     );
+
+    /**
+     * CLI call
+     *
+     * @var bool
+     */
+    protected $cli = false;
 
     /**
      * HTTP client instance
@@ -154,13 +141,6 @@ class WordPressPluginFeed
      * @var \Zend\Cache\StorageFactory
      */
     protected $cache = null;
-    
-    /**
-     * HTMLPurifier instance
-     *
-     * @var \HTMLPurifier
-     */
-    protected $purifier = null;
     
     /**
      * Load plugin data
@@ -234,12 +214,6 @@ class WordPressPluginFeed
             )
         ));
         
-        // HTMLPurifier instance
-        $this->purifier = new HTMLPurifier(HTMLPurifier_Config::create(array
-        (
-            'Attr.AllowedFrameTargets' => array('_blank')
-        )));
-
         // load releases after class config
         try
         {
@@ -260,21 +234,21 @@ class WordPressPluginFeed
     }
 
     /**
-     * Get an instance based on plugin name
+     * Get a parser class instance based on plugin name
      *
      * @param   string  $plugin
      * @param   string  $stability
-     * @return  \WordPressPluginFeed\WordPressPluginFeed
+     * @return  \WordPressPluginFeed\Parsers\Parser
      */
     public static function getInstance($plugin, $stability = null)
     {
         if(isset(self::$aliases[$plugin]))
         {
-            $class = 'WordPressPluginFeed\\' . self::$aliases[$plugin];
+            $class = 'WordPressPluginFeed\\Parsers\\' . self::$aliases[$plugin];
         }
         else
         {
-            $class = 'WordPressPluginFeed\\WordPressPluginFeed';
+            $class = 'WordPressPluginFeed\\Parsers\\Parser';
         }
 
         return new $class($plugin, $stability);
@@ -335,7 +309,7 @@ class WordPressPluginFeed
                 $time = trim(preg_replace('/See timeline at/', '', $time));
                 
                 // tag object
-                $tag = new stdClass();
+                $tag = new Tag();
                 $tag->name = trim($row->filter('.name')->text());  
                 $tag->revision = trim($row->filter('.rev a')->first()->text());
                 $tag->description = trim($row->filter('.change')->text());
@@ -387,7 +361,7 @@ class WordPressPluginFeed
             $tag =& $this->tags[$version];
 
             // release object
-            $release = new stdClass();
+            $release = new Release();
             $release->title = "{$this->title} $version";
             $release->description = $tag->description;
             $release->stability = $this->parseStability($node->textContent);
@@ -420,7 +394,7 @@ class WordPressPluginFeed
             {
                 $version = $tag->name;
                 
-                $release = new stdClass();
+                $release = new Release();
                 $release->title = "{$this->title} $version";
                 $release->description = $tag->description;
                 $release->stability = $this->parseStability($tag->name);
@@ -523,147 +497,18 @@ class WordPressPluginFeed
     }
     
     /**
-     * Filter a release adding type, warnings and other stuff
-     * 
-     * @param   stdClass    $release
-     * @return  stdClass
-     */
-    public function filterRelease($release)
-    {
-        $highlight = array();
-        
-        // add release type
-        if($release->stability != 'stable')
-        {
-            $release->title .= '-' . $release->stability;
-        }
-
-        // purify HTML
-        $release->content = $this->purifier->purify($release->content);
-
-        // create a DOM crawler to modify HTML
-        $crawler = new Crawler($release->content);
-
-        // add target="_blank" to all links
-        foreach($crawler->filter('a') as $index=>$node)
-        {
-            $node->setAttribute('target', '_blank');
-        }
-        $release->content = $crawler->html();
-
-        // detect security keywords
-        $content = strip_tags($release->content);
-        $keywords = implode('|', self::$keywords);
-
-        if(preg_match_all("/(^|\W)($keywords)(\W|$)/i", $content, $match))
-        {
-            foreach(array_unique($match[2]) as $keyword)
-            {
-                $highlight[$keyword] = $keyword;
-            }
-        }
-
-        // detect Common Vulnerabilities and Exposures
-        if(preg_match('/CVE-(\d{4})-(\d{4})/i', $release->content, $match))
-        {
-            $link = '<a href="http://www.cvedetails.com/cve/%s/" '
-                  . 'target="_blank">%s</a>';
-            
-            $highlight[$match[0]] = sprintf($link, $match[0], $match[0]);
-        }
-        
-        // add warning to title and highlight security keywords
-        if(!empty($highlight))
-        {
-            $release->title .= ' (Security release)';
-
-            foreach($highlight as $search=>$replace)
-            {
-                $release->content = preg_replace
-                (
-                    "/$search/",
-                    '<strong style="color:red">' . $replace . '</strong>',
-                    $release->content
-                );
-            }
-        }
-
-        return $release;
-    }
-
-    /**
-     * Generates the feed
-     * 
-     * @param   string  $format     feed format (atom or rss)
-     */
-    public function generate($format = 'atom')
-    {
-        $plugin = $this->plugin;
-        $time = is_null($this->modified) ? time() : $this->modified->timestamp;
-        
-        $feed = new Feed();
-        $feed->setTitle($this->title);
-        $feed->setLink($this->link);
-        $feed->setFeedLink($this->feed_link, 'atom');
-        $feed->setDateModified($time);
-        $feed->addHub('http://pubsubhubbub.appspot.com/');
-        
-        if(!is_null($this->description))
-        {
-            $feed->setDescription($this->description);
-        }
-        
-        if(!empty($this->image['uri']))
-        {
-            $feed->setImage(array
-            (
-                'height' => $this->image['height'],
-                'link' => $feed->getLink(),
-                'title' => $this->title,
-                'uri' => sprintf($this->image['uri'], $this->plugin),
-                'width' => $this->image['width']
-            ));
-        }
-        
-        foreach($this->getReleases() as $release)
-        {
-            // stability filter
-            if($this->stability != false)
-            {
-                if(!preg_match($this->stability, $release->stability))
-                {
-                    continue;
-                }
-            }
-            
-            // feed entry
-            $entry = $feed->createEntry();
-            $entry->setId(sha1($release->title));
-            $entry->setTitle($release->title);
-            $entry->setLink($release->link);
-            $entry->setDateModified($release->created->timestamp);
-            $entry->setDateCreated($release->created->timestamp);
-            $entry->setDescription($release->content);
-            
-            $feed->addEntry($entry);
-        }
-
-        header('Content-Type: text/xml;charset=utf-8');
-        echo $feed->export($format);
-    }
-    
-    /**
-     * Get the parsed releases
+     * Get the parsed releases applying filters
      * 
      * @return  array
      */
     public function getReleases()
     {
-        $releases = $this->releases;
+        array_walk($this->releases, function(Release $release)
+        {
+            $release->filter();
+        });
 
-        array_map(array($this, 'filterRelease'), $releases);
-
-        return $releases;
+        return $this->releases;
     }
     
     /**

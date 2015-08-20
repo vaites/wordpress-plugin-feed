@@ -1,6 +1,6 @@
 <?php
 
-use WordPressPluginFeed\WordPressPluginFeed;
+use WordPressPluginFeed\Parsers\Parser;
 
 /**
  * Error tests
@@ -12,8 +12,8 @@ class UnknownTest extends PHPUnit_Framework_TestCase
      */
     public function testUnknownPlugin()
     {
-        $feed = new WordPressPluginFeed('unknown-plugin');
-        $releases = $feed->getReleases();
+        $parser = new Parser('unknown-plugin');
+        $releases = $parser->getReleases();
 
         $this->assertEquals(0, count($releases));
     }

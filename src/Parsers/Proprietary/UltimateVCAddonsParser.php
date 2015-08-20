@@ -1,39 +1,38 @@
-<?php namespace WordPressPluginFeed\Proprietary;
-
-use stdClass;
+<?php namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
 
-use WordPressPluginFeed\WordPressPluginFeed;
+use WordPressPluginFeed\Release;
+use WordPressPluginFeed\Parsers\Parser;
 
 /**
  * Ultimate Addons for Visual Composer custom parser
  *
  * @author David Martínez <contacto@davidmartinez.net>
  */
-class UltimateVCAddonsFeed extends WordPressPluginFeed
+class UltimateVCAddonsParser extends Parser
 {
     /**
      * Plugin title
      *
      * @var string
      */
-    protected $title = 'Ultimate Addons for Visual Composer';
+    public $title = 'Ultimate Addons for Visual Composer';
     
     /**
      * Plugin short description
      *
      * @var string
      */
-    protected $description = 'This plugin adds several premium elements in your Visual Composer on top of the built-in ones given by WPBakery.';
+    public $description = 'This plugin adds several premium elements in your Visual Composer on top of the built-in ones given by WPBakery.';
     
     /**
      * Plugin image
      * 
      * @var string
      */
-    protected $image = array
+    public $image = array
     (
         'uri' => 'https://thumb-cc.s3.envato.com/files/86787603/80x80.png',
         'height' => 80,
@@ -80,7 +79,7 @@ class UltimateVCAddonsFeed extends WordPressPluginFeed
             $id = 'item-description__changelog';
 
             // release object
-            $release = new stdClass();
+            $release = new Release();
             $release->link = "{$this->sources['profile']}#$id";
             $release->title = "{$this->title} $version";
             $release->description = false;

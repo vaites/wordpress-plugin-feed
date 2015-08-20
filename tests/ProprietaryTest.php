@@ -1,12 +1,12 @@
 <?php
 
-use WordPressPluginFeed\Proprietary\AllInOneSEOPackFeed;
-use WordPressPluginFeed\Proprietary\GravityFormsFeed;
-use WordPressPluginFeed\Proprietary\RevolutionSliderFeed;
-use WordPressPluginFeed\Proprietary\UberMenuFeed;
-use WordPressPluginFeed\Proprietary\UltimateVCAddonsFeed;
-use WordPressPluginFeed\Proprietary\VisualComposerFeed;
-use WordPressPluginFeed\Proprietary\WPMLFeed;
+use WordPressPluginFeed\Parsers\Proprietary\AllInOneSEOPackParser;
+use WordPressPluginFeed\Parsers\Proprietary\GravityFormsParser;
+use WordPressPluginFeed\Parsers\Proprietary\RevolutionSliderParser;
+use WordPressPluginFeed\Parsers\Proprietary\UberMenuParser;
+use WordPressPluginFeed\Parsers\Proprietary\UltimateVCAddonsParser;
+use WordPressPluginFeed\Parsers\Proprietary\VisualComposerParser;
+use WordPressPluginFeed\Parsers\Proprietary\WPMLParser;
 
 /**
  * Tests for open proprietary plugins
@@ -18,8 +18,8 @@ class ProprietaryTest extends PHPUnit_Framework_TestCase
      */
     public function testAllInOneSEOPack()
     {
-        $feed = new AllInOneSEOPackFeed('all-in-one-seo-pack');
-        $releases = $feed->getReleases();
+        $parser = new AllInOneSEOPackParser('all-in-one-seo-pack');
+        $releases = $parser->getReleases();
         
         $this->assertGreaterThan(0, count($releases));
     }
@@ -29,8 +29,8 @@ class ProprietaryTest extends PHPUnit_Framework_TestCase
      */
     public function testGravityForms()
     {
-        $feed = new GravityFormsFeed('gravityforms');
-        $releases = $feed->getReleases();
+        $parser = new GravityFormsParser('gravityforms');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -40,8 +40,8 @@ class ProprietaryTest extends PHPUnit_Framework_TestCase
      */
     public function testRevolutionSlider()
     {
-        $feed = new RevolutionSliderFeed('revslider');
-        $releases = $feed->getReleases();
+        $parser = new RevolutionSliderParser('revslider');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -51,8 +51,8 @@ class ProprietaryTest extends PHPUnit_Framework_TestCase
      */
     public function testWPML()
     {
-        $feed = new WPMLFeed('sitepress-multilingual-cms');
-        $releases = $feed->getReleases();
+        $parser = new WPMLParser('sitepress-multilingual-cms');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -62,8 +62,8 @@ class ProprietaryTest extends PHPUnit_Framework_TestCase
      */
     public function testVisualComposer()
     {
-        $feed = new VisualComposerFeed('js-composer');
-        $releases = $feed->getReleases();
+        $parser = new VisualComposerParser('js-composer');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -73,8 +73,8 @@ class ProprietaryTest extends PHPUnit_Framework_TestCase
      */
     public function testUltimateVCAddons()
     {
-        $feed = new UltimateVCAddonsFeed('ultimate-vc-addons');
-        $releases = $feed->getReleases();
+        $parser = new UltimateVCAddonsParser('ultimate-vc-addons');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
@@ -84,8 +84,8 @@ class ProprietaryTest extends PHPUnit_Framework_TestCase
      */
     public function testUberMenu()
     {
-        $feed = new UberMenuFeed('ubermenu');
-        $releases = $feed->getReleases();
+        $parser = new UberMenuParser('ubermenu');
+        $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }

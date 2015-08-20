@@ -1,39 +1,38 @@
-<?php namespace WordPressPluginFeed\Proprietary;
-
-use stdClass;
+<?php namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use Carbon\Carbon;
 use Zend\Feed\Reader\Reader;
 
-use WordPressPluginFeed\WordPressPluginFeed;
+use WordPressPluginFeed\Release;
+use WordPressPluginFeed\Parsers\Parser;
 
 /**
  * Gravity Forms custom parser
  *
  * @author David Martínez <contacto@davidmartinez.net>
  */
-class GravityFormsFeed extends WordPressPluginFeed
+class GravityFormsParser extends Parser
 {
     /**
      * Plugin title
      *
      * @var string
      */
-    protected $title = 'Gravity Forms';
+    public $title = 'Gravity Forms';
     
     /**
      * Plugin short description
      *
      * @var string
      */
-    protected $description = 'Gravity Forms for WordPress is a full featured contact form plugin that features a drag and drop interface, advanced notification routing, lead capture, conditional logic fields, multi-page forms, pricing calculations and the ability to create posts from external forms.';
+    public $description = 'Gravity Forms for WordPress is a full featured contact form plugin that features a drag and drop interface, advanced notification routing, lead capture, conditional logic fields, multi-page forms, pricing calculations and the ability to create posts from external forms.';
 
     /**
      * Plugin image
      * 
      * @var string
      */
-    protected $image = array
+    public $image = array
     (
         'uri' => 'http://gravityforms.s3.amazonaws.com/logos/gravityforms_logo_100.png',
         'height' => 100,
@@ -78,7 +77,7 @@ class GravityFormsFeed extends WordPressPluginFeed
                 $created = $entry->getDateCreated()->getTimestamp();
 
                 // release object
-                $release = new stdClass();
+                $release = new Release();
                 $release->link = $entry->getLink();
                 $release->title = "{$this->title} $version";
                 $release->description = $entry->getDescription();

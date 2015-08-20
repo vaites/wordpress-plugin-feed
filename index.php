@@ -1,7 +1,9 @@
 <?php include 'vendor/autoload.php';
 
-WordPressPluginFeed\WordPressPluginFeed::getInstance
-(
-    filter_input(INPUT_GET, 'plugin'),
-    filter_input(INPUT_GET, 'stability')
-)->generate();
+$format = filter_input(INPUT_GET, 'format', FILTER_SANITIZE_STRING) ?: 'atom';
+$plugin = filter_input(INPUT_GET, 'plugin', FILTER_SANITIZE_STRING);
+$stability = filter_input(INPUT_GET, 'stability', FILTER_SANITIZE_STRING);
+
+$parser = WordPressPluginFeed\Parsers\Parser::getInstance($plugin, $stability);
+$generator = WordPressPluginFeed\Generators\Generator::getInstance($format);
+$generator->generate($parser);

@@ -1,0 +1,88 @@
+<?php namespace WordPressPluginFeed\Generators\Formats;
+
+use Zend\Feed\Writer\Feed;
+
+use WordPressPluginFeed\Parsers\Parser;
+use WordPressPluginFeed\Generators\Generator;
+
+
+/**
+ * Feed generator
+ *
+ * @package WordPressPluginFeed\Generators\Formats
+ */
+class AtomGenerator extends Generator
+{
+    /**
+     * Feed format
+     *
+     * @var string
+     */
+    protected $format = 'atom';
+
+    /**
+     * Generates the feed
+     *
+     * @param   Parser  $parser
+     */
+    public function generate(Parser $parser = null)
+    {
+        if(!is_null($parser))
+        {
+            $this->setParser($parser);
+        }
+
+        $time = is_null($this->parser->modified) ?
+                time() : $this->parser->modified->timestamp;
+
+        $feed = new Feed();
+        $feed->setTitle($this->parser->title);
+        $feed->setLink($this->parser->link);
+        $feed->setFeedLink($this->parser->feed_link, 'atom');
+        $feed->setDateModified($time);
+        $feed->addHub('http://pubsubhubbub.appspot.com/');
+
+        if(!is_null($this->parser->description))
+        {
+            $feed->setDescription($this->parser->description);
+        }
+
+        if(!empty($this->parser->image['uri']))
+        {
+            $feed->setImage(array
+            (
+                'height' => $this->parser->image['height'],
+                'link' => $feed->getLink(),
+                'title' => $this->parser->title,
+                'uri' => sprintf($this->parser->image['uri'], $this->parser->plugin),
+                'width' => $this->parser->image['width']
+            ));
+        }
+
+        foreach($this->parser->getReleases() as $release)
+        {
+            // stability filter
+            if($this->parser->stability != false)
+            {
+                if(!preg_match($this->parser->stability, $release->stability))
+                {
+                    continue;
+                }
+            }
+
+            // feed entry
+            $entry = $feed->createEntry();
+            $entry->setId(sha1($release->title));
+            $entry->setTitle($release->title);
+            $entry->setLink($release->link);
+            $entry->setDateModified($release->created->timestamp);
+            $entry->setDateCreated($release->created->timestamp);
+            $entry->setDescription($release->content);
+
+            $feed->addEntry($entry);
+        }
+
+        header('Content-Type: text/xml;charset=utf-8');
+        echo $feed->export($this->format);
+    }
+}

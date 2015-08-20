@@ -1,45 +1,32 @@
-<?php namespace WordPressPluginFeed\Proprietary;
-
-use stdClass;
+<?php namespace WordPressPluginFeed\Parsers\OpenSource;
 
 use Carbon\Carbon;
 use Zend\Feed\Reader\Reader;
 
-use WordPressPluginFeed\WordPressPluginFeed;
+use WordPressPluginFeed\Release;
+use WordPressPluginFeed\Parsers\Parser;
 
 /**
- * The WordPress Multilingual Plugin custom parser
+ * BuddyPress custom parser
  *
  * @author David Martínez <contacto@davidmartinez.net>
  */
-class WPMLFeed extends WordPressPluginFeed
+class BuddyPressParser extends Parser
 {
     /**
      * Plugin title
      *
      * @var string
      */
-    protected $title = 'The WordPress Multilingual Plugin';
+    public $title = 'BuddyPress';
     
     /**
      * Plugin short description
      *
      * @var string
      */
-    protected $description = 'WPML makes it easy to build multilingual sites and run them. It’s powerful enough for corporate sites,  yet simple for blogs.';
+    public $description = 'BuddyPress helps you run any kind of social network on your WordPress, with member profiles, activity streams, user groups, messaging, and more.';
 
-    /**
-     * Plugin image
-     * 
-     * @var string
-     */
-    protected $image = array
-    (
-        'uri' => 'https://d2salfytceyqoe.cloudfront.net/wp-content/uploads/2010/09/wpml_logo.png',
-        'height' => 265,
-        'width' => 101
-    );
-    
     /**
      * Source URLs 
      *
@@ -47,7 +34,7 @@ class WPMLFeed extends WordPressPluginFeed
      */    
     protected $sources = array
     (
-        'profile'   => 'https://wpml.org/category/changelog/feed/atom/'
+        'profile'   => 'https://buddypress.org/blog/feed/atom/',
     );
     
     /**
@@ -64,30 +51,21 @@ class WPMLFeed extends WordPressPluginFeed
             // each entry can be a release
             foreach($changelog as $entry)
             {
-                // WPML releases starts with "WPML"
-                if(!preg_match('/^WPML\s+\d+\./i', $entry->getTitle()))
+                // BuddyPress releases starts with "BuddyPress"
+                $regexp = '/^BuddyPress\s+(\d|\.)/i';
+                if(!preg_match($regexp, $entry->getTitle()))
                 {
                     continue;
                 }
-
+                
                 // convert release title to version
                 $version = $this->parseVersion($entry->getTitle());
-                
-                // avoid betas
-                if(preg_match('/b\d+/i', $version))
-                {
-                    continue;
-                }
-                elseif(preg_match('/beta/i', $entry->getLink()))
-                {
-                    continue;
-                }
                 
                 // creation time
                 $created = $entry->getDateCreated()->getTimestamp();
 
                 // release object
-                $release = new stdClass();
+                $release = new Release();
                 $release->link = $entry->getLink();
                 $release->title = "{$this->title} $version";
                 $release->description = $entry->getDescription();
