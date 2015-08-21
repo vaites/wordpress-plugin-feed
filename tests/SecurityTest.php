@@ -13,7 +13,7 @@ class SecurityTest extends PHPUnit_Framework_TestCase
     public function testSecurityJetPack()
     {
         $parser = new Parser('jetpack');
-        $releases = $parser->getReleases();
+        $releases = $parser->getReleases(false);
 
         $this->assertTrue
         (

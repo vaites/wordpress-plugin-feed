@@ -35,15 +35,22 @@ Usage
 
 Just download the release package, place the code on any web server that supports PHP and add to your favorite feed reader:
 
-    http://your/web/server/wordpress-plugin-feed/index.php?plugin=PLUGIN&stability=STABILITY&format=FORMAT
+    http://your/web/server/wordpress-plugin-feed/index.php?plugin=PLUGIN
 
-Available parameters:
-* **plugin**: plugin name, the same as WordPress uses in plugin URL (like *better-wp-security* for [iThemes Security](https://wordpress.org/plugins/better-wp-security))
-* **stability**: one o more stability options (any, stable, alpha, beta, rc) separated by commas
-* **format**: export format (atom or rss)
+Replace *PLUGIN* with plugin name, the same as WordPress uses in plugin URL (like *better-wp-security* for [iThemes Security](https://wordpress.org/plugins/better-wp-security))
 
 You can also clone the repository and run `composer update`:
 
     git clone https://github.com/vaites/wordpress-plugin-feed
     cd wordpress-plugin-feed
     composer update
+
+Configuration
+-------------
+
+[PHP Dotenv](https://github.com/vlucas/phpdotenv) or URL parameters is used to define configuration:
+* **OUTPUT_LIMIT**: number of releases on output (default 25)
+* **OUTPUT_FORMAT**: output format (atom or rss), available as URL parameter (format)
+* **RELEASE_STABILITY**: one o more stability options (any, stable, alpha, beta, rc) separated by commas, also availabla as URL parameter (stability)
+
+There's an *.env.example* file that you can copy to *.env*.

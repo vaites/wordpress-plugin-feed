@@ -10,7 +10,9 @@ use WordPressPluginFeed\Parsers\Parser;
 abstract class Generator
 {
     /**
-     * @var
+     * Parser instance
+     *
+     * @var Parser
      */
     protected $parser;
 
@@ -40,14 +42,20 @@ abstract class Generator
 
     /**
      * Get a generator class instance based on format
+     * Default format defined in .env file (OUTPUT_FORMAT)
      *
      * @param   string  $format
      * @param   Parser  $parser
      * @return  \WordPressPluginFeed\Generators\Generator
      * @throws  \Exception
      */
-    public static function getInstance($format, Parser $parser = null)
+    public static function getInstance($format = null, Parser $parser = null)
     {
+        if(is_null($format))
+        {
+            $format = getenv('OUTPUT_FORMAT') ?: key(static::$aliases);
+        }
+
         if(!isset(static::$aliases[$format]))
         {
             throw new \Exception("Format not supported");
@@ -82,9 +90,11 @@ abstract class Generator
     }
 
     /**
-     * Generate and print output
+     * Generate and returns output, printing if specified
      *
      * @param   Parser  $parser
+     * @param   boolean $echo
+     * @return  string
      **/
-    abstract public function generate(Parser $parser = null);
+    abstract public function generate(Parser $parser = null, $echo = true);
 }

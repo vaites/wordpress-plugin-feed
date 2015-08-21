@@ -151,21 +151,31 @@ class Parser
     public function __construct($plugin, $stability = null) 
     {
         $this->plugin = $plugin;
-        
+
+        // load .env
+        $dotenv = new \Dotenv\Dotenv(dirname(dirname(dirname(__FILE__))));
+        $dotenv->load();
+
         // error handler only for web calls
         if(php_sapi_name() != "cli") 
         {
             $this->cli = true;
             set_error_handler(array($this, 'error'));
+
+            // feed link
+            $host = filter_input(INPUT_SERVER, 'HTTP_HOST');
+            $request = filter_input(INPUT_SERVER, 'REQUEST_URI');
+            $this->feed_link = "http://{$host}{$request}";
         }
 
-        // feed link
-        $host = filter_input(INPUT_SERVER, 'HTTP_HOST');
-        $request = filter_input(INPUT_SERVER, 'REQUEST_URI');
-        $this->feed_link = "http://{$host}{$request}";
+        // default stability if not set
+        if(empty($stability))
+        {
+            $stability = getenv('RELEASE_STABILITY');
+        }
         
-        // stability
-        if(empty($stability) || $stability == 'any')
+        // stability filter
+        if($stability == 'any')
         {
             $this->stability = false;
         }
@@ -230,7 +240,10 @@ class Parser
      */
     public function __destruct() 
     {
-        $this->cache->clearExpired();
+        if($this->cache instanceof StorageFactory)
+        {
+            $this->cache->clearExpired();
+        }
     }
 
     /**
@@ -501,14 +514,19 @@ class Parser
      * 
      * @return  array
      */
-    public function getReleases()
+    public function getReleases($limit = null)
     {
+        if(is_null($limit))
+        {
+            $limit = getenv('OUTPUT_LIMIT') ?: 25;
+        }
+
         array_walk($this->releases, function(Release $release)
         {
             $release->filter();
         });
 
-        return $this->releases;
+        return $limit ? array_slice($this->releases,0,$limit) : $this->releases;
     }
     
     /**

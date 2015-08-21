@@ -1,6 +1,6 @@
 <?php include 'vendor/autoload.php';
 
-$format = filter_input(INPUT_GET, 'format', FILTER_SANITIZE_STRING) ?: 'atom';
+$format = filter_input(INPUT_GET, 'format', FILTER_SANITIZE_STRING);
 $plugin = filter_input(INPUT_GET, 'plugin', FILTER_SANITIZE_STRING);
 $stability = filter_input(INPUT_GET, 'stability', FILTER_SANITIZE_STRING);
 

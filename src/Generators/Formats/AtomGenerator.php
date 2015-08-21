@@ -24,8 +24,10 @@ class AtomGenerator extends Generator
      * Generates the feed
      *
      * @param   Parser  $parser
+     * @param   boolean $echo
+     * @return  string
      */
-    public function generate(Parser $parser = null)
+    public function generate(Parser $parser = null, $echo = true)
     {
         if(!is_null($parser))
         {
@@ -38,9 +40,13 @@ class AtomGenerator extends Generator
         $feed = new Feed();
         $feed->setTitle($this->parser->title);
         $feed->setLink($this->parser->link);
-        $feed->setFeedLink($this->parser->feed_link, 'atom');
         $feed->setDateModified($time);
         $feed->addHub('http://pubsubhubbub.appspot.com/');
+
+        if(!is_null($this->parser->feed_link))
+        {
+            $feed->setFeedLink($this->parser->feed_link, 'atom');
+        }
 
         if(!is_null($this->parser->description))
         {
@@ -82,7 +88,14 @@ class AtomGenerator extends Generator
             $feed->addEntry($entry);
         }
 
-        header('Content-Type: text/xml;charset=utf-8');
-        echo $feed->export($this->format);
+        $output = $feed->export($this->format);
+
+        if($echo)
+        {
+            header('Content-Type: text/xml;charset=utf-8');
+            echo $output;
+        }
+
+        return $output;
     }
 }
