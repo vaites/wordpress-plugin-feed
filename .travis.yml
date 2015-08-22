@@ -1,4 +1,5 @@
 language: php
+
 php:
   - 5.3
   - 5.4
@@ -6,7 +7,7 @@ php:
   - 5.6
   - hhvm
 
-before_script
+install:
   - composer install
 
 notifications:
