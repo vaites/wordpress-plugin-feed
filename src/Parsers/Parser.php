@@ -148,13 +148,18 @@ class Parser
      * @param   string  $plugin
      * @param   string  $stability
      */
-    public function __construct($plugin, $stability = null) 
+    public function __construct($plugin, $stability = null)
     {
         $this->plugin = $plugin;
 
         // load .env
-        $dotenv = new \Dotenv\Dotenv(dirname(dirname(dirname(__FILE__))));
-        $dotenv->load();
+        $env_path = dirname(dirname(dirname(__FILE__)));
+
+        if(file_exists("$env_path/.env"))
+        {
+            $dotenv = new \Dotenv\Dotenv($env_path);
+            $dotenv->load();
+        }
 
         // error handler only for web calls
         if(php_sapi_name() != "cli") 
