@@ -1,3 +1,6 @@
+![Current release](https://img.shields.io/github/release/vaites/wordpress-plugin-feed.svg)
+[![Build Status](https://travis-ci.org/vaites/wordpress-plugin-feed.svg?branch=master)](https://travis-ci.org/vaites/wordpress-plugin-feed)
+
 WordPress Plugin Feed
 =====================
 
