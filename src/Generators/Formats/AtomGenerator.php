@@ -24,10 +24,11 @@ class AtomGenerator extends Generator
      * Generates the feed
      *
      * @param   Parser  $parser
+     * @param   int     $limit
      * @param   boolean $echo
      * @return  string
      */
-    public function generate(Parser $parser = null, $echo = true)
+    public function generate(Parser $parser = null, $limit = null, $echo = true)
     {
         if(!is_null($parser))
         {
@@ -42,11 +43,7 @@ class AtomGenerator extends Generator
         $feed->setLink($this->parser->link);
         $feed->setDateModified($time);
         $feed->addHub('http://pubsubhubbub.appspot.com/');
-
-        if(!is_null($this->parser->feed_link))
-        {
-            $feed->setFeedLink($this->parser->feed_link, 'atom');
-        }
+        $feed->setFeedLink($this->parser->feed_link, 'atom');
 
         if(!is_null($this->parser->description))
         {
@@ -65,7 +62,7 @@ class AtomGenerator extends Generator
             ));
         }
 
-        foreach($this->parser->getReleases() as $release)
+        foreach($this->parser->getReleases($limit) as $release)
         {
             // stability filter
             if($this->parser->stability != false)

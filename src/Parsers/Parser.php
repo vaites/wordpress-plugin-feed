@@ -25,6 +25,7 @@ class Parser
     protected static $aliases = array
     (
         'buddypress'                 => 'OpenSource\\BuddyPressParser',
+        'google-sitemap-generator'   => 'OpenSource\\GoogleXMLSitemapsParser',
 
         'all-in-one-seo-pack'        => 'Proprietary\\AllInOneSEOPackParser',
         'gravityforms'               => 'Proprietary\\GravityFormsParser',
@@ -162,15 +163,26 @@ class Parser
         }
 
         // error handler only for web calls
-        if(php_sapi_name() != "cli") 
+        if(php_sapi_name() != 'cli')
+        {
+            set_error_handler(array($this, 'error'));
+        }
+        else
         {
             $this->cli = true;
-            set_error_handler(array($this, 'error'));
+        }
 
-            // feed link
+        // feed link
+        if($this->cli == false)
+        {
             $host = filter_input(INPUT_SERVER, 'HTTP_HOST');
             $request = filter_input(INPUT_SERVER, 'REQUEST_URI');
             $this->feed_link = "http://{$host}{$request}";
+        }
+        // Atom feeds require a link or "self" keyword
+        else
+        {
+            $this->feed_link = "self";
         }
 
         // default stability if not set
@@ -194,7 +206,7 @@ class Parser
         {
             $this->link = "https://wordpress.org/plugins/$plugin/";
         }
-        
+
         // Zend HTTP Client instance
         $this->http = new Client();
         $this->http->setOptions(array
@@ -542,7 +554,7 @@ class Parser
      */
     public function error($errno, $errstr, $errfile, $errline, $errcontext)
     {
-        if($this->cli === true)
+        if($this->cli === false)
         {
             header('HTTP/1.1 500');
             echo "<h1>Error $errno</h1>";

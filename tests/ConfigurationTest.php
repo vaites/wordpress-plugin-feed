@@ -28,7 +28,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $parser = new Parser('jetpack');
         $generator = Generator::getInstance();
 
-        $output = $generator->generate($parser, false);
+        $output = $generator->generate($parser, null, false);
 
         $this->assertTrue((bool) preg_match('/<rss version="2.0"/', $output));
     }

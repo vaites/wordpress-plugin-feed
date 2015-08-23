@@ -33,27 +33,45 @@ Features:
 
 Because this tool parses HTML of different websites, result cannot be 100% accurate and can fail after a change in the code. So issues and pull requests are welcome...
 
-Usage
------
+Installation
+------------
 
-Just download the release package, place the code on any web server that supports PHP and add to your favorite feed reader:
-
-    http://your/web/server/wordpress-plugin-feed/index.php?plugin=PLUGIN
-
-Replace *PLUGIN* with plugin name, the same as WordPress uses in plugin URL (like *better-wp-security* for [iThemes Security](https://wordpress.org/plugins/better-wp-security))
-
-You can also clone the repository and run `composer update`:
+Just download the release package and place the code on any web server, or clone the repository:
 
     git clone https://github.com/vaites/wordpress-plugin-feed
     cd wordpress-plugin-feed
     composer update
 
-Configuration
--------------
+Remember to run `composer update` after each update.
 
-[PHP Dotenv](https://github.com/vlucas/phpdotenv) or URL parameters is used to define configuration:
-* **OUTPUT_LIMIT**: number of releases on output (default 25)
-* **OUTPUT_FORMAT**: output format (atom or rss), available as URL parameter (format)
-* **RELEASE_STABILITY**: one o more stability options (any, stable, alpha, beta, rc) separated by commas, also availabla as URL parameter (stability)
+Usage
+-----
+
+Use GET parameters:
+
+    http://your/web/server/wordpress-plugin-feed/index.php?plugin=PLUGIN
+
+Or use the command line interface:
+
+    ./cli.php generate --plugin=PLUGIN > feed.xml
+
+Replace *PLUGIN* with plugin name, the same as WordPress uses in plugin URL (like *better-wp-security* for [iThemes Security](https://wordpress.org/plugins/better-wp-security))
+
+Options
+-------
+
+[PHP Dotenv](https://github.com/vlucas/phpdotenv), GET or CLI parameters are used to define configuration:
+* **Limit**: number of releases on output (default 25)
+  * GET: `limit=10`
+  * CLI: `--limit="10"`
+  * ENV: `OUTPUT_LIMIT="10"`
+* **Format**: output format (atom or rss)
+  * GET: `format=rss`
+  * CLI: `--format="rss""`
+  * ENV: `OUTPUT_FORMAT="rss"`
+* **Stability**: one o more stability options (any, stable, alpha, beta, rc) separated by commas (default any)
+  * GET: `stability=stable,rc`
+  * CLI: `--stability="stable,rc"`
+  * ENV: `RELEASE_STABILITY="stable,rc"`
 
 There's an *.env.example* file that you can copy to *.env*.

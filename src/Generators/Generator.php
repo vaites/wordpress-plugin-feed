@@ -93,8 +93,9 @@ abstract class Generator
      * Generate and returns output, printing if specified
      *
      * @param   Parser  $parser
+     * @param   int     $limit
      * @param   boolean $echo
      * @return  string
      **/
-    abstract public function generate(Parser $parser = null, $echo = true);
+    abstract public function generate(Parser $parser = null, $limit = null, $echo = true);
 }

@@ -226,4 +226,37 @@ class StandardTest extends PHPUnit_Framework_TestCase
 
         $this->assertGreaterThan(0, count($releases));
     }
+
+    /**
+     * Standard plugin 21: TinyMCE Advanced
+     */
+    public function testTinyMCEAdvanced()
+    {
+        $parser = new Parser('tinymce-advanced');
+        $releases = $parser->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Standard plugin 22: NextGEN Gallery
+     */
+    public function testNextGENGallery()
+    {
+        $parser = new Parser('nextgen-gallery');
+        $releases = $parser->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Standard plugin 23: Google Analytics by Yoast
+     */
+    public function testGoogleAnalyticsByYoast()
+    {
+        $parser = new Parser('google-analytics-for-wordpress');
+        $releases = $parser->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
 }
