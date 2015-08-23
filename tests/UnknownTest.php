@@ -12,7 +12,7 @@ class UnknownTest extends PHPUnit_Framework_TestCase
      */
     public function testUnknownPlugin()
     {
-        $parser = new Parser('unknown-plugin');
+        $parser = Parser::getInstance('unknown-plugin');
         $releases = $parser->getReleases();
 
         $this->assertEquals(0, count($releases));

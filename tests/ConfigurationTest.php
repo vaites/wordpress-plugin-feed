@@ -15,7 +15,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         putenv('OUTPUT_LIMIT=10');
 
-        $parser = new Parser('jetpack');
+        $parser = Parser::getInstance('jetpack');
         $releases = $parser->getReleases();
 
         $this->assertEquals(10, count($releases));
@@ -25,7 +25,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         putenv('OUTPUT_FORMAT=rss');
 
-        $parser = new Parser('jetpack');
+        $parser = Parser::getInstance('jetpack');
         $generator = Generator::getInstance();
 
         $output = $generator->generate($parser, null, false);

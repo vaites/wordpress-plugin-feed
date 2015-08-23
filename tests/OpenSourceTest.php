@@ -1,6 +1,6 @@
 <?php
 
-use WordPressPluginFeed\Parsers\OpenSource\BuddyPressParser;
+use WordPressPluginFeed\Parsers\Parser;
 
 /**
  * Tests for open source plugins with external changelog
@@ -8,11 +8,22 @@ use WordPressPluginFeed\Parsers\OpenSource\BuddyPressParser;
 class OpenSourceTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Proprietary plugin 1: BuddyPress
+     * Open source plugin 1: BuddyPress
      */
     public function testBuddyPress()
     {
-        $parser = new BuddyPressParser('buddypress');
+        $parser = Parser::getInstance('buddypress');
+        $releases = $parser->getReleases();
+
+        $this->assertGreaterThan(0, count($releases));
+    }
+
+    /**
+     * Open source plugin 2: Google XML Sitemaps
+     */
+    public function testGoogleXMLSitemaps()
+    {
+        $parser = Parser::getInstance('google-sitemap-generator');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));

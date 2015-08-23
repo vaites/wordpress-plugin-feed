@@ -12,7 +12,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testAkismet()
     {
-        $parser = new Parser('akismet');
+        $parser = Parser::getInstance('akismet');
         $releases = $parser->getReleases();
         
         $this->assertGreaterThan(0, count($releases));
@@ -23,7 +23,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testWPSuperCache()
     {
-        $parser = new Parser('wp-super-cache');
+        $parser = Parser::getInstance('wp-super-cache');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -34,7 +34,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testContactForm7()
     {
-        $parser = new Parser('contact-form-7');
+        $parser = Parser::getInstance('contact-form-7');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -45,7 +45,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testWordfence()
     {
-        $parser = new Parser('wordfence');
+        $parser = Parser::getInstance('wordfence');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -56,7 +56,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testBetterWPSecurity()
     {
-        $parser = new Parser('better-wp-security');
+        $parser = Parser::getInstance('better-wp-security');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -67,7 +67,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testWooCommerce()
     {
-        $parser = new Parser('woocommerce');
+        $parser = Parser::getInstance('woocommerce');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -78,7 +78,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testJetPack()
     {
-        $parser = new Parser('jetpack');
+        $parser = Parser::getInstance('jetpack');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -89,7 +89,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testYoastSEO()
     {
-        $parser = new Parser('wordpress-seo');
+        $parser = Parser::getInstance('wordpress-seo');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -100,7 +100,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testW3TotalCache()
     {
-        $parser = new Parser('w3-total-cache');
+        $parser = Parser::getInstance('w3-total-cache');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -111,7 +111,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdraftPlus()
     {
-        $parser = new Parser('updraftplus');
+        $parser = Parser::getInstance('updraftplus');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -122,7 +122,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testShortcodesUltimate()
     {
-        $parser = new Parser('shortcodes-ultimate');
+        $parser = Parser::getInstance('shortcodes-ultimate');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -133,7 +133,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testMailChimpForWordPress()
     {
-        $parser = new Parser('mailchimp-for-wp');
+        $parser = Parser::getInstance('mailchimp-for-wp');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -144,7 +144,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testUserRoleEditor()
     {
-        $parser = new Parser('user-role-editor');
+        $parser = Parser::getInstance('user-role-editor');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -155,7 +155,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testMailPoetNewsletters()
     {
-        $parser = new Parser('wysija-newsletters');
+        $parser = Parser::getInstance('wysija-newsletters');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -166,7 +166,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testSEOUltimate()
     {
-        $parser = new Parser('seo-ultimate');
+        $parser = Parser::getInstance('seo-ultimate');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -177,7 +177,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testNinjaForms()
     {
-        $parser = new Parser('ninja-forms');
+        $parser = Parser::getInstance('ninja-forms');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -188,7 +188,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testSucuriSecurity()
     {
-        $parser = new Parser('sucuri-scanner');
+        $parser = Parser::getInstance('sucuri-scanner');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -199,7 +199,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testPHPCodeWidget()
     {
-        $parser = new Parser('php-code-widget');
+        $parser = Parser::getInstance('php-code-widget');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -210,7 +210,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testNewsletter()
     {
-        $parser = new Parser('newsletter');
+        $parser = Parser::getInstance('newsletter');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -221,7 +221,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testCookieLawInfo()
     {
-        $parser = new Parser('cookie-law-info');
+        $parser = Parser::getInstance('cookie-law-info');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -232,7 +232,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testTinyMCEAdvanced()
     {
-        $parser = new Parser('tinymce-advanced');
+        $parser = Parser::getInstance('tinymce-advanced');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -243,7 +243,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testNextGENGallery()
     {
-        $parser = new Parser('nextgen-gallery');
+        $parser = Parser::getInstance('nextgen-gallery');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
@@ -254,7 +254,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testGoogleAnalyticsByYoast()
     {
-        $parser = new Parser('google-analytics-for-wordpress');
+        $parser = Parser::getInstance('google-analytics-for-wordpress');
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
