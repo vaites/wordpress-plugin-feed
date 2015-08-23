@@ -387,7 +387,7 @@ class Parser
                 continue;
             }
             
-            // tag instance
+            /* @var $tag Tag */
             $tag =& $this->tags[$version];
 
             // release object
@@ -413,7 +413,13 @@ class Parser
                     break;
                 }
             }
-            
+
+            // use tag description if no content is detected
+            if(empty($release->content))
+            {
+                $release->content = $tag->description;
+            }
+
             $this->releases[$version] = $release;
         }
         
