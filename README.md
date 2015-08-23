@@ -20,10 +20,11 @@ Features:
 * Highlighted security updates
   * Link to known vulnerabilities on [CVE Details](http://www.cvedetails.com)
 * [Semantic Versioning](http://semver.org/) syntax
-* Support for (less accurate) changelog of proprietary plugins or with external changelog:
+* Support for (less accurate) changelog of plugins with external information:
   * All-In-One SEO Pack
   * BuddyPress
   * Gravity Forms
+  * Google XML Sitemaps
   * Slider Revolution
   * The WordPress Multilingual Plugin (WPML)
   * UberMenu
