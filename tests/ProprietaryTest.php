@@ -8,79 +8,31 @@ use WordPressPluginFeed\Parsers\Parser;
 class ProprietaryTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Proprietary plugin 1: All In One Seo PACK
+     * Proprietary plugin test
+     *
+     * @dataProvider    pluginProvider
+     * @param   string  $plugin
      */
-    public function testAllInOneSEOPack()
+    public function testProprietary($plugin)
     {
-        $parser = Parser::getInstance('all-in-one-seo-pack');
+        $parser = Parser::getInstance($plugin);
         $releases = $parser->getReleases();
         
         $this->assertGreaterThan(0, count($releases));
     }
 
     /**
-     * Proprietary plugin 2: Gravity Forms
+     * Plugin provider
+     *
+     * @return  array
      */
-    public function testGravityForms()
+    public function pluginProvider()
     {
-        $parser = Parser::getInstance('gravityforms');
-        $releases = $parser->getReleases();
-
-        $this->assertGreaterThan(0, count($releases));
-    }
-
-    /**
-     * Proprietary plugin 3: Revolution Slider
-     */
-    public function testRevolutionSlider()
-    {
-        $parser = Parser::getInstance('revslider');
-        $releases = $parser->getReleases();
-
-        $this->assertGreaterThan(0, count($releases));
-    }
-
-    /**
-     * Proprietary plugin 4: The WordPress Multilingual Plugin
-     */
-    public function testWPML()
-    {
-        $parser = Parser::getInstance('sitepress-multilingual-cms');
-        $releases = $parser->getReleases();
-
-        $this->assertGreaterThan(0, count($releases));
-    }
-
-    /**
-     * Proprietary plugin 5: Visual Composer
-     */
-    public function testVisualComposer()
-    {
-        $parser = Parser::getInstance('js-composer');
-        $releases = $parser->getReleases();
-
-        $this->assertGreaterThan(0, count($releases));
-    }
-
-    /**
-     * Proprietary plugin 6: Ultimate Addons for Visual Composer
-     */
-    public function testUltimateVCAddons()
-    {
-        $parser = Parser::getInstance('ultimate-vc-addons');
-        $releases = $parser->getReleases();
-
-        $this->assertGreaterThan(0, count($releases));
-    }
-
-    /**
-     * Proprietary plugin 7: UberMenu
-     */
-    public function testUberMenu()
-    {
-        $parser = Parser::getInstance('ubermenu');
-        $releases = $parser->getReleases();
-
-        $this->assertGreaterThan(0, count($releases));
+        return array
+        (
+            array('gravityforms'), array('revslider'),
+            array('ultimate-vc-addons'),array('ubermenu'),
+            array('sitepress-multilingual-cms'), array('js-composer')
+        );
     }
 }

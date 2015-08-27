@@ -8,24 +8,29 @@ use WordPressPluginFeed\Parsers\Parser;
 class OpenSourceTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Open source plugin 1: BuddyPress
+     * Open source plugin test
+     *
+     * @dataProvider    pluginProvider
+     * @param   string  $plugin
      */
-    public function testBuddyPress()
+    public function testOpenSource($plugin)
     {
-        $parser = Parser::getInstance('buddypress');
+        $parser = Parser::getInstance($plugin);
         $releases = $parser->getReleases();
 
         $this->assertGreaterThan(0, count($releases));
     }
 
     /**
-     * Open source plugin 2: Google XML Sitemaps
+     * Plugin provider
+     *
+     * @return  array
      */
-    public function testGoogleXMLSitemaps()
+    public function pluginProvider()
     {
-        $parser = Parser::getInstance('google-sitemap-generator');
-        $releases = $parser->getReleases();
-
-        $this->assertGreaterThan(0, count($releases));
+        return array
+        (
+            array('buddypress'), array('google-sitemap-generator')
+        );
     }
 }

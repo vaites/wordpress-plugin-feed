@@ -18,9 +18,12 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $parser = Parser::getInstance('jetpack');
         $releases = $parser->getReleases();
 
-        $this->assertEquals(10, count($releases));
+        $this->assertCount(10, $releases);
     }
 
+    /**
+     * Format configuration test
+     */
     public function testFormatConfiguration()
     {
         putenv('OUTPUT_FORMAT=rss');

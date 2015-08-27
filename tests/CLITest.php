@@ -5,8 +5,14 @@ use WordPressPluginFeed\Clients\CLIClient;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * Command line interface test
+ */
 class CLITest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * CLI with format test
+     */
     public function testCLI()
     {
         $application = new Application();
