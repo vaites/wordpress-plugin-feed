@@ -34,7 +34,7 @@ class RevolutionSliderParser extends Parser
      */
     public $image = array
     (
-        'uri' => 'https://0.s3.envato.com/files/104347001/smallicon2.png',
+        'uri' => 'https://thumb-cc.s3.envato.com/files/144560542/smallicon.png',
         'height' => 80,
         'width' => 80
     );
