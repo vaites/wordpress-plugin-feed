@@ -86,8 +86,6 @@ class Release
      */
     public function filter()
     {
-        $highlight = array();
-
         // add release type
         if($this->stability != 'stable')
         {
@@ -96,6 +94,7 @@ class Release
 
         // purify HTML
         $this->content = $this->purifier->purify($this->content);
+        $this->content = html_entity_decode($this->content);
 
         // create a DOM crawler to modify HTML
         $crawler = new Crawler($this->content);
@@ -105,7 +104,7 @@ class Release
         {
             $node->setAttribute('target', '_blank');
         }
-        $this->content = $crawler->html();
+        $this->content = utf8_decode($crawler->html());
 
         // detect security keywords
         $content = strip_tags($this->content);
