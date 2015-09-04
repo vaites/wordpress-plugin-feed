@@ -24,16 +24,17 @@ class Parser
      */
     protected static $aliases = array
     (
-        'buddypress'                 => 'OpenSource\\BuddyPressParser',
-        'google-sitemap-generator'   => 'OpenSource\\GoogleXMLSitemapsParser',
+        'buddypress'                  => 'OpenSource\\BuddyPressParser',
+        'google-sitemap-generator'    => 'OpenSource\\GoogleXMLSitemapsParser',
 
-        'all-in-one-seo-pack'        => 'Proprietary\\AllInOneSEOPackParser',
-        'gravityforms'               => 'Proprietary\\GravityFormsParser',
-        'revslider'                  => 'Proprietary\\RevolutionSliderParser',
-        'js-composer'                => 'Proprietary\\VisualComposerParser',
-        'sitepress-multilingual-cms' => 'Proprietary\\WPMLParser',
-        'ubermenu'                   => 'Proprietary\\UberMenuParser',
-        'ultimate-vc-addons'         => 'Proprietary\\UltimateVCAddonsParser'
+        'all-in-one-seo-pack'         => 'Proprietary\\AllInOneSEOPackParser',
+        'gravityforms'                => 'Proprietary\\GravityFormsParser',
+        'revslider'                   => 'Proprietary\\RevolutionSliderParser',
+        'js-composer'                 => 'Proprietary\\VisualComposerParser',
+        'sitepress-multilingual-cms'  => 'Proprietary\\WPMLParser',
+        'ubermenu'                    => 'Proprietary\\UberMenuParser',
+        'ultimate-vc-addons'          => 'Proprietary\\UltimateVCAddonsParser',
+        'yoast-wordpress-seo-premium' => 'Proprietary\\YoastSEOPremiumParser'
     );
 
     /**

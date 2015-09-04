@@ -1,5 +1,6 @@
-![Current release](https://img.shields.io/github/release/vaites/wordpress-plugin-feed.svg)
+[![Current release](https://img.shields.io/github/release/vaites/wordpress-plugin-feed.svg)](https://github.com/vaites/wordpress-plugin-feed/releases/latest)
 [![Build Status](https://travis-ci.org/vaites/wordpress-plugin-feed.svg?branch=master)](https://travis-ci.org/vaites/wordpress-plugin-feed)
+[![Code coverage](https://img.shields.io/codecov/c/github/vaites/wordpress-plugin-feed.svg)](https://codecov.io/github/vaites/wordpress-plugin-feed)
 
 WordPress Plugin Feed
 =====================
@@ -21,15 +22,16 @@ Features:
   * Link to known vulnerabilities on [CVE Details](http://www.cvedetails.com)
 * [Semantic Versioning](http://semver.org/) syntax
 * Support for (less accurate) changelog of plugins with external information:
-  * All-In-One SEO Pack
-  * BuddyPress
-  * Gravity Forms
-  * Google XML Sitemaps
-  * Slider Revolution
-  * The WordPress Multilingual Plugin (WPML)
-  * UberMenu
-  * Ultimade Addons for Visual Composer
-  * Visual Composer
+  * [All-In-One SEO Pack](http://semperplugins.com/plugins/all-in-one-seo-pack-pro-version/)
+  * [BuddyPress](https://buddypress.org/)
+  * [Gravity Forms](http://www.gravityforms.com/)
+  * [Google XML Sitemaps](http://www.arnebrachhold.de/projects/wordpress-plugins/google-xml-sitemaps-generator/)
+  * [Slider Revolution](http://www.themepunch.com/portfolio/slider-revolution-wordpress-plugin/)
+  * [The WordPress Multilingual Plugin (WPML)](http://wpml.org)
+  * [UberMenu](http://wpmegamenu.com/)
+  * [Ultimade Addons for Visual Composer](http://vc.wpbakery.com/addons/ultimate-addon-visual-composer/)
+  * [Visual Composer](http://vc.wpbakery.com/)
+  * [Yoast SEO Premium](https://yoast.com/wordpress/plugins/seo-premium/)
 * Compatible with PHP 5.3 or greater
 
 Because this tool parses HTML of different websites, result cannot be 100% accurate and can fail after a change in the code. So issues and pull requests are welcome...

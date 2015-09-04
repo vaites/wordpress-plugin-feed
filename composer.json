@@ -1,7 +1,7 @@
 {
     "name": "WordPress Plugin Feed",
     "description": "Provides detailed feeds for WordPress plugin releases",
-    "version": "0.6.3",
+    "version": "0.6.4",
     "autoload": {
         "psr-4": {
             "WordPressPluginFeed\\": "src/"
