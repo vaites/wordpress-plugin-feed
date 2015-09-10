@@ -1,6 +1,5 @@
 [![Current release](https://img.shields.io/github/release/vaites/wordpress-plugin-feed.svg)](https://github.com/vaites/wordpress-plugin-feed/releases/latest)
 [![Build Status](https://travis-ci.org/vaites/wordpress-plugin-feed.svg?branch=master)](https://travis-ci.org/vaites/wordpress-plugin-feed)
-[![Code coverage](https://img.shields.io/codecov/c/github/vaites/wordpress-plugin-feed.svg)](https://codecov.io/github/vaites/wordpress-plugin-feed)
 
 WordPress Plugin Feed
 =====================
