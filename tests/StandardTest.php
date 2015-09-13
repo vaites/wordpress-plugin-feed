@@ -41,7 +41,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
             array('sucuri-scanner'), array('php-code-widget'),
             array('ninja-forms'), array('cookie-law-info'),
             array('tinymce-advanced'), array('nextgen-gallery'),
-            array('google-analytics-for-wordpress')
+            array('google-analytics-for-wordpress'),
+            array('advanced-custom-fields')
         );
     }
 }
