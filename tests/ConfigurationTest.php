@@ -13,12 +13,12 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
      */
     public function testLimitConfiguration()
     {
-        putenv('OUTPUT_LIMIT=10');
+        putenv('OUTPUT_LIMIT=5');
 
-        $parser = Parser::getInstance('jetpack');
+        $parser = Parser::getInstance('akismet');
         $releases = $parser->getReleases();
 
-        $this->assertCount(10, $releases);
+        $this->assertCount(5, $releases);
     }
 
     /**

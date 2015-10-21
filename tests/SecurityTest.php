@@ -12,16 +12,16 @@ class SecurityTest extends PHPUnit_Framework_TestCase
      */
     public function testSecurityJetPack()
     {
-        $parser = Parser::getInstance('jetpack');
+        $parser = Parser::getInstance('akismet');
         $releases = $parser->getReleases(false);
 
         $this->assertTrue
         (
-            isset($releases['2.9.3']) &&
-            preg_match('/security/i', $releases['2.9.3']->title) &&
+            isset($releases['3.1.2']) &&
+            preg_match('/security/i', $releases['3.1.2']->title) &&
 
-            isset($releases['3.5.3']) &&
-            preg_match('/security/i', $releases['3.5.3']->title)
+            isset($releases['3.1.5']) &&
+            preg_match('/security/i', $releases['3.1.5']->title)
         );
     }
 }
