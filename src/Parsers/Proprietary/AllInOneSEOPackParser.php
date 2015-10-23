@@ -52,7 +52,7 @@ class AllInOneSEOPackParser extends Parser
         // need to parse changelog block
         $changelog = $crawler->filter('.entry-content')->children();
         
-        // each h3 is a release
+        // each paragraph is a release
         foreach($changelog->filter('p') as $index=>$node)
         {
             // convert release title to version

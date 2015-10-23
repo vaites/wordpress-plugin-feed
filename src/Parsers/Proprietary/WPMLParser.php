@@ -1,7 +1,7 @@
 <?php namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use Carbon\Carbon;
-use Zend\Feed\Reader\Reader;
+use Symfony\Component\DomCrawler\Crawler;
 
 use WordPressPluginFeed\Release;
 use WordPressPluginFeed\Parsers\Parser;
@@ -46,53 +46,48 @@ class WPMLParser extends Parser
      */    
     protected $sources = array
     (
-        'profile'   => 'https://wpml.org/category/changelog/feed/atom/'
+        'profile'   => 'https://wpml.org/category/changelog/'
     );
     
     /**
-     * Parse public releases using feed from official blog
+     * Parse public releases using changelog category from official blog
      */    
     protected function loadReleases()
     {
         // fetch 5 pages of feed
         for($p = 0; $p < 5; $p++)
         {
-            $query = "?paged=$p";
-            $changelog = Reader::importString($this->fetch('profile', $query));
+            // profile
+            $crawler = new Crawler($this->fetch('profile', "?paged=$p"));
 
-            // each entry can be a release
-            foreach($changelog as $entry)
+            // need to parse changelog block
+            $changelog = $crawler->filter('.post > h2');
+
+            // each h2 is a release
+            foreach($changelog as $index=>$node)
             {
-                // WPML releases starts with "WPML"
-                if(!preg_match('/^WPML\s+\d+\./i', $entry->getTitle()))
+                // title must start with WPML and version
+                $regexp = '/^WPML\s+(\d+)\.(\d+)(\.(\d+))?\s+/i';
+                if(!preg_match($regexp, $node->textContent))
                 {
                     continue;
                 }
 
                 // convert release title to version
-                $version = $this->parseVersion($entry->getTitle());
-                
-                // avoid betas
-                if(preg_match('/b\d+/i', $version))
-                {
-                    continue;
-                }
-                elseif(preg_match('/beta/i', $entry->getLink()))
-                {
-                    continue;
-                }
-                
-                // creation time
-                $created = $entry->getDateCreated()->getTimestamp();
+                $version = $this->parseVersion($node->textContent);
 
                 // release object
                 $release = new Release();
-                $release->link = $entry->getLink();
+                $release->link = $changelog->eq($index)->filter('a')->attr('href');
                 $release->title = "{$this->title} $version";
-                $release->description = $entry->getDescription();
-                $release->stability = $this->parseStability($entry->getTitle());
-                $release->created = Carbon::createFromTimestamp($created);
-                $release->content = $entry->getContent();
+                $release->description = false;
+                $release->stability = $this->parseStability($node->textContent);
+                $release->created = time();
+                $release->content = $crawler->filter('.post .entry')->eq($index)->html();
+
+                // pubdate needs to be parsed
+                $release->created = Carbon::parse(preg_replace('/\s+by(.+)/', '',
+                    trim($crawler->filter('.post > small')->eq($index)->text())));
 
                 $this->releases[$version] = $release;
             }
