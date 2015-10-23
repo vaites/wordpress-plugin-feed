@@ -344,8 +344,9 @@ class Parser
                 $tag->name = trim($row->filter('.name')->text());  
                 $tag->revision = trim($row->filter('.rev a')->first()->text());
                 $tag->description = trim($row->filter('.change')->text());
+                $tag->author = trim($row->filter('.author')->text());
                 $tag->created = Carbon::parse($time);
-                
+
                 // fixes to tag name
                 $tag->name = preg_replace('/^v/', '', $tag->name);
                 
@@ -395,6 +396,7 @@ class Parser
             $release = new Release();
             $release->title = "{$this->title} $version";
             $release->description = $tag->description;
+            $release->author = $tag->author;
             $release->stability = $this->parseStability($node->textContent);
             $release->created = $tag->created;
             $release->content = '';

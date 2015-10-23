@@ -17,14 +17,21 @@ class Release
     /**
      * Changelog excerpt
      *
-     * @var
+     * @var string
      */
     public $description;
 
     /**
+     * Release author
+     *
+     * @var array|string
+     */
+    public $author;
+
+    /**
      * Stability
      *
-     * @var
+     * @var string
      */
     public $stability;
 

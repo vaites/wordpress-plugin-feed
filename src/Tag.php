@@ -24,6 +24,13 @@ class Tag
     public $description;
 
     /**
+     * Subversion commit author
+     *
+     * @var
+     */
+    public $author;
+
+    /**
      * Publish date
      *
      * @var \Carbon\Carbon

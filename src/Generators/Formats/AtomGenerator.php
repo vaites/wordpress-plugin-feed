@@ -82,6 +82,20 @@ class AtomGenerator extends Generator
             $entry->setDateCreated($release->created->timestamp);
             $entry->setDescription($release->content);
 
+            // entry author
+            if(is_string($release->author))
+            {
+                $entry->addAuthor(array
+                (
+                    'name' => $release->author,
+                    'uri' => "https://profiles.wordpress.org/{$release->author}/"
+                ));
+            }
+            elseif(is_array($release->author))
+            {
+                $entry->addAuthor($release->author);
+            }
+
             $feed->addEntry($entry);
         }
 
