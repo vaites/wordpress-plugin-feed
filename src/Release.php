@@ -8,6 +8,13 @@ use Symfony\Component\DomCrawler\Crawler;
 class Release
 {
     /**
+     * Version
+     *
+     * @var string
+     */
+    public $version;
+
+    /**
      * Plugin name and version
      *
      * @var string
@@ -57,6 +64,13 @@ class Release
     public $created;
 
     /**
+     * List of fixed vulnerabilities
+     *
+     * @var array
+     */
+    public $vulnerabilities;
+
+    /**
      * Keywords that activate "Security release" message
      *
      * @var array
@@ -64,7 +78,7 @@ class Release
     protected static $keywords = array
     (
         'safe', 'trusted', 'security', 'vulnerability', 'leak', 'attack',
-        'CSRF', 'SQLi', 'XSS', 'LFI', 'RFI', 'CVE-'
+        'CSRF', 'SQLi', 'XSS', 'XXE', 'LFI', 'RFI', 'CVE-'
     );
 
     /**
@@ -139,6 +153,7 @@ class Release
         {
             $this->title .= ' (Security release)';
 
+            // highlight security keywords
             foreach($highlight as $search=>$replace)
             {
                 $this->content = preg_replace
@@ -148,6 +163,26 @@ class Release
                     $this->content
                 );
             }
+        }
+
+        // add warning to title and links to WPScan Vulnerability Database
+        if(!empty($this->vulnerabilities))
+        {
+            if(empty($highlight))
+            {
+                $this->title .= ' (Security release)';
+            }
+
+            $this->content .= "\n\n<p>Fixed vulnerabilities:</p>\n<ul>";
+
+            foreach($this->vulnerabilities as $vulnerability)
+            {
+                $this->content .= "<li><a href=\"https://wpvulndb.com/vulnerabilities/{$vulnerability->id}\">"
+                                 . "{$vulnerability->title}</a></li>\n";
+
+            }
+
+            $this->content .= "\n</ul>";
         }
 
         return $this;

@@ -82,6 +82,7 @@ class UberMenuParser extends Parser
 
             // release object
             $release = new Release();
+            $release->version = $version;
             $release->link = "{$this->sources['profile']}#$id";
             $release->title = "{$this->title} $version";
             $release->description = false;
@@ -92,7 +93,7 @@ class UberMenuParser extends Parser
             $pubdate = strtotime($match[2]);
             $release->created = Carbon::createFromTimestamp($pubdate);
 
-            $this->releases[$version] = $release;
+            $this->addRelease($release);
         }
     }
 }

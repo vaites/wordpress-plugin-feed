@@ -66,6 +66,7 @@ class AllInOneSEOPackParser extends Parser
             
             // release object
             $release = new Release();
+            $release->version = $version;
             $release->link = $this->sources['profile'];
             $release->title = "{$this->title} $version";
             $release->description = false;
@@ -89,7 +90,7 @@ class AllInOneSEOPackParser extends Parser
                 }
             }
             
-            $this->releases[$version] = $release;
+            $this->addRelease($release);
         }
     }
 }

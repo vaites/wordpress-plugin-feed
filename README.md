@@ -19,7 +19,7 @@ Features:
 * Accurate release date (based on Subversion commits)
 * Link to Subversion commit list between releases
 * Highlighted security updates
-  * Link to known vulnerabilities on [CVE Details](http://www.cvedetails.com)
+  * Link to known vulnerabilities on [CVE Details](http://www.cvedetails.com) and [WPScan Vulnerability Database](https://wpvulndb.com)
 * [Semantic Versioning](http://semver.org/) syntax
 * Support for (less accurate) changelog of plugins with external information:
   * [All-In-One SEO Pack](http://semperplugins.com/plugins/all-in-one-seo-pack-pro-version/)

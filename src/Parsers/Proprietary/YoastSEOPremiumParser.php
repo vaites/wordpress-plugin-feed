@@ -71,6 +71,7 @@ class YoastSEOPremiumParser extends Parser
 
             // release object
             $release = new Release();
+            $release->version = $version;
             $release->link = "{$this->sources['profile']}#{$id}";
             $release->title = "{$this->title} $version";
             $release->description = false;
@@ -98,7 +99,7 @@ class YoastSEOPremiumParser extends Parser
             $release->created = Carbon::parse($changelog->filter('h2')
                     ->eq($index)->nextAll()->first()->text());
 
-            $this->releases[$version] = $release;
+            $this->addRelease($release);
         }
     }
 }

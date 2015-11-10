@@ -78,6 +78,7 @@ class RevolutionSliderParser extends Parser
             
             // release object
             $release = new Release();
+            $release->version = $version;
             $release->link = "{$this->sources['profile']}#{$id}";
             $release->title = "{$this->title} $version";
             $release->description = false;
@@ -104,7 +105,7 @@ class RevolutionSliderParser extends Parser
             // pubdate needs to be parsed
             $release->created = Carbon::parse($pubdate[2]);
             
-            $this->releases[$version] = $release;
+            $this->addRelease($release);
         }
     }
 }

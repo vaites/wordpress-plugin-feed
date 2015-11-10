@@ -78,6 +78,7 @@ class GravityFormsParser extends Parser
 
                 // release object
                 $release = new Release();
+                $release->version = $version;
                 $release->link = $entry->getLink();
                 $release->title = "{$this->title} $version";
                 $release->description = $entry->getDescription();
@@ -85,7 +86,7 @@ class GravityFormsParser extends Parser
                 $release->created = Carbon::createFromTimestamp($created);
                 $release->content = $entry->getContent();
 
-                $this->releases[$version] = $release;
+                $this->addRelease($release);
             }
         }
     }

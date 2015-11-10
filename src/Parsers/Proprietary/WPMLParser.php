@@ -78,6 +78,7 @@ class WPMLParser extends Parser
 
                 // release object
                 $release = new Release();
+                $release->version = $version;
                 $release->link = $changelog->eq($index)->filter('a')->attr('href');
                 $release->title = "{$this->title} $version";
                 $release->description = false;
@@ -89,7 +90,7 @@ class WPMLParser extends Parser
                 $release->created = Carbon::parse(preg_replace('/\s+by(.+)/', '',
                     trim($crawler->filter('.post > small')->eq($index)->text())));
 
-                $this->releases[$version] = $release;
+                $this->addRelease($release);
             }
         }
     }

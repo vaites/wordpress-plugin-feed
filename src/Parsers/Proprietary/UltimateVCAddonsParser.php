@@ -58,8 +58,7 @@ class UltimateVCAddonsParser extends Parser
         $crawler = new Crawler($this->fetch('profile'));
         
         // need to parse changelog block
-        $changelog = $crawler->filter('#item-description__changelog')
-                    ->nextAll();
+        $changelog = $crawler->filter('#item-description__changelog')->nextAll();
 
         // each p is a release
         foreach($changelog->filter('p') as $index=>$node)
@@ -80,6 +79,7 @@ class UltimateVCAddonsParser extends Parser
 
             // release object
             $release = new Release();
+            $release->version = $version;
             $release->link = "{$this->sources['profile']}#$id";
             $release->title = "{$this->title} $version";
             $release->description = false;
@@ -105,7 +105,7 @@ class UltimateVCAddonsParser extends Parser
             $pubdate = $match[1] . ' ' . $match[2] . ', ' . $match[3];
             $release->created = Carbon::parse($pubdate);
 
-            $this->releases[$version] = $release;
+            $this->addRelease($release);
         }
     }
 }

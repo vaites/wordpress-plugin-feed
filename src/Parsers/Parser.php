@@ -113,6 +113,13 @@ class Parser
     protected $tags = array();
     
     /**
+     * WPScan Vulnerability Database
+     *
+     * @var array
+     */
+    protected $vulnerabilities = array();
+
+    /**
      * Source URLs 
      *
      * @var array
@@ -245,6 +252,7 @@ class Parser
         // load releases after class config
         try
         {
+            $this->loadVulnerabilities();
             $this->loadReleases();
         }
         catch(Exception $exception)
@@ -286,7 +294,7 @@ class Parser
     }
     
     /**
-     * Get HTML code from changelog tab (results are cached)
+     * Fetch a source (results are cached)
      * 
      * @link    http://framework.zend.com/manual/2.4/en/modules/zend.http.client.html
      * @param   string  $type   profile, tags or image
@@ -318,6 +326,21 @@ class Parser
         }
         
         return $code;
+    }
+
+    /**
+     * Add a release to list
+     *
+     * @param   $release
+     */
+    public function addRelease(Release $release)
+    {
+        if(isset($this->vulnerabilities[$release->version]))
+        {
+            $release->vulnerabilities = $this->vulnerabilities[$release->version];
+        }
+
+        $this->releases[$release->version] = $release;
     }
     
     /**
@@ -351,6 +374,31 @@ class Parser
                 $tag->name = preg_replace('/^v/', '', $tag->name);
                 
                 $this->tags[$tag->name] = $tag;
+            }
+        }
+    }
+
+    /**
+     * Get known vulnerabilities from WPScan Vulnerability Database
+     *
+     * @link    https://wpvulndb.com/api
+     */
+    public function loadVulnerabilities()
+    {
+        $this->sources['vulnerabilities'] = 'https://wpvulndb.com/api/v2/plugins/' . $this->plugin;
+
+        $response = @json_decode($this->fetch('vulnerabilities'));
+
+        if(is_object($response) && isset($response->{$this->plugin}->vulnerabilities))
+        {
+            foreach($response->{$this->plugin}->vulnerabilities as $vulnerability)
+            {
+                if(!isset($this->vulnerabilities[$vulnerability->fixed_in]))
+                {
+                    $this->vulnerabilities[$vulnerability->fixed_in] = array();
+                }
+
+                $this->vulnerabilities[$vulnerability->fixed_in][] = $vulnerability;
             }
         }
     }
@@ -394,6 +442,7 @@ class Parser
 
             // release object
             $release = new Release();
+            $release->version = $version;
             $release->title = "{$this->title} $version";
             $release->description = $tag->description;
             $release->author = $tag->author;
@@ -423,7 +472,7 @@ class Parser
                 $release->content = $tag->description;
             }
 
-            $this->releases[$version] = $release;
+            $this->addRelease($release);
         }
         
         // with zero releases, generate release data from Trac
@@ -440,7 +489,7 @@ class Parser
                 $release->created = $tag->created;
                 $release->content = "Commit message: " . $tag->description;
 
-                $this->releases[$version] = $release;
+                $this->addRelease($release);
             }
             
             reset($this->tags);            
@@ -477,7 +526,7 @@ class Parser
                 $release->link .= '&stop_rev=' . $previous->revision;
             }
             
-            $this->releases[$version] = $release;
+            $this->addRelease($release);
         }
     }
     

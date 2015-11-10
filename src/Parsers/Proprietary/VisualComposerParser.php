@@ -58,8 +58,7 @@ class VisualComposerParser extends Parser
         $crawler = new Crawler($this->fetch('profile'));
         
         // need to parse changelog block
-        $changelog = $crawler->filter('#item-description__updates')
-                    ->nextAll()->filter('pre')->eq(0);
+        $changelog = $crawler->filter('#item-description__updates')->nextAll()->filter('pre')->eq(0);
 
         // each release has a title with date and version followed by changes
         foreach(explode("\n\n", $changelog->text()) as $block)
@@ -82,6 +81,7 @@ class VisualComposerParser extends Parser
 
             // release object
             $release = new Release();
+            $release->version = $version;
             $release->link = "{$this->sources['profile']}#$id";
             $release->title = "{$this->title} $version";
             $release->description = false;
@@ -92,7 +92,7 @@ class VisualComposerParser extends Parser
             $pubdate = $match[3] . '-' . $match[2] . '-' . $match[1];
             $release->created = Carbon::parse($pubdate);
 
-            $this->releases[$version] = $release;
+            $this->addRelease($release);
         }
     }
 }
