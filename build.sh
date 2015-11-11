@@ -9,7 +9,7 @@ if [ ! -f $BUILD ]; then
     composer update
 
     tar czvf $BUILD ./ --exclude=.env --exclude=.git --exclude=.idea --exclude=nbproject \
-                       --exclude=build* --exclude=cache/zfcache-* --exclude=composer.lock
+                       --exclude=reports --exclude=build* --exclude=cache/zfcache-* --exclude=composer.lock
 else
     echo "$BUILD already exists..."
 fi
