@@ -64,48 +64,44 @@ class UltimateVCAddonsParser extends Parser
         foreach($changelog->filter('p') as $index=>$node)
         {
             // title must have pubdate and version
-            $title = $node->textContent;
-            $regexp = '/(\w+)\s+(\d+),\s+(\d+).+Version\s+(.+)/i';
-            if(!preg_match($regexp, $title, $match))
+            if(preg_match('/(\w+)\s+(\d+),\s+(\d+).+Version\s+(.+)/i', $node->textContent, $match))
             {
-                continue;
-            }
+                // convert release title to version
+                $version = $this->parseVersion($match[4]);
 
-            // convert release title to version
-            $version = $this->parseVersion($match[4]);
+                // get de ID to build the link
+                $id = 'item-description__changelog';
 
-            // get de ID to build the link
-            $id = 'item-description__changelog';
+                // release object
+                $release = new Release();
+                $release->version = $version;
+                $release->link = "{$this->sources['profile']}#$id";
+                $release->title = "{$this->title} $version";
+                $release->description = false;
+                $release->stability = $this->parseStability($version);
+                $release->content = '';
 
-            // release object
-            $release = new Release();
-            $release->version = $version;
-            $release->link = "{$this->sources['profile']}#$id";
-            $release->title = "{$this->title} $version";
-            $release->description = false;
-            $release->stability = $this->parseStability($version);
-            $release->content = '';
-
-            // pre that follows p are the details
-            $details = $changelog->filter('p')->eq($index)->nextAll();
-            foreach($details as $index=>$node)
-            {
-                if($node->tagName == 'pre')
+                // pre that follows p are the details
+                $details = $changelog->filter('p')->eq($index)->nextAll();
+                foreach($details as $index=>$node)
                 {
-                    $text = $details->eq($index)->text();
-                    $release->content .= str_replace("\n", "<br />\n", $text);
+                    if($node->tagName == 'pre')
+                    {
+                        $text = $details->eq($index)->text();
+                        $release->content .= str_replace("\n", "<br />\n", $text);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                else
-                {
-                    break;
-                }
+
+                // pubdate needs to be parsed
+                $pubdate = $match[1] . ' ' . $match[2] . ', ' . $match[3];
+                $release->created = Carbon::parse($pubdate);
+
+                $this->addRelease($release);
             }
-
-            // pubdate needs to be parsed
-            $pubdate = $match[1] . ' ' . $match[2] . ', ' . $match[3];
-            $release->created = Carbon::parse($pubdate);
-
-            $this->addRelease($release);
         }
     }
 }

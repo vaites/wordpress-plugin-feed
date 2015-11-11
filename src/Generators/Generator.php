@@ -67,7 +67,7 @@ abstract class Generator
     }
 
     /**
-     * Get release list
+     * Get parser
      *
      * @return  Parser
      */
@@ -77,7 +77,7 @@ abstract class Generator
     }
 
     /**
-     * Set release list
+     * Set parser
      *
      * @param   Parser  $parser
      * @return  $this

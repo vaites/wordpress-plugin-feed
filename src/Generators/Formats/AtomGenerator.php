@@ -35,8 +35,7 @@ class AtomGenerator extends Generator
             $this->setParser($parser);
         }
 
-        $time = is_null($this->parser->modified) ?
-                time() : $this->parser->modified->timestamp;
+        $time = is_null($this->parser->modified) ? time() : $this->parser->modified->timestamp;
 
         $feed = new Feed();
         $feed->setTitle($this->parser->title);

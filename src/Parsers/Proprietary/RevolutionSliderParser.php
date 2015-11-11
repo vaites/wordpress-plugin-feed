@@ -68,44 +68,42 @@ class RevolutionSliderParser extends Parser
             $version = $this->parseVersion($node->textContent);
             
             // title must have pubdate
-            if(!preg_match('/(.+) \((.+)\)/i', $node->textContent, $pubdate))
+            if(preg_match('/(.+) \((.+)\)/i', $node->textContent, $pubdate))
             {
-                continue;
-            }
-            
-            // get the ID to build link
-            $id = $changelog->filter('h3')->eq($index)->attr('id');
-            
-            // release object
-            $release = new Release();
-            $release->version = $version;
-            $release->link = "{$this->sources['profile']}#{$id}";
-            $release->title = "{$this->title} $version";
-            $release->description = false;
-            $release->stability = $this->parseStability($node->textContent);
-            $release->created = time();
-            $release->content = '';
+                // get the ID to build link
+                $id = $changelog->filter('h3')->eq($index)->attr('id');
 
-            // nodes that follows h3 are the details
-            $details = $changelog->filter('h3')->eq($index)->nextAll();
-            foreach($details as $index=>$node)
-            {
-                if($node->tagName != 'h3')
+                // release object
+                $release = new Release();
+                $release->version = $version;
+                $release->link = "{$this->sources['profile']}#{$id}";
+                $release->title = "{$this->title} $version";
+                $release->description = false;
+                $release->stability = $this->parseStability($node->textContent);
+                $release->created = time();
+                $release->content = '';
+
+                // nodes that follows h3 are the details
+                $details = $changelog->filter('h3')->eq($index)->nextAll();
+                foreach($details as $index=>$node)
                 {
-                    $release->content .= "<{$node->tagName}>" . 
-                                         $details->eq($index)->html() .
-                                         "</{$node->tagName}>" . PHP_EOL;
+                    if($node->tagName != 'h3')
+                    {
+                        $release->content .= "<{$node->tagName}>" .
+                                              $details->eq($index)->html() .
+                                              "</{$node->tagName}>" . PHP_EOL;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                else
-                {
-                    break;
-                }
+
+                // pubdate needs to be parsed
+                $release->created = Carbon::parse($pubdate[2]);
+
+                $this->addRelease($release);
             }
-            
-            // pubdate needs to be parsed
-            $release->created = Carbon::parse($pubdate[2]);
-            
-            $this->addRelease($release);
         }
     }
 }

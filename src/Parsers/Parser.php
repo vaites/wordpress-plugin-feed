@@ -606,7 +606,8 @@ class Parser
     
     /**
      * Error handler
-     * 
+     *
+     * @codeCoverageIgnore
      * @param   int     $errno
      * @param   string  $errstr
      */
