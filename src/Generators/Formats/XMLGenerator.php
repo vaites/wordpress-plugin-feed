@@ -1,21 +1,21 @@
 <?php namespace WordPressPluginFeed\Generators\Formats;
 
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 use WordPressPluginFeed\Parsers\Parser;
 use WordPressPluginFeed\Generators\Generator;
 
 /**
- * JSON generator
+ * XML generator
  *
  * @package WordPressPluginFeed\Generators\Formats
  */
-class JSONGenerator extends Generator
+class XMLGenerator extends Generator
 {
     /**
-     * Generate the feed
+     * Generate the XML
      *
      * @param   Parser  $parser
      * @param   int     $limit
@@ -30,13 +30,13 @@ class JSONGenerator extends Generator
         }
 
         $data = $this->serialize('array', $limit);
-        $serializer = new Serializer(array(new ObjectNormalizer()), array(new JsonEncoder()));
-        $context = array('json_encode_options' => defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0);
-        $output = $serializer->serialize($data, 'json', $context);
+        $serializer = new Serializer(array(new ObjectNormalizer()), array(new XmlEncoder()));
+        $context = array('xml_root_node_name' => 'plugin');
+        $output = $serializer->serialize($data, 'xml', $context);
 
         if($echo)
         {
-            header('Content-Type: application/json;charset=utf-8');
+            header('Content-Type: application/xml;charset=utf-8');
             echo $output;
         }
 

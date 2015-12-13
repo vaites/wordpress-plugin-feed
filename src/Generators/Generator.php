@@ -1,5 +1,7 @@
 <?php namespace WordPressPluginFeed\Generators;
 
+use stdClass;
+
 use WordPressPluginFeed\Parsers\Parser;
 
 /**
@@ -25,7 +27,8 @@ abstract class Generator
     (
         'atom'  => 'Formats\\AtomGenerator',
         'rss'   => 'Formats\\RSSGenerator',
-        'json'  => 'Formats\\JSONGenerator'
+        'json'  => 'Formats\\JSONGenerator',
+        'xml'   => 'Formats\\XMLGenerator'
     );
 
     /**
@@ -88,6 +91,90 @@ abstract class Generator
         $this->parser = $parser;
 
         return $this;
+    }
+
+    /**
+     * Serialize parsed data to a basic class with plugin info and release list
+     *
+     * @param   string  $mode   array or object
+     * @param   int     $limit
+     * @return  stdClass
+     */
+    protected function serialize($mode = 'array', $limit = null)
+    {
+        $time = is_null($this->parser->modified) ? time() : $this->parser->modified->timestamp;
+
+        $data = new stdClass();
+        $data->title = $this->parser->title;
+        $data->link = $this->parser->link;
+        $data->modified = $time;
+        $data->description = $this->parser->description;
+
+        if(!empty($this->parser->image['uri']))
+        {
+            $data->image = new stdClass();
+            $data->image->height = $this->parser->image['height'];
+            $data->image->link = $this->parser->link;
+            $data->image->title = $this->parser->title;
+            $data->image->uri = sprintf($this->parser->image['uri'], $this->parser->plugin);
+            $data->image->width = $this->parser->image['width'];
+
+            if($mode == 'array')
+            {
+                $data->image = (array) $data->image;
+            }
+        }
+
+        $data->releases = array();
+        foreach($this->parser->getReleases($limit) as $release)
+        {
+            // stability filter
+            if($this->parser->stability != false)
+            {
+                if(!preg_match($this->parser->stability, $release->stability))
+                {
+                    continue;
+                }
+            }
+
+            // feed entry
+            $item = new stdClass();;
+            $item->id = sha1($release->title);
+            $item->title = $release->title;
+            $item->version = $release->version;
+            $item->stability = $release->stability;
+            $item->security = $release->security;
+            $item->link = $release->link;
+            $item->author = null;
+            $item->description = $release->content;
+            $item->modified = $release->created->timestamp;
+            $item->created = $release->created->timestamp;
+
+            // entry author
+            if(is_string($release->author))
+            {
+                $item->author = array
+                (
+                    'name' => $release->author,
+                    'uri' => "https://profiles.wordpress.org/{$release->author}/"
+                );
+            }
+            elseif(is_array($release->author))
+            {
+                $item->author = $release->author;
+            }
+
+            if($mode == 'array')
+            {
+                $data->releases[] = (array) $item;
+            }
+            else
+            {
+                $data->releases[] = $item;
+            }
+        }
+
+        return ($mode == 'array') ? (array) $data : $data;
     }
 
     /**

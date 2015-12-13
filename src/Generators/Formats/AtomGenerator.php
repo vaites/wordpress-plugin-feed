@@ -21,7 +21,7 @@ class AtomGenerator extends Generator
     protected $format = 'atom';
 
     /**
-     * Generates the feed
+     * Generate the feed
      *
      * @param   Parser  $parser
      * @param   int     $limit
