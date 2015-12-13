@@ -71,7 +71,7 @@ Options
   * GET: `limit=10`
   * CLI: `--limit="10"`
   * ENV: `OUTPUT_LIMIT="10"`
-* **Format**: output format (atom, rss, json or xml)
+* **Format**: atom, rss, json or xml (default atom)
   * GET: `format=rss`
   * CLI: `--format="rss""`
   * ENV: `OUTPUT_FORMAT="rss"`

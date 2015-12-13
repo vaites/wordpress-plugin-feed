@@ -106,6 +106,7 @@ abstract class Generator
 
         $data = new stdClass();
         $data->title = $this->parser->title;
+        $data->name = $this->parser->plugin;
         $data->link = $this->parser->link;
         $data->modified = $time;
         $data->description = $this->parser->description;
