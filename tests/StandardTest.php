@@ -42,7 +42,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
             array('ninja-forms'), array('cookie-law-info'),
             array('tinymce-advanced'), array('nextgen-gallery'),
             array('google-analytics-for-wordpress'),
-            array('advanced-custom-fields')
+            array('advanced-custom-fields'),
+            array('the-definitive-url-sanitizer')
         );
     }
 }
