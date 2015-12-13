@@ -118,6 +118,9 @@ class Release
             $this->title .= '-' . $this->stability;
         }
 
+        // replace known strings
+        $this->content = preg_replace('/^Commit message:\s+/i', '', $this->content);
+
         // purify HTML
         $this->content = $this->purifier->purify($this->content);
         $this->content = html_entity_decode($this->content);

@@ -481,10 +481,12 @@ class Parser
             foreach($this->tags as $tag)
             {
                 $version = $tag->name;
-                
+
                 $release = new Release();
+                $release->version = $version;
                 $release->title = "{$this->title} $version";
                 $release->description = $tag->description;
+                $release->author = $tag->author;
                 $release->stability = $this->parseStability($tag->name);
                 $release->created = $tag->created;
                 $release->content = "Commit message: " . $tag->description;
@@ -494,7 +496,7 @@ class Parser
             
             reset($this->tags);            
         }
-        
+
         // add extra info to detected releases
         foreach($this->releases as $version=>$release)
         {            
