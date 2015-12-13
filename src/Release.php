@@ -71,6 +71,11 @@ class Release
     public $vulnerabilities;
 
     /**
+     * Is a security release?
+     */
+    public $security = false;
+
+    /**
      * Keywords that activate "Security release" message
      *
      * @var array
@@ -163,6 +168,9 @@ class Release
                     $this->content
                 );
             }
+
+            // set as security release
+            $this->security = true;
         }
 
         // add warning to title and links to WPScan Vulnerability Database
@@ -173,8 +181,8 @@ class Release
                 $this->title .= ' (Security release)';
             }
 
+            // add vulnerability list at the end of content
             $this->content .= "\n\n<p>Fixed vulnerabilities:</p>\n<ul>";
-
             foreach($this->vulnerabilities as $vulnerability)
             {
                 $this->content .= "<li><a href=\"https://wpvulndb.com/vulnerabilities/{$vulnerability->id}\">"
@@ -183,6 +191,9 @@ class Release
             }
 
             $this->content .= "\n</ul>";
+
+            // set as security release
+            $this->security = true;
         }
 
         return $this;

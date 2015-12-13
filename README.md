@@ -22,6 +22,7 @@ Features:
 * Highlighted security updates
   * Link to known vulnerabilities on [CVE Details](http://www.cvedetails.com) and [WPScan Vulnerability Database](https://wpvulndb.com)
 * [Semantic Versioning](http://semver.org/) syntax
+* Multiple output formats (Atom, RSS, JSON and XML)
 * Support for (less accurate) changelog of plugins with external information:
   * [All-In-One SEO Pack](http://semperplugins.com/plugins/all-in-one-seo-pack-pro-version/)
   * [BuddyPress](https://buddypress.org/)
@@ -70,7 +71,7 @@ Options
   * GET: `limit=10`
   * CLI: `--limit="10"`
   * ENV: `OUTPUT_LIMIT="10"`
-* **Format**: output format (atom or rss)
+* **Format**: output format (atom, rss, json or xml)
   * GET: `format=rss`
   * CLI: `--format="rss""`
   * ENV: `OUTPUT_FORMAT="rss"`

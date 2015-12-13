@@ -587,7 +587,7 @@ class Parser
     /**
      * Get the parsed releases applying filters
      * 
-     * @return  array
+     * @return  Release[]
      */
     public function getReleases($limit = null)
     {
@@ -601,7 +601,7 @@ class Parser
             $release->filter();
         });
 
-        return $limit ? array_slice($this->releases,0,$limit) : $this->releases;
+        return $limit ? array_slice($this->releases, 0, $limit) : $this->releases;
     }
     
     /**
