@@ -81,3 +81,10 @@ Options
   * ENV: `RELEASE_STABILITY="stable,rc"`
 
 There's an *.env.example* file that you can copy to *.env*.
+
+TO-DO
+-----
+* PHAR Package instead of ZIPs
+* Add database persistence
+* Add tags based on contents
+* Enhance search&replace (HTML safe)
