@@ -81,12 +81,12 @@ class YoastSEOPremiumParser extends Parser
 
             // nodes that follows h2 are the details
             $details = $changelog->filter('h2')->eq($index)->nextAll();
-            foreach($details as $index=>$node)
+            foreach($details as $n=>$node)
             {
                 if($node->tagName != 'h2')
                 {
                     $release->content .= "<{$node->tagName}>" .
-                        $details->eq($index)->html() .
+                        $details->eq($n)->html() .
                         "</{$node->tagName}>" . PHP_EOL;
                 }
                 else
@@ -95,9 +95,9 @@ class YoastSEOPremiumParser extends Parser
                 }
             }
 
-            // pubdate needs to be parsed
-            $release->created = Carbon::parse($changelog->filter('h2')
-                    ->eq($index)->nextAll()->first()->text());
+            // pubdate needs to be parsed and can be stripped
+            $release->created = Carbon::parse($changelog->filter('h2')->eq($index)->nextAll()->first()->text());
+            $release->content = preg_replace("/<p>\s*<small>\s*(.+)\s*<\/small>\s*<\/p>/i", '', $release->content);
 
             $this->addRelease($release);
         }
