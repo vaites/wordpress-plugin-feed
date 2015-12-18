@@ -58,8 +58,7 @@ class RevolutionSliderParser extends Parser
         $crawler = new Crawler($this->fetch('profile'));
         
         // need to parse changelog block
-        $changelog = $crawler->filter('#item-description__ressources-credits')
-                    ->nextAll();
+        $changelog = $crawler->filter('#item-description__ressources-credits')->nextAll();
         
         // each h3 is a release
         foreach($changelog->filter('h3') as $index=>$node)
@@ -100,6 +99,7 @@ class RevolutionSliderParser extends Parser
                 }
 
                 // pubdate needs to be parsed
+                $pubdate[2] = preg_replace('/dezember/i', 'december', $pubdate[2]);
                 $release->created = Carbon::parse($pubdate[2]);
 
                 $this->addRelease($release);
