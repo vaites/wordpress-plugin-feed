@@ -54,6 +54,9 @@ class YoastSEOPremiumParser extends Parser
      */    
     protected function loadReleases()
     {
+        // load Yoast SEO (free) releases
+        $free = Parser::getInstance('wordpress-seo', $this->stability)->getReleases();
+
         // profile
         $crawler = new Crawler($this->fetch('profile'));
 
@@ -77,7 +80,13 @@ class YoastSEOPremiumParser extends Parser
             $release->description = false;
             $release->stability = $this->parseStability($node->textContent);
             $release->created = time();
-            $release->content = '';
+
+            // add changelog from free version if exists
+            if(isset($free[$version]))
+            {
+                $release->content = preg_replace('/<\/?body>/', '', $free[$version]->content);
+                $release->content .= "<p>Yoast SEO Premium changes:</p>\n";
+            }
 
             // nodes that follows h2 are the details
             $details = $changelog->filter('h2')->eq($index)->nextAll();
@@ -86,8 +95,8 @@ class YoastSEOPremiumParser extends Parser
                 if($node->tagName != 'h2')
                 {
                     $release->content .= "<{$node->tagName}>" .
-                        $details->eq($n)->html() .
-                        "</{$node->tagName}>" . PHP_EOL;
+                                         $details->eq($n)->html() .
+                                         "</{$node->tagName}>" . PHP_EOL;
                 }
                 else
                 {
