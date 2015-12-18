@@ -82,12 +82,12 @@ class GoogleXMLSitemapsParser extends Parser
 
             // nodes that follows p are the details
             $details = $changelog->filter('p')->eq($index)->nextAll();
-            foreach($details as $index=>$node)
+            foreach($details as $n=>$node)
             {
                 if($node->tagName != 'p')
                 {
                     $release->content .= "<{$node->tagName}>" .
-                        $details->eq($index)->html() .
+                        $details->eq($n)->html() .
                         "</{$node->tagName}>" . PHP_EOL;
                 }
                 else

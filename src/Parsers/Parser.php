@@ -254,6 +254,11 @@ class Parser
         {
             $this->loadVulnerabilities();
             $this->loadReleases();
+
+            if(empty($this->releases))
+            {
+                throw new Exception('No releases detected');
+            }
         }
         catch(Exception $exception)
         {
@@ -300,6 +305,7 @@ class Parser
      * @param   string  $type   profile, tags or image
      * @param   strign  $append query string or other parameters
      * @return  string
+     * @throws  \Exception
      */
     public function fetch($type = 'profile', $append = null)
     {
@@ -321,6 +327,12 @@ class Parser
                     $code = $response->getBody();
                     
                     $this->cache->setItem($key, $code);
+                }
+                else
+                {
+                    $message = "Error fetching {$uri} (" . $response->getReasonPhrase() . ")";
+
+                    throw new Exception($message, $response->getStatusCode());
                 }
             }        
         }
@@ -387,10 +399,10 @@ class Parser
     {
         $this->sources['vulnerabilities'] = 'https://wpvulndb.com/api/v2/plugins/' . $this->plugin;
 
-        $response = @json_decode($this->fetch('vulnerabilities'));
-
-        if(is_object($response) && isset($response->{$this->plugin}->vulnerabilities))
+        try
         {
+            $response = @json_decode($this->fetch('vulnerabilities'));
+
             foreach($response->{$this->plugin}->vulnerabilities as $vulnerability)
             {
                 if(!isset($this->vulnerabilities[$vulnerability->fixed_in]))
@@ -400,6 +412,10 @@ class Parser
 
                 $this->vulnerabilities[$vulnerability->fixed_in][] = $vulnerability;
             }
+        }
+        catch(Exception $exception)
+        {
+            // not all plugins have  profile at wpvulndb.com
         }
     }
     
@@ -452,12 +468,12 @@ class Parser
 
             // nodes that follows h4 are the details
             $details = $changelog->filter('h4')->eq($index)->nextAll();
-            foreach($details as $index=>$node)
+            foreach($details as $n=>$node)
             {
                 if($node->tagName != 'h4')
                 {
                     $release->content .= "<{$node->tagName}>" . 
-                                         $details->eq($index)->html() .
+                                         $details->eq($n)->html() .
                                          "</{$node->tagName}>" . PHP_EOL;
                 }
                 else

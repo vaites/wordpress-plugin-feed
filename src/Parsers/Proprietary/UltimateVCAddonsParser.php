@@ -83,11 +83,11 @@ class UltimateVCAddonsParser extends Parser
 
                 // pre that follows p are the details
                 $details = $changelog->filter('p')->eq($index)->nextAll();
-                foreach($details as $index=>$node)
+                foreach($details as $n=>$node)
                 {
                     if($node->tagName == 'pre')
                     {
-                        $text = $details->eq($index)->text();
+                        $text = $details->eq($n)->text();
                         $release->content .= str_replace("\n", "<br />\n", $text);
                     }
                     else
