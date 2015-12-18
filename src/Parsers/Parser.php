@@ -625,7 +625,6 @@ class Parser
     /**
      * Error handler
      *
-     * @codeCoverageIgnore
      * @param   int     $errno
      * @param   string  $errstr
      */
@@ -640,11 +639,18 @@ class Parser
             echo "<strong>File:</strong> $errfile ($errline)</p>";
             exit;
         }
+        else
+        {
+            echo "Error $errno\n";
+            echo "Plugin: {$this->plugin}\n";
+            echo "Message: $errstr\n";
+            echo "File: $errfile ($errline)\n";
+        }
     }
 
     /**
      * Exception handler
-     * 
+     *
      * @param Exception $exception
      */
     public function exception(Exception $exception)
