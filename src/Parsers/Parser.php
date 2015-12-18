@@ -219,17 +219,9 @@ class Parser
         $this->http = new Client();
         $this->http->setOptions(array
         (
+            'sslcapath' => '/etc/ssl/certs',
             'timeout' => 30
         ));
-        
-        // use cURL if exists
-        if(function_exists('curl_init'))
-        {
-            $this->http->setOptions(array
-            (
-                'adapter' => 'Zend\Http\Client\Adapter\Curl'
-            ));
-        }
         
         // cache instance
         $this->cache = StorageFactory::factory(array
