@@ -92,6 +92,8 @@ class WPMLParser extends Parser
 
                 $this->addRelease($release);
             }
+
+            sleep(5);
         }
     }
 }
