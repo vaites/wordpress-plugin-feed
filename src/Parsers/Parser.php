@@ -236,7 +236,7 @@ class Parser
         $this->http->setOptions(array
         (
             'sslcapath' => '/etc/ssl/certs',
-            'timeout' => 60,
+            'timeout' => 30,
             'useragent' => 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0'
         ));
 
@@ -245,7 +245,12 @@ class Parser
         {
             $this->http->setOptions(array
             (
-                'adapter' => 'Zend\Http\Client\Adapter\Curl'
+                'adapter' => 'Zend\Http\Client\Adapter\Curl',
+                'curloptions' => array
+                (
+                    CURLOPT_CONNECTTIMEOUT => 30,
+                    CURLOPT_TIMEOUT => 30
+                )
             ));
         }
         
