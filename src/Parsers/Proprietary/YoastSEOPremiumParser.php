@@ -58,6 +58,7 @@ class YoastSEOPremiumParser extends Parser
         $free = Parser::getInstance('wordpress-seo', $this->stability)->getReleases();
 
         // profile
+        $this->http->setOptions(array('curloptions' => array(CURLOPT_SSL_VERIFYPEER => false)));
         $crawler = new Crawler($this->fetch('profile'));
 
         // need to parse changelog block
