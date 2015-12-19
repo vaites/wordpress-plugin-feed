@@ -236,7 +236,8 @@ class Parser
         $this->http->setOptions(array
         (
             'sslcapath' => '/etc/ssl/certs',
-            'timeout' => 60
+            'timeout' => 60,
+            'useragent' => 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0'
         ));
 
         // use cURL if exists
