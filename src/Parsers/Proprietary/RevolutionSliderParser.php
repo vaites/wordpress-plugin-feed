@@ -48,24 +48,24 @@ class RevolutionSliderParser extends Parser
     (
         'profile'   => 'http://codecanyon.net/item/slider-revolution-responsive-wordpress-plugin/2751380',
     );
-    
+
     /**
      * Parse public releases using "release log" block on Code Canyon profile
-     */    
+     */
     protected function loadReleases()
     {
         // profile
         $crawler = new Crawler($this->fetch('profile'));
-        
+
         // need to parse changelog block
         $changelog = $crawler->filter('#item-description__ressources-credits')->nextAll();
-        
+
         // each h3 is a release
         foreach($changelog->filter('h3') as $index=>$node)
         {
             // convert release title to version
             $version = $this->parseVersion($node->textContent);
-            
+
             // title must have pubdate
             if(preg_match('/(.+) \((.+)\)/i', $node->textContent, $pubdate))
             {

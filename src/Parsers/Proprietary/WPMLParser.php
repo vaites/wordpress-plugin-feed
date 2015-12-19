@@ -50,5 +50,5 @@ class WPMLParser extends FeedParser
      *
      * @var string
      */
-    protected $regexp = '/^WPML\s+(\d+)\.(\d+)(\.(\d+))?\s+/i';
+    protected $regexp = '/^WPML\s+(\d+)\.(\d+)([\d|\.]+)?/i';
 }
