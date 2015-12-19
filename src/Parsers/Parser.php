@@ -495,11 +495,10 @@ class Parser
             $details = $changelog->filter('h4')->eq($index)->nextAll();
             foreach($details as $n=>$node)
             {
-                if($node->tagName != 'h4')
+                $tag = $node->tagName;
+                if($tag != 'h4')
                 {
-                    $release->content .= "<{$node->tagName}>" . 
-                                         $details->eq($n)->html() .
-                                         "</{$node->tagName}>" . PHP_EOL;
+                    $release->content .= "<$tag>" . $details->eq($n)->html() . "</{$tag}>" . PHP_EOL;
                 }
                 else
                 {
@@ -628,7 +627,7 @@ class Parser
     /**
      * Get the parsed releases applying filters
      * 
-     * @return  Release[]
+     * @return  \WordPressPluginFeed\Release[]
      */
     public function getReleases($limit = null)
     {
@@ -680,8 +679,10 @@ class Parser
      *
      * @param   int     $errno
      * @param   string  $errstr
+     * @param   string  $errfile
+     * @param   int     $errline
      */
-    public function error($errno, $errstr, $errfile, $errline, $errcontext)
+    public function error($errno, $errstr, $errfile, $errline)
     {
         $this->exception(new ErrorException($errstr, $errno, 1, $errfile, $errline));
     }

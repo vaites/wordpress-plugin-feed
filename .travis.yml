@@ -10,6 +10,9 @@ php:
 
 sudo: false
 
+env:
+  - ENVIRONMENT=testing
+
 before_install:
   - pip install --user codecov
 
