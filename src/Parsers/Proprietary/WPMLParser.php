@@ -1,17 +1,13 @@
 <?php namespace WordPressPluginFeed\Parsers\Proprietary;
 
-use Carbon\Carbon;
-use Symfony\Component\DomCrawler\Crawler;
-
-use WordPressPluginFeed\Release;
-use WordPressPluginFeed\Parsers\Parser;
+use WordPressPluginFeed\Parsers\Generic\FeedParser;
 
 /**
  * The WordPress Multilingual Plugin custom parser
  *
  * @author David Martínez <contacto@davidmartinez.net>
  */
-class WPMLParser extends Parser
+class WPMLParser extends FeedParser
 {
     /**
      * Plugin title
@@ -25,7 +21,7 @@ class WPMLParser extends Parser
      *
      * @var string
      */
-    public $description = 'WPML makes it easy to build multilingual sites and run them. It’s powerful enough for corporate sites,  yet simple for blogs.';
+    public $description = 'WPML makes it easy to build multilingual sites and run them. It’s powerful enough for corporate sites, yet simple for blogs.';
 
     /**
      * Plugin image
@@ -46,54 +42,13 @@ class WPMLParser extends Parser
      */    
     protected $sources = array
     (
-        'profile'   => 'https://wpml.org/category/changelog/'
+        'profile'   => 'https://wpml.org/category/changelog/feed/'
     );
-    
+
     /**
-     * Parse public releases using changelog category from official blog
-     */    
-    protected function loadReleases()
-    {
-        // fetch 5 pages of feed
-        for($p = 0; $p < 5; $p++)
-        {
-            // profile
-            $crawler = new Crawler($this->fetch('profile', "?paged=$p"));
-
-            // need to parse changelog block
-            $changelog = $crawler->filter('.post > h2');
-
-            // each h2 is a release
-            foreach($changelog as $index=>$node)
-            {
-                // title must start with WPML and version
-                $regexp = '/^WPML\s+(\d+)\.(\d+)(\.(\d+))?\s+/i';
-                if(!preg_match($regexp, $node->textContent))
-                {
-                    continue;
-                }
-
-                // convert release title to version
-                $version = $this->parseVersion($node->textContent);
-
-                // release object
-                $release = new Release();
-                $release->version = $version;
-                $release->link = $changelog->eq($index)->filter('a')->attr('href');
-                $release->title = "{$this->title} $version";
-                $release->description = false;
-                $release->stability = $this->parseStability($node->textContent);
-                $release->created = time();
-                $release->content = $crawler->filter('.post .entry')->eq($index)->html();
-
-                // pubdate needs to be parsed
-                $release->created = Carbon::parse(preg_replace('/\s+by(.+)/', '',
-                    trim($crawler->filter('.post > small')->eq($index)->text())));
-
-                $this->addRelease($release);
-            }
-
-            sleep(5);
-        }
-    }
+     * Regular expression to detect releases
+     *
+     * @var string
+     */
+    protected $regexp = '/^WPML\s+(\d+)\.(\d+)(\.(\d+))?\s+/i';
 }

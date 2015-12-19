@@ -58,8 +58,7 @@ class UberMenuParser extends Parser
         $crawler = new Crawler($this->fetch('profile'));
         
         // need to parse changelog block
-        $changelog = $crawler->filter('#item-description__changelog')
-                    ->nextAll()->filter('pre')->eq(0);
+        $changelog = $crawler->filter('#item-description__changelog')->nextAll()->filter('pre')->eq(0);
 
         // each release has a title with date and version followed by changes
         foreach(preg_split("/(-|=){10,}/", $changelog->text()) as $block)
@@ -67,9 +66,7 @@ class UberMenuParser extends Parser
             $block = explode("\n", trim($block));
 
             // title must have pubdate and version
-            $title = array_shift($block);
-            $regexp = '/v([\d|\.]+)\s\(?(.+)\)?/i';
-            if(!preg_match($regexp, $title, $match) || empty($block))
+            if(empty($block) || !preg_match('/v([\d|\.]+)\s\(?(.+)\)?/i', array_shift($block), $match))
             {
                 continue;
             }
