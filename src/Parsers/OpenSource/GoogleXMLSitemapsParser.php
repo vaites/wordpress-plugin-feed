@@ -71,24 +71,19 @@ class GoogleXMLSitemapsParser extends Parser
             }
 
             // release object
-            $release = new Release();
-            $release->version = $version;
+            $release = new Release($this->title, $version);
             $release->link = $this->sources['profile'];
-            $release->title = "{$this->title} $version";
-            $release->description = false;
             $release->stability = $this->parseStability($node->textContent);
             $release->created = $this->tags[$version]->created;
-            $release->content = '';
 
             // nodes that follows p are the details
             $details = $changelog->filter('p')->eq($index)->nextAll();
             foreach($details as $n=>$node)
             {
-                if($node->tagName != 'p')
+                $tag = $node->tagName;
+                if($tag != 'p')
                 {
-                    $release->content .= "<{$node->tagName}>" .
-                        $details->eq($n)->html() .
-                        "</{$node->tagName}>" . PHP_EOL;
+                    $release->content .= "<$tag>" . $details->eq($n)->html() . "</$tag>" . PHP_EOL;
                 }
                 else
                 {

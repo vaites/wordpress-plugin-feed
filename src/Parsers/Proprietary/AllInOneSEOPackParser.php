@@ -64,14 +64,10 @@ class AllInOneSEOPackParser extends Parser
             }
             
             // release object
-            $release = new Release();
-            $release->version = $version;
+            $release = new Release($this->title, $version);
             $release->link = $this->sources['profile'];
-            $release->title = "{$this->title} $version";
-            $release->description = false;
             $release->stability = $this->parseStability($node->textContent);
             $release->created = $this->tags[$version]->created;
-            $release->content = '';
 
             // ul that follows p+strong are the details
             $details = $changelog->filter('p')->eq($index)->nextAll();

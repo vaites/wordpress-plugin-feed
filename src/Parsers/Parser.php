@@ -484,9 +484,7 @@ class Parser
             $tag =& $this->tags[$version];
 
             // release object
-            $release = new Release();
-            $release->version = $version;
-            $release->title = "{$this->title} $version";
+            $release = new Release($this->title, $version);
             $release->description = $tag->description;
             $release->author = $tag->author;
             $release->stability = $this->parseStability($node->textContent);
@@ -525,9 +523,7 @@ class Parser
             {
                 $version = $tag->name;
 
-                $release = new Release();
-                $release->version = $version;
-                $release->title = "{$this->title} $version";
+                $release = new Release($this->title, $version);
                 $release->description = $tag->description;
                 $release->author = $tag->author;
                 $release->stability = $this->parseStability($tag->name);

@@ -95,9 +95,17 @@ class Release
 
     /**
      * Instantiate dependencies
+     *
+     * @param   string  $title
+     * @param   string  $version
      */
-    public function __construct()
+    public function __construct($title, $version)
     {
+        // set mandatory properties
+        $this->version = $version;
+        $this->title = "$title $version";
+        $this->created = time();
+
         // HTMLPurifier instance
         $this->purifier = new HTMLPurifier(HTMLPurifier_Config::create(array
         (

@@ -73,14 +73,9 @@ class RevolutionSliderParser extends Parser
                 $id = $changelog->filter('h3')->eq($index)->attr('id');
 
                 // release object
-                $release = new Release();
-                $release->version = $version;
+                $release = new Release($this->title, $version);
                 $release->link = "{$this->sources['profile']}#{$id}";
-                $release->title = "{$this->title} $version";
-                $release->description = false;
                 $release->stability = $this->parseStability($node->textContent);
-                $release->created = time();
-                $release->content = '';
 
                 // nodes that follows h3 are the details
                 $details = $changelog->filter('h3')->eq($index)->nextAll();

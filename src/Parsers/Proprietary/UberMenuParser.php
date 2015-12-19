@@ -78,17 +78,13 @@ class UberMenuParser extends Parser
             $id = 'item-description__changelog';
 
             // release object
-            $release = new Release();
-            $release->version = $version;
+            $release = new Release($this->title, $version);
             $release->link = "{$this->sources['profile']}#$id";
-            $release->title = "{$this->title} $version";
-            $release->description = false;
             $release->stability = $this->parseStability($version);
             $release->content = implode("<br />\n", $block);
 
             // pubdate needs to be parsed
-            $pubdate = strtotime($match[2]);
-            $release->created = Carbon::createFromTimestamp($pubdate);
+            $release->created = Carbon::createFromTimestamp(strtotime($match[2]));
 
             $this->addRelease($release);
         }

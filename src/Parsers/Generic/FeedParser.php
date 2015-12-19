@@ -55,10 +55,8 @@ class FeedParser extends Parser
                     $created = $entry->getDateCreated()->getTimestamp();
 
                     // release object
-                    $release = new Release();
-                    $release->version = $version;
+                    $release = new Release($this->title, $version);
                     $release->link = $entry->getLink();
-                    $release->title = "{$this->title} $version";
                     $release->description = $entry->getDescription();
                     $release->stability = $this->parseStability($entry->getTitle());
                     $release->created = Carbon::createFromTimestamp($created);
