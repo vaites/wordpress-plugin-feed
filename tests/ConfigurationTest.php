@@ -18,7 +18,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $parser = Parser::getInstance('akismet');
         $releases = $parser->getReleases();
 
-        $this->assertCount(5, $releases);
+        $this->assertCount(5, $releases, $parser->getLastError());
     }
 
     /**
@@ -33,7 +33,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
         $output = $generator->generate($parser, null, false);
 
-        $this->assertContains('<feed xmlns="http://www.w3.org/2005/Atom"', $output);
+        $this->assertContains('<feed xmlns="http://www.w3.org/2005/Atom"', $output, $parser->getLastError());
     }
 
     /**
@@ -48,7 +48,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
         $output = $generator->generate($parser, null, false);
 
-        $this->assertContains('<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"', $output);
+        $this->assertContains('<rss version="2.0"', $output, $parser->getLastError());
     }
 
     /**
@@ -63,7 +63,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
         $output = @json_decode($generator->generate($parser, null, false));
 
-        $this->assertEquals($output->name, 'jetpack');
+        $this->assertEquals($output->name, 'jetpack', $parser->getLastError());
     }
 
     /**
@@ -78,6 +78,6 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
         $output = $generator->generate($parser, null, false);
 
-        $this->assertContains('<?xml version="1.0"?>', $output);
+        $this->assertContains('<?xml version="1.0"?>', $output, $parser->getLastError());
     }
 }

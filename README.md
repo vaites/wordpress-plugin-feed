@@ -79,6 +79,9 @@ Options
   * GET: `stability=stable,rc`
   * CLI: `--stability="stable,rc"`
   * ENV: `RELEASE_STABILITY="stable,rc"`
+  
+Other options are only configurable with environment variables:
+* CACHE_TTL: cache life in seconds
 
 There's an *.env.example* file that you can copy to *.env*.
 

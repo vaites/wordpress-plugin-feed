@@ -15,6 +15,6 @@ class UnknownTest extends PHPUnit_Framework_TestCase
         $parser = Parser::getInstance('unknown-plugin', null, false);
         $releases = $parser->getReleases();
 
-        $this->assertEquals(0, count($releases));
+        $this->assertEquals(0, count($releases), $parser->getLastError());
     }
 }

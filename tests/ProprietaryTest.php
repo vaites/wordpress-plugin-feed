@@ -18,7 +18,7 @@ class ProprietaryTest extends PHPUnit_Framework_TestCase
         $parser = Parser::getInstance($plugin);
         $releases = $parser->getReleases();
         
-        $this->assertGreaterThan(0, count($releases));
+        $this->assertGreaterThan(0, count($releases), $parser->getLastError());
     }
 
     /**

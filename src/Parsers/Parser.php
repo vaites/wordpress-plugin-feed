@@ -153,6 +153,13 @@ class Parser
     protected $cache = null;
 
     /**
+     * List of exceptions thrown during process
+     *
+     * @var \Exception[]
+     */
+    protected $exceptions = array();
+
+    /**
      * Show errors and exceptions
      *
      * @var bool
@@ -166,7 +173,7 @@ class Parser
      * @param   string  $stability
      * @param   bool    $debug
      */
-    public function __construct($plugin, $stability = null, $debug = true)
+    public function __construct($plugin, $stability = null, $debug = null)
     {
         $this->plugin = $plugin;
 
@@ -250,7 +257,7 @@ class Parser
                 'options' => array
                 (
                     'cache_dir' => dirname(dirname(__DIR__)) . '/cache',
-                    'ttl' => 3600
+                    'ttl' => getenv('CACHE_TTL')
                 )
             ),
             'plugins' => array
@@ -260,8 +267,8 @@ class Parser
         ));
 
         // debug mode
-        $this->debug = (bool) $debug;
-        
+        $this->debug = is_null($debug) ? !$this->cli : (bool) $debug;
+
         // load releases after class config
         try
         {
@@ -298,7 +305,7 @@ class Parser
      * @param   bool    $debug
      * @return  \WordPressPluginFeed\Parsers\Parser
      */
-    public static function getInstance($plugin, $stability = null, $debug = true)
+    public static function getInstance($plugin, $stability = null, $debug = null)
     {
         if(isset(self::$aliases[$plugin]))
         {
@@ -635,6 +642,36 @@ class Parser
 
         return $limit ? array_slice($this->releases, 0, $limit) : $this->releases;
     }
+
+    /**
+     * Get the last error as a string
+     *
+     * @return string
+     */
+    public function getLastError()
+    {
+        $error = '';
+
+        $exception = end($this->exceptions);
+
+        if(!empty($exception) && $this->cli === false)
+        {
+            header('HTTP/1.1 500');
+            $error .= "<h1>Error " . $exception->getCode() . "</h1>";
+            $error .= "<p><strong>Plugin:</strong> {$this->plugin}<br />";
+            $error .= "<strong>Message:</strong> " . $exception->getMessage() . "<br />";
+            $error .= "<strong>File:</strong> " . $exception->getFile() . " (" . $exception->getLine() . ")</p>";
+        }
+        elseif(!empty($exception))
+        {
+            $error .= "Error " . $exception->getCode() . "\n";
+            $error .= "Plugin: {$this->plugin}\n";
+            $error .= "Message: " . $exception->getMessage() . "\n";
+            $error .= "File: " . $exception->getFile() . " (" . $exception->getLine() . ")\n";
+        }
+
+        return $error;
+    }
     
     /**
      * Error handler
@@ -654,21 +691,16 @@ class Parser
      */
     public function exception(Exception $exception)
     {
+        $this->exceptions[] = $exception;
+
         if($this->debug && $this->cli === false)
         {
             header('HTTP/1.1 500');
-            echo "<h1>Error " . $exception->getCode() . "</h1>";
-            echo "<p><strong>Plugin:</strong> {$this->plugin}<br />";
-            echo "<strong>Message:</strong> " . $exception->getMessage() . "<br />";
-            echo "<strong>File:</strong> " . $exception->getFile() . " (" . $exception->getFile() . "</p>";
-            exit;
+            die($this->getLastError());
         }
         elseif($this->debug)
         {
-            echo "Error " . $exception->getCode() . "\n";
-            echo "Plugin: {$this->plugin}\n";
-            echo "Message: " . $exception->getMessage() . "\n";
-            echo "File: " . $exception->getFile() . " (" . $exception->getFile() . "\n";
+            echo $this->getLastError();
         }
     }
 }
