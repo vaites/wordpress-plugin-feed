@@ -1,5 +1,6 @@
 <?php namespace WordPressPluginFeed\Parsers;
 
+use ErrorException;
 use Exception;
 
 use Carbon\Carbon;
@@ -150,14 +151,22 @@ class Parser
      * @var \Zend\Cache\StorageFactory
      */
     protected $cache = null;
+
+    /**
+     * Show errors and exceptions
+     *
+     * @var bool
+     */
+    protected $debug = true;
     
     /**
      * Load plugin data
      * 
      * @param   string  $plugin
      * @param   string  $stability
+     * @param   bool    $debug
      */
-    public function __construct($plugin, $stability = null)
+    public function __construct($plugin, $stability = null, $debug = true)
     {
         $this->plugin = $plugin;
 
@@ -249,6 +258,9 @@ class Parser
                 'exception_handler' => array('throw_exceptions' => false)
             )
         ));
+
+        // debug mode
+        $this->debug = (bool) $debug;
         
         // load releases after class config
         try
@@ -283,9 +295,10 @@ class Parser
      *
      * @param   string  $plugin
      * @param   string  $stability
+     * @param   bool    $debug
      * @return  \WordPressPluginFeed\Parsers\Parser
      */
-    public static function getInstance($plugin, $stability = null)
+    public static function getInstance($plugin, $stability = null, $debug = true)
     {
         if(isset(self::$aliases[$plugin]))
         {
@@ -296,7 +309,7 @@ class Parser
             $class = 'WordPressPluginFeed\\Parsers\\Parser';
         }
 
-        return new $class($plugin, $stability);
+        return new $class($plugin, $stability, $debug);
     }
     
     /**
@@ -631,22 +644,7 @@ class Parser
      */
     public function error($errno, $errstr, $errfile, $errline, $errcontext)
     {
-        if($this->cli === false)
-        {
-            header('HTTP/1.1 500');
-            echo "<h1>Error $errno</h1>";
-            echo "<p><strong>Plugin:</strong> {$this->plugin}<br />";
-            echo "<strong>Message:</strong> $errstr<br />";
-            echo "<strong>File:</strong> $errfile ($errline)</p>";
-            exit;
-        }
-        else
-        {
-            echo "Error $errno\n";
-            echo "Plugin: {$this->plugin}\n";
-            echo "Message: $errstr\n";
-            echo "File: $errfile ($errline)\n";
-        }
+        $this->exception(new ErrorException($errstr, $errno, 1, $errfile, $errline));
     }
 
     /**
@@ -656,13 +654,21 @@ class Parser
      */
     public function exception(Exception $exception)
     {
-        $this->error
-        (
-            $exception->getCode(), 
-            $exception->getMessage(), 
-            $exception->getFile(), 
-            $exception->getLine(), 
-            $exception->getTrace()
-        );
+        if($this->debug && $this->cli === false)
+        {
+            header('HTTP/1.1 500');
+            echo "<h1>Error " . $exception->getCode() . "</h1>";
+            echo "<p><strong>Plugin:</strong> {$this->plugin}<br />";
+            echo "<strong>Message:</strong> " . $exception->getMessage() . "<br />";
+            echo "<strong>File:</strong> " . $exception->getFile() . " (" . $exception->getFile() . "</p>";
+            exit;
+        }
+        elseif($this->debug)
+        {
+            echo "Error " . $exception->getCode() . "\n";
+            echo "Plugin: {$this->plugin}\n";
+            echo "Message: " . $exception->getMessage() . "\n";
+            echo "File: " . $exception->getFile() . " (" . $exception->getFile() . "\n";
+        }
     }
 }
