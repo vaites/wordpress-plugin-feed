@@ -73,11 +73,10 @@ class AllInOneSEOPackParser extends Parser
             $details = $changelog->filter('p')->eq($index)->nextAll();
             foreach($details as $n=>$node)
             {
-                if($node->tagName != 'p')
+                $tagname = $node->tagName;
+                if($tagname != 'p')
                 {
-                    $release->content .= "<{$node->tagName}>" . 
-                                         $details->eq($n)->html() .
-                                         "</{$node->tagName}>" . PHP_EOL;
+                    $release->content .= "<$tagname>" . $details->eq($n)->html() . "</$tagname>" . PHP_EOL;
                 }
                 else
                 {

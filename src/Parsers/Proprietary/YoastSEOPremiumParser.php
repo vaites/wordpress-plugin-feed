@@ -89,11 +89,10 @@ class YoastSEOPremiumParser extends Parser
             $details = $changelog->filter('h2')->eq($index)->nextAll();
             foreach($details as $n=>$node)
             {
-                if($node->tagName != 'h2')
+                $tagname = $node->tagName;
+                if($tagname != 'h2')
                 {
-                    $release->content .= "<{$node->tagName}>" .
-                                         $details->eq($n)->html() .
-                                         "</{$node->tagName}>" . PHP_EOL;
+                    $release->content .= "<$tagname>" . $details->eq($n)->html() . "</$tagname>" . PHP_EOL;
                 }
                 else
                 {

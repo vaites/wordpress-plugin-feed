@@ -495,10 +495,10 @@ class Parser
             $details = $changelog->filter('h4')->eq($index)->nextAll();
             foreach($details as $n=>$node)
             {
-                $tag = $node->tagName;
-                if($tag != 'h4')
+                $tagname = $node->tagName;
+                if($tagname != 'h4')
                 {
-                    $release->content .= "<$tag>" . $details->eq($n)->html() . "</{$tag}>" . PHP_EOL;
+                    $release->content .= "<$tagname>" . $details->eq($n)->html() . "</{$tagname}>" . PHP_EOL;
                 }
                 else
                 {
@@ -540,7 +540,7 @@ class Parser
         {            
             // tag instance
             $tag =& $this->tags[$version];
-            
+
             // sets the feed modification time
             if(is_null($this->modified))
             {

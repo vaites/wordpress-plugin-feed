@@ -81,11 +81,10 @@ class RevolutionSliderParser extends Parser
                 $details = $changelog->filter('h3')->eq($index)->nextAll();
                 foreach($details as $n=>$node)
                 {
-                    if($node->tagName != 'h3')
+                    $tagname = $node->tagName;
+                    if($tagname != 'h3')
                     {
-                        $release->content .= "<{$node->tagName}>" .
-                                              $details->eq($n)->html() .
-                                              "</{$node->tagName}>" . PHP_EOL;
+                        $release->content .= "<$tagname>" . $details->eq($n)->html() . "</$tagname>" . PHP_EOL;
                     }
                     else
                     {
