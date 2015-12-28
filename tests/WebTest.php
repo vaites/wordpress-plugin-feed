@@ -6,6 +6,7 @@ use Symfony\Component\Process\Process;
  * Web interface test
  *
  * @requires PHP 5.4
+ * @requires ! HHVM
  */
 class WebTest extends PHPUnit_Framework_TestCase
 {
@@ -21,11 +22,18 @@ class WebTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->server = new Process('php -S localhost:18473');
-        $this->server->setWorkingDirectory(dirname(__DIR__));
-        $this->server->start();
+        if(defined('HHVM_VERSION'))
+        {
+            $this->markTestSkipped();
+        }
+        else
+        {
+            $this->server = new Process('php -S localhost:18473');
+            $this->server->setWorkingDirectory(dirname(__DIR__));
+            $this->server->start();
 
-        sleep(2);
+            sleep(2);
+        }
     }
 
     /**
