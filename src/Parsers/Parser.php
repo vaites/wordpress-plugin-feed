@@ -212,7 +212,7 @@ class Parser
         // default stability if not set
         if(empty($stability))
         {
-            $stability = getenv('RELEASE_STABILITY');
+            $stability = getenv('RELEASE_STABILITY') ?: 'any';
         }
         
         // stability filter
@@ -253,7 +253,7 @@ class Parser
                 )
             ));
         }
-        
+
         // cache instance
         $this->cache = StorageFactory::factory(array
         (
@@ -263,7 +263,7 @@ class Parser
                 'options' => array
                 (
                     'cache_dir' => dirname(dirname(__DIR__)) . '/cache',
-                    'ttl' => getenv('CACHE_TTL')
+                    'ttl' => getenv('CACHE_TTL') ?: 3600
                 )
             ),
             'plugins' => array
@@ -692,6 +692,7 @@ class Parser
     /**
      * Error handler
      *
+     * @codeCoverageIgnore
      * @param   int     $errno
      * @param   string  $errstr
      * @param   string  $errfile
@@ -705,6 +706,7 @@ class Parser
     /**
      * Exception handler
      *
+     * @codeCoverageIgnore
      * @param Exception $exception
      */
     public function exception(Exception $exception)

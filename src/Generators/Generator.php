@@ -130,16 +130,6 @@ abstract class Generator
         $data->releases = array();
         foreach($this->parser->getReleases($limit) as $release)
         {
-            // stability filter
-            if($this->parser->stability != false)
-            {
-                if(!preg_match($this->parser->stability, $release->stability))
-                {
-                    continue;
-                }
-            }
-
-            // feed entry
             $item = new stdClass();;
             $item->id = sha1($release->title);
             $item->title = $release->title;
@@ -152,7 +142,6 @@ abstract class Generator
             $item->modified = $release->created->timestamp;
             $item->created = $release->created->timestamp;
 
-            // entry author
             if(is_string($release->author))
             {
                 $item->author = array

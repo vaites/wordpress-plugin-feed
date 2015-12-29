@@ -5,7 +5,7 @@ use WordPressPluginFeed\Generators\Generator;
 /**
  * Error and exception tests
  */
-class ErrorTest extends PHPUnit_Framework_TestCase
+class ExceptionTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Unsupported format
