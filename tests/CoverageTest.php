@@ -13,7 +13,7 @@ class CoverageTest extends PHPUnit_Framework_TestCase
      */
     public function testParser()
     {
-        putenv('RELEASE_STABILITY', 'any');
+        putenv('RELEASE_STABILITY=any');
 
         $parser = Parser::getInstance('jetpack');
         $generator = Generator::getInstance('atom', $parser);
