@@ -297,7 +297,7 @@ class Parser
      */
     public function __destruct() 
     {
-        if($this->cache instanceof StorageFactory)
+        if($this->cache instanceof \Zend\Cache\Storage\Adapter\Filesystem)
         {
             $this->cache->clearExpired();
         }
