@@ -9,6 +9,23 @@ use WordPressPluginFeed\Generators\Generator;
 class ConfigurationTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * .env configuration test
+     */
+    public function testDotEnvConfiguration()
+    {
+        $env_path = dirname(dirname(__FILE__));
+
+        if(!file_exists("$env_path/.env"))
+        {
+            file_put_contents("$env_path/.env", 'OUTPUT_LIMIT="0"');
+        }
+
+        $parser = Parser::getInstance('jetpack');
+
+        $this->assertEquals(0, getenv('OUTPUT_LIMIT'));
+    }
+
+    /**
      * Limit configuration test
      */
     public function testLimitConfiguration()
