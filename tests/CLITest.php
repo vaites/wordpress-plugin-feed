@@ -24,7 +24,7 @@ class CLITest extends PHPUnit_Framework_TestCase
         $commandTester->execute(array
         (
             'command'   => $command->getName(),
-            '--plugin'  => 'akismet',
+            '--plugin'  => 'jetpack',
             '--format'  => 'rss'
         ));
 

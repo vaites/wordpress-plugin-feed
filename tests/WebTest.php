@@ -51,7 +51,7 @@ class WebTest extends PHPUnit_Framework_TestCase
      */
     public function testWeb()
     {
-        $output = file_get_contents('http://localhost:18473/index.php?plugin=akismet&format=rss');
+        $output = file_get_contents('http://localhost:18473/index.php?plugin=jetpack&format=rss');
 
         $this->assertRegExp('/<rss version="2.0"/', $output);
     }
