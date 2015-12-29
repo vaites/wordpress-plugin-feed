@@ -63,15 +63,6 @@ class AtomGenerator extends Generator
 
         foreach($this->parser->getReleases($limit) as $release)
         {
-            // stability filter
-            if($this->parser->stability != false)
-            {
-                if(!preg_match($this->parser->stability, $release->stability))
-                {
-                    continue;
-                }
-            }
-
             // feed entry
             $entry = $feed->createEntry();
             $entry->setId(sha1($release->title));

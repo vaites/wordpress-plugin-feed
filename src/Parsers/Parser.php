@@ -102,7 +102,7 @@ class Parser
     /**
      * Release list
      *
-     * @var array
+     * @var \WordPressPluginFeed\Release[]
      */
     protected $releases = array();
     
@@ -631,17 +631,32 @@ class Parser
      */
     public function getReleases($limit = null)
     {
+        $releases = array();
+
         if(is_null($limit))
         {
             $limit = getenv('OUTPUT_LIMIT') ?: 25;
         }
 
-        array_walk($this->releases, function(Release $release)
+        $count = 0;
+        foreach($this->releases as $release)
         {
-            $release->filter();
-        });
+            if($this->stability !== false && !preg_match($this->stability, $release->stability))
+            {
+                continue;
+            }
 
-        return $limit ? array_slice($this->releases, 0, $limit) : $this->releases;
+            $release->filter();
+            $releases[$release->version] = $release;
+
+            $count++;
+            if($limit > 0 && $count >= $limit)
+            {
+                break;
+            }
+        }
+
+        return $releases;
     }
 
     /**

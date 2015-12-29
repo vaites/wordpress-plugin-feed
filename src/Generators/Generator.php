@@ -1,5 +1,6 @@
 <?php namespace WordPressPluginFeed\Generators;
 
+use Exception;
 use stdClass;
 
 use WordPressPluginFeed\Parsers\Parser;
@@ -62,7 +63,7 @@ abstract class Generator
 
         if(!isset(static::$aliases[$format]))
         {
-            throw new \Exception("Format not supported");
+            throw new Exception("Format not supported");
         }
 
         $class = "WordPressPluginFeed\\Generators\\" . self::$aliases[$format];
