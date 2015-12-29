@@ -177,6 +177,9 @@ class Parser
     {
         $this->plugin = $plugin;
 
+        // error handler
+        set_error_handler(array($this, 'error'));
+
         // load .env
         $env_path = dirname(dirname(dirname(__FILE__)));
 
@@ -187,11 +190,7 @@ class Parser
         }
 
         // error handler only for web calls
-        if(php_sapi_name() != 'cli')
-        {
-            set_error_handler(array($this, 'error'));
-        }
-        else
+        if(php_sapi_name() == 'cli')
         {
             $this->cli = true;
         }
