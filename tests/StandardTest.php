@@ -38,6 +38,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
             array('tinymce-advanced'), array('nextgen-gallery'), array('google-analytics-for-wordpress'),
             array('siteorigin-panels'), array('wpclef'), array('broken-link-checker'), array('backwpup'),
             array('wptouch'), array('the-events-calendar'), array('advanced-custom-fields'), array('tinymce-advanced'),
+            array('duplicate-post'), array('disable-comments'), array('ml-slider'), array('iwp-client'),
             array('the-definitive-url-sanitizer')
         );
     }
