@@ -48,7 +48,7 @@ class YoastSEOPremiumParser extends Parser
     (
         'profile'   => 'https://yoast.com/wordpress/plugins/seo-premium/change-log/',
     );
-    
+
     /**
      * Parse public releases using changelog page on Yoast.com
      */    
