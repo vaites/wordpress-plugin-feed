@@ -53,5 +53,5 @@ class AllInOneSEOPackParser extends GenericParser
      *
      * @var bool
      */
-    protected $tagMustExist = true;
+    protected $useTags = true;
 }

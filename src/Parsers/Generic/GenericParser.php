@@ -31,15 +31,15 @@ class GenericParser extends Parser
      *
      * @var bool
      */
-    protected $tagMustExist = false;
+    protected $useTags = false;
 
     /**
      * Parse public releases using changelog page on authors web
-     */    
+     */
     protected function loadReleases()
     {
         // tags need to be loaded before parse releases
-        if($this->tagMustExist == true)
+        if($this->useTags == true)
         {
             $this->loadTags();
         }
@@ -57,7 +57,7 @@ class GenericParser extends Parser
             $version = $this->parseVersion($node->textContent);
 
             // tag must exist in Subversion?
-            if($this->tagMustExist == true && !isset($this->tags[$version]))
+            if($this->useTags == true && !isset($this->tags[$version]))
             {
                 continue;
             }
@@ -68,7 +68,7 @@ class GenericParser extends Parser
             $release->stability = $this->parseStability($node->textContent);
 
             // creation date based on tag
-            if($this->tagMustExist == true && !isset($this->tags[$version]))
+            if($this->useTags == true && isset($this->tags[$version]))
             {
                 $release->created = $this->tags[$version]->created;
             }

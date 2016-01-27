@@ -1,5 +1,6 @@
 <?php namespace WordPressPluginFeed;
 
+use Carbon\Carbon;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 
@@ -104,7 +105,7 @@ class Release
         // set mandatory properties
         $this->version = $version;
         $this->title = "$title $version";
-        $this->created = time();
+        $this->created = Carbon::now();
 
         // HTMLPurifier instance
         $this->purifier = new HTMLPurifier(HTMLPurifier_Config::create(array
