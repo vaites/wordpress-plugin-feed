@@ -1,7 +1,6 @@
 #!/bin/bash
 
-VERSION=`cat composer.json | grep 'version' | awk '{print $2}' \
-       | sed -e 's/"//g' | sed -e 's/,//'`
+VERSION=`git tag | tail -n 1 | sed -e 's/v//'`
 
 BUILD="./build/wordpress-plugin-feed-$VERSION.tar.gz"
 
