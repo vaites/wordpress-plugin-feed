@@ -356,7 +356,7 @@ class Parser
                 }
                 else
                 {
-                    $message = "Error fetching {$uri} (" . $response->getReasonPhrase() . ")";
+                    $message = "Error fetching {$source} (" . $response->getReasonPhrase() . ")";
 
                     throw new Exception($message, $response->getStatusCode());
                 }
