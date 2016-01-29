@@ -53,5 +53,5 @@ class GoogleXMLSitemapsParser extends GenericParser
      *
      * @var bool
      */
-    protected $tagMustExist = true;
+    protected $useTags = true;
 }
