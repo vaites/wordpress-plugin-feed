@@ -75,6 +75,10 @@ Options
   * GET: `format=rss`
   * CLI: `--format="rss""`
   * ENV: `OUTPUT_FORMAT="rss"`
+* **Filter**: terms to match against title and content (default none)
+  * GET: `filter=security`
+  * CLI: `--filter="security""`
+  * ENV: `OUTPUT_FILTER="security"`
 * **Stability**: one o more stability options (any, stable, alpha, beta, rc) separated by commas (default any)
   * GET: `stability=stable,rc`
   * CLI: `--stability="stable,rc"`

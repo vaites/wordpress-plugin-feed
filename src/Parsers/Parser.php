@@ -51,6 +51,13 @@ class Parser
      * @var string
      */
     public $stability = 'stable';
+
+    /**
+     * Terms to match against title
+     *
+     * @var string
+     */
+    public $filter = false;
     
     /**
      * Plugin title
@@ -171,9 +178,10 @@ class Parser
      * 
      * @param   string  $plugin
      * @param   string  $stability
+     * @param   string  $filter
      * @param   bool    $debug
      */
-    public function __construct($plugin, $stability = null, $debug = null)
+    public function __construct($plugin, $stability = null, $filter = null, $debug = null)
     {
         $this->plugin = $plugin;
 
@@ -223,7 +231,17 @@ class Parser
         {
             $this->stability = '/(' . str_replace(',', '|', $stability) . ')/';
         }
-        
+
+        // text filter
+        if(!empty($filter))
+        {
+            $this->filter = '/(' . preg_replace('/\s+/', '|', preg_quote($filter)) . ')/i';
+        }
+        else
+        {
+            $this->filter = '/(' . preg_replace('/\s+/', '|', preg_quote(getenv('OUTPUT_FILTER'))) . ')/i';
+        }
+
         // external link if not defined
         if(empty($this->link))
         {
@@ -307,10 +325,11 @@ class Parser
      *
      * @param   string  $plugin
      * @param   string  $stability
+     * @param   string  $filter
      * @param   bool    $debug
      * @return  \WordPressPluginFeed\Parsers\Parser
      */
-    public static function getInstance($plugin, $stability = null, $debug = null)
+    public static function getInstance($plugin, $stability = null, $filter = null, $debug = null)
     {
         if(isset(self::$aliases[$plugin]))
         {
@@ -321,7 +340,7 @@ class Parser
             $class = 'WordPressPluginFeed\\Parsers\\Parser';
         }
 
-        return new $class($plugin, $stability, $debug);
+        return new $class($plugin, $stability, $filter, $debug);
     }
     
     /**
@@ -645,7 +664,12 @@ class Parser
                 continue;
             }
 
-            $release->filter();
+            if($this->filter !== false && !preg_match($this->filter, $release->title . $release->content))
+            {
+                continue;
+            }
+
+            $release->filter($this->filter);
             $releases[$release->version] = $release;
 
             $count++;

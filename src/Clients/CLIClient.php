@@ -39,6 +39,13 @@ class CLIClient extends Command
 
         $this->addOption
         (
+            'filter', null,
+            InputOption::VALUE_OPTIONAL,
+            'Terms to match against title and content'
+        );
+
+        $this->addOption
+        (
             'limit', null,
             InputOption::VALUE_OPTIONAL,
             'Number of releases on output'
@@ -50,9 +57,10 @@ class CLIClient extends Command
         $plugin     = $input->getOption('plugin');
         $stability  = $input->getOption('stability');
         $format     = $input->getOption('format');
+        $filter     = $input->getOption('filter');
         $limit      = $input->getOption('limit');
 
-        $parser = Parser::getInstance($plugin, $stability);
+        $parser = Parser::getInstance($plugin, $stability, $filter);
         $generator = Generator::getInstance($format);
         $output->writeln(trim($generator->generate($parser, $limit, false)));
     }

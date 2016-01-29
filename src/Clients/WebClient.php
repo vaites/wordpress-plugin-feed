@@ -15,9 +15,10 @@ class WebClient
         $plugin     = filter_input(1, 'plugin',    FILTER_SANITIZE_STRING);
         $stability  = filter_input(1, 'stability', FILTER_SANITIZE_STRING);
         $format     = filter_input(1, 'format',    FILTER_SANITIZE_STRING);
+        $filter     = filter_input(1, 'filter',    FILTER_SANITIZE_STRING);
         $limit      = filter_input(1, 'limit',     FILTER_SANITIZE_NUMBER_INT);
 
-        $parser = Parser::getInstance($plugin, $stability);
+        $parser = Parser::getInstance($plugin, $stability, $filter);
         $generator = Generator::getInstance($format);
         $generator->generate($parser, $limit);
     }

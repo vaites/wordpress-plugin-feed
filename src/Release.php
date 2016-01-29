@@ -117,9 +117,10 @@ class Release
     /**
      * Filter a release adding type, warnings and other stuff
      *
+     * @param   string  $filter
      * @return  self
      */
-    public function filter()
+    public function filter($filter = null)
     {
         // add release type
         if($this->stability != 'stable')
@@ -144,10 +145,20 @@ class Release
         }
         $this->content = utf8_decode($crawler->html());
 
-        // detect security keywords
+        // base for highlights
         $content = strip_tags($this->content);
         $keywords = implode('|', self::$keywords);
 
+        // detect filtered words
+        if(!empty($filter) && preg_match_all($filter, $content, $match))
+        {
+            foreach(array_unique($match[1]) as $keyword)
+            {
+                $highlight[$keyword] = $keyword;
+            }
+        }
+
+        // detect security keywords
         if(preg_match_all("/(^|\W)($keywords)(\W|$)/i", $content, $match))
         {
             foreach(array_unique($match[2]) as $keyword)
