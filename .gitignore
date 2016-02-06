@@ -4,6 +4,5 @@ build
 cache/*
 !cache/.gitkeep
 composer.lock
-nbproject
 reports/*.xml
 vendor

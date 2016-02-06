@@ -39,7 +39,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
             array('siteorigin-panels'), array('wpclef'), array('broken-link-checker'), array('backwpup'),
             array('wptouch'), array('the-events-calendar'), array('advanced-custom-fields'), array('tinymce-advanced'),
             array('duplicate-post'), array('disable-comments'), array('ml-slider'), array('iwp-client'),
-            array('the-definitive-url-sanitizer')
+            array('regenerate-thumbnails'), array('wp-pagenavi'), array('the-definitive-url-sanitizer')
         );
     }
 }
