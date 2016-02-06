@@ -15,6 +15,8 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function testStandard($plugin)
     {
+        sleep(3);
+        
         $parser = Parser::getInstance($plugin);
         $releases = $parser->getReleases();
         
