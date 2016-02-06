@@ -237,7 +237,7 @@ class Parser
         {
             $this->filter = '/(' . preg_replace('/\s+/', '|', preg_quote($filter)) . ')/i';
         }
-        else
+        elseif(getenv('OUTPUT_FILTER'))
         {
             $this->filter = '/(' . preg_replace('/\s+/', '|', preg_quote(getenv('OUTPUT_FILTER'))) . ')/i';
         }

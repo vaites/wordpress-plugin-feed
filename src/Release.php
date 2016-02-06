@@ -148,6 +148,7 @@ class Release
         // base for highlights
         $content = strip_tags($this->content);
         $keywords = implode('|', self::$keywords);
+        $highlight = array();
 
         // detect filtered words
         if(!empty($filter) && preg_match_all($filter, $content, $match))
