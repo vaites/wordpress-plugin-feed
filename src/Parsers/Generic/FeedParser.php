@@ -21,6 +21,13 @@ class FeedParser extends Parser
     protected $pages = 5;
 
     /**
+     * Seconds to sleep between calls
+     *
+     * @var int
+     */
+    protected $sleep = 1;
+
+    /**
      * Regular expression to detect releases
      *
      * @var string
@@ -64,6 +71,11 @@ class FeedParser extends Parser
 
                     $this->addRelease($release);
                 }
+            }
+
+            if($this->sleep)
+            {
+                sleep($this->sleep);
             }
         }
     }

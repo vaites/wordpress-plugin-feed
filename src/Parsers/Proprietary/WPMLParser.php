@@ -46,6 +46,13 @@ class WPMLParser extends FeedParser
     );
 
     /**
+     * Seconds to sleep between calls
+     *
+     * @var int
+     */
+    protected $sleep = 5;
+
+    /**
      * Regular expression to detect releases
      *
      * @var string
