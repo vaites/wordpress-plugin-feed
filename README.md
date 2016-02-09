@@ -86,6 +86,7 @@ Options
   
 Other options are only configurable with environment variables:
 * CACHE_TTL: cache life in seconds
+* CACHE_DIR: absolute path of cache directory
 
 There's an *.env.example* file that you can copy to *.env*.
 

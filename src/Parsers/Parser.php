@@ -279,7 +279,7 @@ class Parser
                 'name' => 'filesystem', 
                 'options' => array
                 (
-                    'cache_dir' => dirname(dirname(__DIR__)) . '/cache',
+                    'cache_dir' => getenv('CACHE_DIR') ?: dirname(dirname(__DIR__)) . '/cache',
                     'ttl' => getenv('CACHE_TTL') ?: 3600
                 )
             ),
