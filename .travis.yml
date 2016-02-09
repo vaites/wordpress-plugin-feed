@@ -10,10 +10,6 @@ php:
 
 sudo: false
 
-env:
-  - ENVIRONMENT=testing
-  - CACHE_DIR=$HOME/wpf
-
 cache:
   directories:
   - $HOME/wpf
