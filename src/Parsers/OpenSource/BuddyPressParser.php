@@ -10,27 +10,13 @@ use WordPressPluginFeed\Parsers\Generic\FeedParser;
 class BuddyPressParser extends FeedParser
 {
     /**
-     * Plugin title
-     *
-     * @var string
-     */
-    public $title = 'BuddyPress';
-    
-    /**
-     * Plugin short description
-     *
-     * @var string
-     */
-    public $description = 'BuddyPress helps you run any kind of social network on your WordPress, with member profiles, activity streams, user groups, messaging, and more.';
-
-    /**
      * Source URLs 
      *
      * @var array
      */    
     protected $sources = array
     (
-        'profile'   => 'https://buddypress.org/blog/feed/atom/',
+        'changelog' => 'https://buddypress.org/blog/feed/atom/',
     );
 
     /**

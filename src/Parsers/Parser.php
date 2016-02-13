@@ -27,6 +27,7 @@ class Parser
     (
         'buddypress'                  => 'OpenSource\\BuddyPressParser',
         'google-sitemap-generator'    => 'OpenSource\\GoogleXMLSitemapsParser',
+        'woocommerce'                 => 'OpenSource\\WooCommerceParser',
 
         'all-in-one-seo-pack'         => 'Proprietary\\AllInOneSEOPackParser',
         'gravityforms'                => 'Proprietary\\GravityFormsParser',
@@ -128,15 +129,22 @@ class Parser
     protected $vulnerabilities = array();
 
     /**
-     * Source URLs 
+     * Default source URLs
      *
      * @var array
      */
-    protected $sources = array
+    protected $defaultSources = array
     (
         'profile'   => 'https://wordpress.org/plugins/%s/changelog/',
         'tags'      => 'https://plugins.trac.wordpress.org/browser/%s/tags?order=date&desc=1'
     );
+
+    /**
+     * Other source URLs
+     *
+     * @var array
+     */
+    protected $sources = array();
 
     /**
      * CLI call
@@ -242,6 +250,9 @@ class Parser
             $this->filter = '/(' . preg_replace('/\s+/', '|', preg_quote(getenv('OUTPUT_FILTER'))) . ')/i';
         }
 
+        // merge source URLs
+        $this->sources = array_merge($this->defaultSources, $this->sources);
+
         // external link if not defined
         if(empty($this->link))
         {
@@ -282,10 +293,6 @@ class Parser
                     'cache_dir' => getenv('CACHE_DIR') ?: dirname(dirname(__DIR__)) . '/cache',
                     'ttl' => getenv('CACHE_TTL') ?: 3600
                 )
-            ),
-            'plugins' => array
-            (
-                'exception_handler' => array('throw_exceptions' => false)
             )
         ));
 
@@ -296,6 +303,7 @@ class Parser
         try
         {
             $this->loadVulnerabilities();
+            $this->loadProperties();
             $this->loadReleases();
 
             if(empty($this->releases))
@@ -355,7 +363,7 @@ class Parser
     public function fetch($type = 'profile', $append = null)
     {
         $code = false;
-        
+
         if(isset($this->sources[$type]) && $this->sources[$type])
         {
             $uri = $this->sources[$type] . $append;
@@ -392,12 +400,73 @@ class Parser
      */
     public function addRelease(Release $release)
     {
+        // add extra info based on tag, if exists
+        if(isset($this->tags[$release->version]))
+        {
+            // tag instance
+            $tag =& $this->tags[$release->version];
+
+            // sets the feed modification time
+            if(is_null($this->modified))
+            {
+                $release->modified = $tag->created;
+            }
+
+            // link to Track browser listing commits between since previous tag
+            if(empty($release->link))
+            {
+                $release->link = 'https://plugins.trac.wordpress.org/log/'
+                               . $this->plugin . '/trunk?action=stop_on_copy'
+                               . '&mode=stop_on_copy&rev=' . $tag->revision
+                               . '&limit=100&sfp_email=&sfph_mail=';
+
+                // move pointer to previous release
+                while(current($this->tags) && key($this->tags) != $release->version)
+                {
+                    next($this->tags);
+                }
+
+                // add previous release revision to limit commit list
+                $previous = next($this->tags);
+                if(!empty($previous))
+                {
+                    $release->link .= '&stop_rev=' . $previous->revision;
+                }
+            }
+        }
+
+        // add known vulnerabilities
         if(isset($this->vulnerabilities[$release->version]))
         {
             $release->vulnerabilities = $this->vulnerabilities[$release->version];
         }
 
         $this->releases[$release->version] = $release;
+    }
+
+    /**
+     * Load plugin properties, like title and description
+     *
+     * @throws Exception
+     */
+    public function loadProperties()
+    {
+        // profile
+        $crawler = new Crawler($this->fetch('profile'));
+
+        // plugin title (used for feed title)
+        $this->title = $crawler->filter('#plugin-title h2')->text();
+        $this->title = preg_replace('/\s*(:|\s+\-|\|)(.+)/', '', $this->title);
+        $this->title = preg_replace('/\s+\((.+)\)$/', '', $this->title);
+
+        // short description
+        $this->description = $crawler->filter('.shortdesc')->text();
+
+        // if profile page doesn't have a <meta name="thumbnail">, plugin doesn't have custom image
+        if($crawler->filter('meta[name=thumbnail]')->count() == 0)
+        {
+            $this->image['uri'] = null;
+        }
     }
     
     /**
@@ -475,14 +544,6 @@ class Parser
         // profile 
         $crawler = new Crawler($this->fetch('profile'));
 
-        // plugin title (used for feed title)
-        $this->title = $crawler->filter('#plugin-title h2')->text();
-        $this->title = preg_replace('/\s*(:|\s+\-|\|)(.+)/', '', $this->title);
-        $this->title = preg_replace('/\s+\((.+)\)$/', '', $this->title);
-        
-        // short description
-        $this->description = $crawler->filter('.shortdesc')->text();
-
         // need to parse changelog block
         $changelog = $crawler->filter('.block.changelog .block-content');
         
@@ -551,46 +612,6 @@ class Parser
             }
             
             reset($this->tags);            
-        }
-
-        // add extra info to detected releases
-        foreach($this->releases as $version=>$release)
-        {            
-            // tag instance
-            $tag =& $this->tags[$version];
-
-            // sets the feed modification time
-            if(is_null($this->modified))
-            {
-                $this->modified = $tag->created;
-            }
-            
-            // link to Track browser listing commits between since previous tag
-            $release->link = 'https://plugins.trac.wordpress.org/log/'
-                    . $this->plugin . '/trunk?action=stop_on_copy'
-                    . '&mode=stop_on_copy&rev=' . $tag->revision 
-                    . '&limit=100&sfp_email=&sfph_mail=';                       
-            
-            // move pointer to previous release
-            while(current($this->tags) && key($this->tags) != $version)
-            {
-                next($this->tags);
-            }
-            
-            // add previous release revision to limit commit list
-            $previous = next($this->tags);
-            if(!empty($previous))
-            {
-                $release->link .= '&stop_rev=' . $previous->revision;
-            }
-            
-            $this->addRelease($release);
-        }
-
-        // if profile page doesn't have a <meta name="thumbnail">, plugin doesn't have custom image
-        if($crawler->filter('meta[name=thumbnail]')->count() == 0)
-        {
-            $this->image['uri'] = null;
         }
     }
     

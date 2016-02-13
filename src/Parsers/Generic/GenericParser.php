@@ -45,7 +45,8 @@ class GenericParser extends Parser
         }
 
         // get profile source
-        $crawler = new Crawler($this->fetch('profile'));
+        $source = isset($this->sources['changelog']) ? 'changelog' : 'profile';
+        $crawler = new Crawler($this->fetch($source));
 
         // changelog is inside container
         $changelog = $crawler->filter($this->container)->children();

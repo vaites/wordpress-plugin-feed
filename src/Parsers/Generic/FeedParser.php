@@ -43,7 +43,8 @@ class FeedParser extends Parser
         for($p = 0; $p < $this->pages; $p++)
         {
             $query = "?paged=$p";
-            $changelog = Reader::importString($this->fetch('profile', $query));
+            $source = isset($this->sources['changelog']) ? 'changelog' : 'profile';
+            $changelog = Reader::importString($this->fetch($source), $query);
 
             // each entry can be a release
             foreach($changelog as $entry)
