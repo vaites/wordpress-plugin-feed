@@ -586,6 +586,12 @@ class Parser
             
             $this->addRelease($release);
         }
+
+        // if profile page doesn't have a <meta name="thumbnail">, plugin doesn't have custom image
+        if($crawler->filter('meta[name=thumbnail]')->count() == 0)
+        {
+            $this->image['uri'] = null;
+        }
     }
     
     /**
