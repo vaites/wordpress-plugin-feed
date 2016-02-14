@@ -30,8 +30,7 @@ class AllInOneSEOPackParser extends GenericParser
      */    
     protected $sources = array
     (
-        'profile'   => 'http://semperfiwebdesign.com/blog/all-in-one-seo-pack/all-in-one-seo-pack-release-history/',
-        'tags'      => 'https://plugins.trac.wordpress.org/browser/%s/tags?order=date&desc=1'
+        'changelog' => 'http://semperfiwebdesign.com/blog/all-in-one-seo-pack/all-in-one-seo-pack-release-history/',
     );
 
     /**

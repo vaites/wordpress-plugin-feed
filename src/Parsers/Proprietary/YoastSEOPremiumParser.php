@@ -46,7 +46,7 @@ class YoastSEOPremiumParser extends Parser
      */    
     protected $sources = array
     (
-        'profile'   => 'https://yoast.com/wordpress/plugins/seo-premium/change-log/',
+        'changelog' => 'https://yoast.com/wordpress/plugins/seo-premium/change-log/',
     );
 
     /**
@@ -59,7 +59,7 @@ class YoastSEOPremiumParser extends Parser
 
         // profile
         $this->http->setOptions(array('curloptions' => array(CURLOPT_SSL_VERIFYPEER => false)));
-        $crawler = new Crawler($this->fetch('profile'));
+        $crawler = new Crawler($this->fetch('changelog'));
 
         // need to parse changelog block
         $changelog = $crawler->filter('section.content')->children();

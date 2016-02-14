@@ -42,7 +42,7 @@ class WPMLParser extends FeedParser
      */    
     protected $sources = array
     (
-        'profile'   => 'https://wpml.org/category/changelog/feed/'
+        'changelog' => 'https://wpml.org/category/changelog/feed/'
     );
 
     /**

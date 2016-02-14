@@ -46,7 +46,7 @@ class RevolutionSliderParser extends Parser
      */    
     protected $sources = array
     (
-        'profile'   => 'http://codecanyon.net/item/slider-revolution-responsive-wordpress-plugin/2751380',
+        'changelog' => 'http://codecanyon.net/item/slider-revolution-responsive-wordpress-plugin/2751380',
     );
 
     /**
@@ -55,7 +55,7 @@ class RevolutionSliderParser extends Parser
     protected function loadReleases()
     {
         // profile
-        $crawler = new Crawler($this->fetch('profile'));
+        $crawler = new Crawler($this->fetch('changelog'));
 
         // need to parse changelog block
         $changelog = $crawler->filter('#item-description__ressources-credits')->nextAll();

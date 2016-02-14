@@ -356,11 +356,12 @@ class Parser
      * 
      * @link    http://framework.zend.com/manual/2.4/en/modules/zend.http.client.html
      * @param   string  $type   profile, tags or image
-     * @param   strign  $append query string or other parameters
+     * @param   string  $append query string or other parameters
+     * @param   bool    $cached if result is cached, is set to true
      * @return  string
      * @throws  \Exception
      */
-    public function fetch($type = 'profile', $append = null)
+    public function fetch($type = 'profile', $append = null, &$cached = false)
     {
         $code = false;
 
@@ -387,7 +388,11 @@ class Parser
 
                     throw new Exception($message, $response->getStatusCode());
                 }
-            }        
+            }
+            else
+            {
+                $cached = true;
+            }
         }
         
         return $code;
@@ -451,21 +456,25 @@ class Parser
      */
     public function loadProperties()
     {
-        // profile
-        $crawler = new Crawler($this->fetch('profile'));
-
-        // plugin title (used for feed title)
-        $this->title = $crawler->filter('#plugin-title h2')->text();
-        $this->title = preg_replace('/\s*(:|\s+\-|\|)(.+)/', '', $this->title);
-        $this->title = preg_replace('/\s+\((.+)\)$/', '', $this->title);
-
-        // short description
-        $this->description = $crawler->filter('.shortdesc')->text();
-
-        // if profile page doesn't have a <meta name="thumbnail">, plugin doesn't have custom image
-        if($crawler->filter('meta[name=thumbnail]')->count() == 0)
+        // proprietary plugins doesn't have a profile
+        if(!preg_match('/Proprietary/', get_class($this)))
         {
-            $this->image['uri'] = null;
+            // profile
+            $crawler = new Crawler($this->fetch('profile'));
+
+            // plugin title (used for feed title)
+            $this->title = $crawler->filter('#plugin-title h2')->text();
+            $this->title = preg_replace('/\s*(:|\s+\-|\|)(.+)/', '', $this->title);
+            $this->title = preg_replace('/\s+\((.+)\)$/', '', $this->title);
+
+            // short description
+            $this->description = $crawler->filter('.shortdesc')->text();
+
+            // if profile page doesn't have a <meta name="thumbnail">, plugin doesn't have custom image
+            if($crawler->filter('meta[name=thumbnail]')->count() == 0)
+            {
+                $this->image['uri'] = null;
+            }
         }
     }
     

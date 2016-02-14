@@ -42,7 +42,8 @@ class GravityFormsParser extends FeedParser
      */    
     protected $sources = array
     (
-        'profile'   => 'http://www.gravityhelp.com/feed/atom/',
+        'changelog' => 'http://www.gravityhelp.com/feed/atom/',
+        'profile'   => false
     );
 
     /**
@@ -51,4 +52,11 @@ class GravityFormsParser extends FeedParser
      * @var string
      */
     protected $regexp = '/^Gravity Forms v(\d|\.)+ Released/i';
+
+    /**
+     * Number of pages to request
+     *
+     * @var int
+     */
+    protected $pages = 5;
 }

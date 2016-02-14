@@ -46,7 +46,7 @@ class UltimateVCAddonsParser extends Parser
      */    
     protected $sources = array
     (
-        'profile'   => 'http://codecanyon.net/item/ultimate-addons-for-visual-composer/6892199',
+        'changelog' => 'http://codecanyon.net/item/ultimate-addons-for-visual-composer/6892199',
     );
     
     /**
@@ -55,7 +55,7 @@ class UltimateVCAddonsParser extends Parser
     protected function loadReleases()
     {
         // profile
-        $crawler = new Crawler($this->fetch('profile'));
+        $crawler = new Crawler($this->fetch('changelog'));
         
         // need to parse changelog block
         $changelog = $crawler->filter('#item-description__changelog')->nextAll();

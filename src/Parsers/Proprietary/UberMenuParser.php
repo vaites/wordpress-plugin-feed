@@ -46,7 +46,7 @@ class UberMenuParser extends Parser
      */    
     protected $sources = array
     (
-        'profile'   => 'http://codecanyon.net/item/ubermenu-wordpress-mega-menu-plugin/154703',
+        'changelog' => 'http://codecanyon.net/item/ubermenu-wordpress-mega-menu-plugin/154703',
     );
     
     /**
@@ -55,7 +55,7 @@ class UberMenuParser extends Parser
     protected function loadReleases()
     {
         // profile
-        $crawler = new Crawler($this->fetch('profile'));
+        $crawler = new Crawler($this->fetch('changelog'));
         
         // need to parse changelog block
         $changelog = $crawler->filter('#item-description__changelog')->nextAll()->filter('pre')->eq(0);
