@@ -1,28 +1,21 @@
 language: php
-
 php:
-  - 5.3
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - hhvm
-
+- 5.3
+- 5.4
+- 5.5
+- 5.6
+- 7.0
+- hhvm
 sudo: false
-
 cache:
   directories:
-  - $HOME/wpf
-
+  - "$HOME/wpf"
 before_install:
-  - pip install --user codecov
-
+- pip install --user codecov
 install:
-  - composer install
-
+- composer install
 after_success:
-  - codecov
-
+- codecov
 notifications:
-  email:
-    - contacto@davidmartinez.net
+  slack:
+    secure: 2O9kxS5yWTqlkMVaeSG5x0LooOwhVpToLzVSGS68aCLdBHpj4aMWSux8/BWY5fG2+XSsvCf2ndWjX0oSqQkaPcop3Au56RnObqJbFoSwyTsW2pYMd26abKObMSe/jnNHnQZGRAOglExQdx9CK+3YVd5ZOAHkwma+uCWj7Ut+M/MjYa8Mb2hne9QfUtIcrMMIg99tVLMg5GIz571OG+HABhLIYkoJTDerhU2m6egH0Lvo8ON1epYKChBCoKSa7CWM8eFz+r56f9M/BnGq7/VH+cganrsNijEYruQQ0PkBXpr2QI09Wy4sdTLqnGKb9+iWkhhOkKBr7t/54sYMcc7924QHYCd5tyg6v6qZdpA3iDonX6GWiODTdOOpU9FujWkGR0Qrw4q4VefOn6IdJ4QaBozEsynRDqxVYqs2WOe9VESKJV0rVDYfNdUNcEiXybCxSkipPiViFMAXnKXS75OX6Tf4RP0PidEq9BmSadNf0HxiT6/88THb0lZm0bGvVFg+pqy1NMTJbUzirI6RltXdu+GxL7KtF9QP/4E+cMeGrbbTGckRWNA/Z1h5EqBB1N3Tv7xjJUTridawH8oFGtKM+yGGdzVHr3JHvYtvLXIahaeiQy0U4D2CelaEBxhn5JvNBuJsC9fl3mv3meaplk1C0QDihGDjErXEl+Xhy3sXuNs=
