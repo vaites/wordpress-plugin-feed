@@ -29,7 +29,8 @@ abstract class Generator
         'atom'  => 'Formats\\AtomGenerator',
         'rss'   => 'Formats\\RSSGenerator',
         'json'  => 'Formats\\JSONGenerator',
-        'xml'   => 'Formats\\XMLGenerator'
+        'xml'   => 'Formats\\XMLGenerator',
+        'yaml'  => 'Formats\\YAMLGenerator'
     );
 
     /**
