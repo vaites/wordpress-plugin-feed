@@ -50,7 +50,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
         $output = $generator->generate($parser, null, false);
 
-        $this->assertContains('<feed xmlns="http://www.w3.org/2005/Atom"', $output, $parser->getLastError());
+        $this->stringStartsWith('<feed xmlns="http://www.w3.org/2005/Atom"', $output, $parser->getLastError());
     }
 
     /**
@@ -65,7 +65,37 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
         $output = $generator->generate($parser, null, false);
 
-        $this->assertContains('<rss version="2.0"', $output, $parser->getLastError());
+        $this->stringStartsWith('<rss version="2.0"', $output, $parser->getLastError());
+    }
+
+    /**
+     * XML Format configuration test
+     */
+    public function testXMLFormatConfiguration()
+    {
+        putenv('OUTPUT_FORMAT=xml');
+
+        $parser = Parser::getInstance('jetpack');
+        $generator = Generator::getInstance();
+
+        $output = $generator->generate($parser, null, false);
+
+        $this->stringStartsWith('<?xml version="1.0"?>', $output, $parser->getLastError());
+    }
+
+    /**
+     * YAML Format configuration test
+     */
+    public function testYAMLFormatConfiguration()
+    {
+        putenv('OUTPUT_FORMAT=yaml');
+
+        $parser = Parser::getInstance('jetpack');
+        $generator = Generator::getInstance();
+
+        $output = $generator->generate($parser, null, false);
+
+        $this->stringStartsWith('title: Jetpack', $output, $parser->getLastError());
     }
 
     /**
@@ -81,20 +111,5 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $output = @json_decode($generator->generate($parser, null, false));
 
         $this->assertEquals($output->name, 'jetpack', $parser->getLastError());
-    }
-
-    /**
-     * XML Format configuration test
-     */
-    public function testXMLFormatConfiguration()
-    {
-        putenv('OUTPUT_FORMAT=xml');
-
-        $parser = Parser::getInstance('jetpack');
-        $generator = Generator::getInstance();
-
-        $output = $generator->generate($parser, null, false);
-
-        $this->assertContains('<?xml version="1.0"?>', $output, $parser->getLastError());
     }
 }
