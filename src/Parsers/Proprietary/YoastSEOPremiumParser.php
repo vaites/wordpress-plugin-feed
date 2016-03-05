@@ -74,9 +74,8 @@ class YoastSEOPremiumParser extends Parser
             $id = $changelog->filter('h2')->eq($index)->attr('id');
 
             // release object
-            $release = new Release($this->title, $version);
+            $release = new Release($this->title, $version, $this->parseStability($node->textContent));
             $release->link = "{$this->sources['profile']}#{$id}";
-            $release->stability = $this->parseStability($node->textContent);
 
             // add changelog from free version if exists
             if(isset($free[$version]))

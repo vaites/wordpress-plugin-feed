@@ -446,7 +446,7 @@ class Parser
             $release->vulnerabilities = $this->vulnerabilities[$release->version];
         }
 
-        $this->releases[$release->version] = $release;
+        $this->releases[$release->id] = $release;
     }
 
     /**
@@ -572,10 +572,9 @@ class Parser
             $tag =& $this->tags[$version];
 
             // release object
-            $release = new Release($this->title, $version);
+            $release = new Release($this->title, $version, $this->parseStability($node->textContent));
             $release->description = $tag->description;
             $release->author = $tag->author;
-            $release->stability = $this->parseStability($node->textContent);
             $release->created = $tag->created;
             $release->content = '';
 
@@ -610,10 +609,9 @@ class Parser
             {
                 $version = $tag->name;
 
-                $release = new Release($this->title, $version);
+                $release = new Release($this->title, $version, $this->parseStability($tag->name));
                 $release->description = $tag->description;
                 $release->author = $tag->author;
-                $release->stability = $this->parseStability($tag->name);
                 $release->created = $tag->created;
                 $release->content = "Commit message: " . $tag->description;
 
@@ -706,7 +704,7 @@ class Parser
             }
 
             $release->filter($this->filter);
-            $releases[$release->version] = $release;
+            $releases[$release->id] = $release;
 
             $count++;
             if($limit > 0 && $count >= $limit)

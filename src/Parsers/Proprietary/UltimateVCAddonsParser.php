@@ -73,9 +73,8 @@ class UltimateVCAddonsParser extends Parser
                 $id = 'item-description__changelog';
 
                 // release object
-                $release = new Release($this->title, $version);
+                $release = new Release($this->title, $version, $this->parseStability($version));
                 $release->link = "{$this->sources['profile']}#$id";
-                $release->stability = $this->parseStability($version);
 
                 // pre that follows p are the details
                 $details = $changelog->filter('p')->eq($index)->nextAll();

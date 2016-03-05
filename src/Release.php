@@ -9,6 +9,13 @@ use Symfony\Component\DomCrawler\Crawler;
 class Release
 {
     /**
+     * Unique identifier (version + stability)
+     *
+     * @var string
+     */
+    public $id;
+
+    /**
      * Version
      *
      * @var string
@@ -100,11 +107,13 @@ class Release
      * @param   string  $title
      * @param   string  $version
      */
-    public function __construct($title, $version)
+    public function __construct($title, $version, $stability)
     {
         // set mandatory properties
-        $this->version = $version;
+        $this->id = "$version-$stability";
         $this->title = "$title $version";
+        $this->version = $version;
+        $this->stability = $stability;
         $this->created = Carbon::now();
 
         // HTMLPurifier instance

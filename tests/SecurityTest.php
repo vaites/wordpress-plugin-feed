@@ -17,11 +17,11 @@ class SecurityTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue
         (
-            isset($releases['3.1.2']) &&
-            preg_match('/security/i', $releases['3.1.2']->title) &&
+            isset($releases['3.1.2-stable']) &&
+            preg_match('/security/i', $releases['3.1.2-stable']->title) &&
 
-            isset($releases['3.1.5']) &&
-            preg_match('/security/i', $releases['3.1.5']->title)
+            isset($releases['3.1.5-stable']) &&
+            preg_match('/security/i', $releases['3.1.5-stable']->title)
         );
     }
 }

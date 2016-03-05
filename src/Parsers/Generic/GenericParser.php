@@ -64,9 +64,8 @@ class GenericParser extends Parser
             }
 
             // release object
-            $release = new Release($this->title, $version);
+            $release = new Release($this->title, $version, $this->parseStability($node->textContent));
             $release->link = $this->sources['profile'];
-            $release->stability = $this->parseStability($node->textContent);
 
             // creation date based on tag
             if($this->useTags == true && isset($this->tags[$version]))

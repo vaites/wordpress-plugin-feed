@@ -80,9 +80,8 @@ class VisualComposerParser extends Parser
             $id = 'item-description__updates';
 
             // release object
-            $release = new Release($this->title, $version);
+            $release = new Release($this->title, $version, $this->parseStability($version));
             $release->link = "{$this->sources['profile']}#$id";
-            $release->stability = $this->parseStability($version);
             $release->content = implode("<br />\n", $block);
 
             // pubdate needs to be parsed

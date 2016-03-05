@@ -50,10 +50,9 @@ class WooCommerceParser extends Parser
                 }
 
                 // release object
-                $release = new Release($this->title, $version);
+                $release = new Release($this->title, $version, $this->parseStability($version));
                 $release->description = $tag->description;
                 $release->author = $tag->author;
-                $release->stability = $this->parseStability($version);
                 $release->content = '<ul>' . preg_replace('/\*(.+)/', '<li>$1</li>', $match[3][$r]) . '</ul>';
                 $release->created = $tag->created;
 
