@@ -657,7 +657,7 @@ class Parser
         (
             'alpha' => "/(alpha)(\s*\d+)?/i",
             'beta' => "/(beta)(\s*\d+)?/i",
-            'rc' => "/(rc|release\s+candidate)(\s*\d+)?/i",
+            'rc' => "/(\Wrc\W|release\s+candidate)(\s*\d+)?/i",
         );
         
         foreach($versions as $version=>$regexp)
