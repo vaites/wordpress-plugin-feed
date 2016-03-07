@@ -90,7 +90,7 @@ class Release
      */
     protected static $keywords = array
     (
-        'safe', 'trusted', 'security', 'vulnerability', 'leak', 'attack',
+        'safe', 'trusted', 'security', 'vulnerability', 'leak', 'attack', 'malware', 'malicious',
         'CSRF', 'SQLi', 'XSS', 'XXE', 'LFI', 'RFI', 'CVE-'
     );
 
