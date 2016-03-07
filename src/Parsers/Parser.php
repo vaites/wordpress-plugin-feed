@@ -561,11 +561,19 @@ class Parser
         {
             // convert release title to version
             $version = $this->parseVersion($node->textContent);
-            
+
             // version must exist in tag list
             if(!isset($this->tags[$version]))
             {
-                continue;
+                // sometimes changelog doesn't reflect full version (3.9 => 3.9.0)
+                if(!isset($this->tags["$version.0"]))
+                {
+                    continue;
+                }
+                else
+                {
+                    $version .= '.0';
+                }
             }
             
             /* @var $tag Tag */
