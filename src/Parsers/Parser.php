@@ -416,28 +416,6 @@ class Parser
             {
                 $release->modified = $tag->created;
             }
-
-            // link to Track browser listing commits between since previous tag
-            if(empty($release->link))
-            {
-                $release->link = 'https://plugins.trac.wordpress.org/log/'
-                               . $this->plugin . '/trunk?action=stop_on_copy'
-                               . '&mode=stop_on_copy&rev=' . $tag->revision
-                               . '&limit=100&sfp_email=&sfph_mail=';
-
-                // move pointer to previous release
-                while(current($this->tags) && key($this->tags) != $release->version)
-                {
-                    next($this->tags);
-                }
-
-                // add previous release revision to limit commit list
-                $previous = next($this->tags);
-                if(!empty($previous))
-                {
-                    $release->link .= '&stop_rev=' . $previous->revision;
-                }
-            }
         }
 
         // add known vulnerabilities
@@ -692,12 +670,14 @@ class Parser
     public function getReleases($limit = null)
     {
         $releases = array();
+        $keyless = array();
 
         if(is_null($limit))
         {
             $limit = getenv('OUTPUT_LIMIT') ?: 25;
         }
 
+        // get releases filtered
         $count = 0;
         foreach($this->releases as $release)
         {
@@ -712,13 +692,46 @@ class Parser
             }
 
             $release->filter($this->filter);
-            $releases[$release->id] = $release;
+            $keyless[] = $releases[$release->id] = $release;
 
             $count++;
             if($limit > 0 && $count >= $limit)
             {
                 break;
             }
+        }
+
+        // link to Track browser listing commits between since previous tag
+        $count = 0;
+        foreach($releases as $release)
+        {
+            // tag must exist
+            if(empty($release->link) && isset($this->tags[$release->version]))
+            {
+                $tag =& $this->tags[$release->version];
+
+                $release->link = "https://plugins.trac.wordpress.org/log/{$this->plugin}/trunk?action=stop_on_copy"
+                               . "&mode=stop_on_copy&rev={$tag->revision}&limit=100&sfp_email=&sfph_mail=";
+
+                // previous tag must exists too
+                if(isset($keyless[$count + 1]))
+                {
+                    $previous =& $this->tags[$keyless[$count + 1]->version];
+
+                    if(!empty($previous))
+                    {
+                        $release->link .= "&stop_rev={$previous->revision}";
+                    }
+                }
+            }
+
+            // without link to Track, link to changelog
+            if(empty($release->link))
+            {
+                $release->link = sprintf($this->sources['profile'], $this->plugin);
+            }
+
+            $count++;
         }
 
         return $releases;
