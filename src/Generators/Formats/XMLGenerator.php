@@ -36,6 +36,7 @@ class XMLGenerator extends Generator
 
         if($echo)
         {
+            header('Content-Disposition: inline; filename="' . $parser->title . '.xml"');
             header('Content-Type: application/xml;charset=utf-8');
             echo $output;
         }

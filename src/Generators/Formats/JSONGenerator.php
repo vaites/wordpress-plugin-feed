@@ -36,6 +36,7 @@ class JSONGenerator extends Generator
 
         if($echo)
         {
+            header('Content-Disposition: inline; filename="' . $parser->title . '.json"');
             header('Content-Type: application/json;charset=utf-8');
             echo $output;
         }

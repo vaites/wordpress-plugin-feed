@@ -33,6 +33,7 @@ class YAMLGenerator extends Generator
 
         if($echo)
         {
+            header('Content-Disposition: inline; filename="' . $parser->title . '.yaml"');
             header('Content-Type: application/x-yaml;charset=utf-8');
             echo $output;
         }
