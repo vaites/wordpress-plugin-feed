@@ -139,6 +139,7 @@ abstract class Generator
             $item->security = $release->security;
             $item->link = $release->link;
             $item->author = null;
+            $item->categories = $release->categories;
             $item->description = $release->content;
             $item->modified = $release->created->timestamp;
             $item->created = $release->created->timestamp;

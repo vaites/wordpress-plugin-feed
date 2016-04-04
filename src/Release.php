@@ -56,6 +56,13 @@ class Release
      * @var string
      */
     public $link;
+    
+    /**
+     * User defined categories
+     *
+     * @var array
+     */
+    public $categories = array();
 
     /**
      * Changelog

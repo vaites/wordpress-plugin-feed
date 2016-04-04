@@ -87,6 +87,13 @@ class Parser
     );
 
     /**
+     * User defined categories
+     *
+     * @var array
+     */
+    public $categories = array();
+
+    /**
      * Plugin URL at WordPress.org
      *
      * @var string
@@ -187,9 +194,10 @@ class Parser
      * @param   string  $plugin
      * @param   string  $stability
      * @param   string  $filter
+     * @param   string  $categories
      * @param   bool    $debug
      */
-    public function __construct($plugin, $stability = null, $filter = null, $debug = null)
+    public function __construct($plugin, $stability = null, $filter = null, $categories = null, $debug = null)
     {
         $this->plugin = $plugin;
 
@@ -248,6 +256,12 @@ class Parser
         elseif(getenv('OUTPUT_FILTER'))
         {
             $this->filter = '/(' . preg_replace('/\s+/', '|', preg_quote(getenv('OUTPUT_FILTER'))) . ')/i';
+        }
+
+        // user defined categories
+        if(!empty($categories))
+        {
+            $this->categories = explode(',', $categories);
         }
 
         // merge source URLs
@@ -334,10 +348,11 @@ class Parser
      * @param   string  $plugin
      * @param   string  $stability
      * @param   string  $filter
+     * @param   string  $categories
      * @param   bool    $debug
      * @return  \WordPressPluginFeed\Parsers\Parser
      */
-    public static function getInstance($plugin, $stability = null, $filter = null, $debug = null)
+    public static function getInstance($plugin, $stability = null, $filter = null, $categories = null, $debug = null)
     {
         if(isset(self::$aliases[$plugin]))
         {
@@ -348,7 +363,7 @@ class Parser
             $class = 'WordPressPluginFeed\\Parsers\\Parser';
         }
 
-        return new $class($plugin, $stability, $filter, $debug);
+        return new $class($plugin, $stability, $filter, $categories, $debug);
     }
     
     /**
@@ -417,6 +432,9 @@ class Parser
                 $release->modified = $tag->created;
             }
         }
+
+        // add user defined categories
+        $release->categories = $this->categories;
 
         // add known vulnerabilities
         if(isset($this->vulnerabilities[$release->version]))

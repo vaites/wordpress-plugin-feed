@@ -46,6 +46,13 @@ class CLIClient extends Command
 
         $this->addOption
         (
+            'categories', null,
+            InputOption::VALUE_OPTIONAL,
+            'User defined categories'
+        );
+
+        $this->addOption
+        (
             'limit', null,
             InputOption::VALUE_OPTIONAL,
             'Number of releases on output'
@@ -58,9 +65,10 @@ class CLIClient extends Command
         $stability  = $input->getOption('stability');
         $format     = $input->getOption('format');
         $filter     = $input->getOption('filter');
+        $categories = $input->getOption('categories');
         $limit      = $input->getOption('limit');
 
-        $parser = Parser::getInstance($plugin, $stability, $filter);
+        $parser = Parser::getInstance($plugin, $stability, $filter, $categories);
         $generator = Generator::getInstance($format);
         $output->writeln(trim($generator->generate($parser, $limit, false)));
     }

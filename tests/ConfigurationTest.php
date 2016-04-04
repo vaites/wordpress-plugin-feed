@@ -26,6 +26,21 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Categories configuration test
+     */
+    public function testCategoriesConfiguration()
+    {
+        putenv('OUTPUT_FORMAT=json');
+
+        $parser = Parser::getInstance('jetpack', 'stable', null, 'example.com');
+        $generator = Generator::getInstance();
+
+        $output = @json_decode($generator->generate($parser, null, false));
+
+        $this->assertEquals($output->releases[0]->categories, array('example.com'), $parser->getLastError());
+    }
+
+    /**
      * Limit configuration test
      */
     public function testLimitConfiguration()

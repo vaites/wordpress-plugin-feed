@@ -72,6 +72,11 @@ class AtomGenerator extends Generator
             $entry->setDateCreated($release->created->timestamp);
             $entry->setDescription($release->content);
 
+            foreach($release->categories as $category)
+            {
+                $entry->addCategory(array('term' => $category));
+            }
+
             // entry author
             if(is_string($release->author))
             {

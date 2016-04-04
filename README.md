@@ -23,6 +23,7 @@ Features:
   * Link to known vulnerabilities on [CVE Details](http://www.cvedetails.com) and [WPScan Vulnerability Database](https://wpvulndb.com)
 * [Semantic Versioning](http://semver.org/) syntax
 * Multiple output formats (Atom, RSS, JSON and XML)
+* User defined categories, useful for filtering (*clients*, *example.com*...)
 * Support for (less accurate) changelog of plugins with external information:
   * [All-In-One SEO Pack](http://semperplugins.com/plugins/all-in-one-seo-pack-pro-version/)
   * [BuddyPress](https://buddypress.org/)
@@ -83,7 +84,12 @@ Options
   * GET: `stability=stable,rc`
   * CLI: `--stability="stable,rc"`
   * ENV: `RELEASE_STABILITY="stable,rc"`
-  
+
+There are some options configurable only via GET or CLI:
+  **Categories**: one o more user defined categories, separated by commas (default none)
+  * GET: `categories=example.com,mywebsite.com`
+  * CLI: `--categories="example.com,mywebsite.com"`
+
 Other options are only configurable with environment variables:
 * CACHE_TTL: cache life in seconds
 * CACHE_DIR: absolute path of cache directory
