@@ -42,7 +42,7 @@ class FeedParser extends Parser
         // fetch 5 pages of feed
         for($p = 0; $p < $this->pages; $p++)
         {
-            $query = "?paged=$p";
+            $query = $this->pages > 0 ? "?paged=$p" : '';
             $source = isset($this->sources['changelog']) ? 'changelog' : 'profile';
             $changelog = Reader::importString($this->fetch($source, $query, $cached));
 
@@ -50,7 +50,7 @@ class FeedParser extends Parser
             foreach($changelog as $entry)
             {
                 // title must match regexp
-                if(!preg_match($this->regexp, $entry->getTitle()))
+                if($this->regexp && !preg_match($this->regexp, $entry->getTitle()))
                 {
                     continue;
                 }
@@ -59,14 +59,10 @@ class FeedParser extends Parser
                 $version = $this->parseVersion($entry->getTitle());
                 if($version !== false)
                 {
-                    // creation time
-                    $created = $entry->getDateCreated()->getTimestamp();
-
-                    // release object
                     $release = new Release($this->title, $version, $this->parseStability($entry->getTitle()));
                     $release->link = $entry->getLink();
                     $release->description = $entry->getDescription();
-                    $release->created = Carbon::createFromTimestamp($created);
+                    $release->created = Carbon::instance($entry->getDateCreated() ?: $entry->getDateModified());
                     $release->content = $entry->getContent();
 
                     $this->addRelease($release);

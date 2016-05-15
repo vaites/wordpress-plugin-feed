@@ -27,6 +27,7 @@ class Parser
     (
         'buddypress'                  => 'OpenSource\\BuddyPressParser',
         'google-sitemap-generator'    => 'OpenSource\\GoogleXMLSitemapsParser',
+        'versionpress'                => 'OpenSource\\VersionPressParser',
         'woocommerce'                 => 'OpenSource\\WooCommerceParser',
 
         'all-in-one-seo-pack'         => 'Proprietary\\AllInOneSEOPackParser',
@@ -446,6 +447,19 @@ class Parser
     }
 
     /**
+     * Add a tag to list
+     *
+     * @param   Tag     $tag
+     */
+    public function addTag(Tag $tag)
+    {
+        // fixes to tag name
+        $tag->name = preg_replace('/^v/', '', $tag->name);
+
+        $this->tags[$tag->name] = $tag;
+    }
+
+    /**
      * Load plugin properties, like title and description
      *
      * @throws Exception
@@ -453,7 +467,7 @@ class Parser
     public function loadProperties()
     {
         // proprietary plugins doesn't have a profile
-        if(!preg_match('/Proprietary/', get_class($this)))
+        if(!preg_match('/Proprietary/', get_class($this)) && !empty($this->sources['profile']))
         {
             // profile
             $crawler = new Crawler($this->fetch('profile'));
@@ -501,10 +515,7 @@ class Parser
                 $tag->author = trim($row->filter('.author')->text());
                 $tag->created = Carbon::parse($time);
 
-                // fixes to tag name
-                $tag->name = preg_replace('/^v/', '', $tag->name);
-                
-                $this->tags[$tag->name] = $tag;
+                $this->addTag($tag);
             }
         }
     }
