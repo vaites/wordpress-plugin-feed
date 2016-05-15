@@ -30,7 +30,7 @@ class OpenSourceTest extends PHPUnit_Framework_TestCase
     {
         return array
         (
-            array('buddypress'), array('google-sitemap-generator')
+            array('buddypress'), array('google-sitemap-generator'), array('versionpress'), array('woocommerce')
         );
     }
 }
