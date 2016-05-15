@@ -25,6 +25,7 @@ Features:
 * Multiple output formats (Atom, RSS, JSON and XML)
 * User defined categories, useful for filtering (*clients*, *example.com*...)
 * Support for (less accurate) changelog of plugins with external information:
+  * [AffiliateWP](http://affiliatewp.com)
   * [All-In-One SEO Pack](http://semperplugins.com/plugins/all-in-one-seo-pack-pro-version/)
   * [BuddyPress](https://buddypress.org/)
   * [Gravity Forms](http://www.gravityforms.com/)
@@ -33,7 +34,9 @@ Features:
   * [The WordPress Multilingual Plugin (WPML)](http://wpml.org)
   * [UberMenu](http://wpmegamenu.com/)
   * [Ultimade Addons for Visual Composer](http://vc.wpbakery.com/addons/ultimate-addon-visual-composer/)
+  * [VersionPress](http://versionpress.net)
   * [Visual Composer](http://vc.wpbakery.com/)
+  * [WooCommerce](https://www.woothemes.com/woocommerce/)
   * [Yoast SEO Premium](https://yoast.com/wordpress/plugins/seo-premium/)
 * Compatible with PHP 5.3 or greater
 
