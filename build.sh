@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=`git tag | tail -n 1 | sed -e 's/v//'`
+VERSION=`git tag --sort version:refname | tail -n 1 | sed -e 's/v//'`
 
 BUILD="./build/wordpress-plugin-feed-$VERSION.tar.gz"
 
