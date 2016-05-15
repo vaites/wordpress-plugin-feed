@@ -30,6 +30,7 @@ class Parser
         'versionpress'                => 'OpenSource\\VersionPressParser',
         'woocommerce'                 => 'OpenSource\\WooCommerceParser',
 
+        'affiliatewp'                 => 'Proprietary\\AffiliateWPParser',
         'all-in-one-seo-pack'         => 'Proprietary\\AllInOneSEOPackParser',
         'gravityforms'                => 'Proprietary\\GravityFormsParser',
         'revslider'                   => 'Proprietary\\RevolutionSliderParser',

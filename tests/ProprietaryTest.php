@@ -30,10 +30,9 @@ class ProprietaryTest extends PHPUnit_Framework_TestCase
     {
         return array
         (
-            array('gravityforms'), array('revslider'),
-            array('ultimate-vc-addons'),array('ubermenu'),
-            array('sitepress-multilingual-cms'), array('js-composer'),
-            array('all-in-one-seo-pack'), array('yoast-wordpress-seo-premium')
+            array('gravityforms'), array('revslider'), array('ultimate-vc-addons'),array('ubermenu'),
+            array('sitepress-multilingual-cms'), array('js-composer'), array('all-in-one-seo-pack'),
+            array('yoast-wordpress-seo-premium'), array('affiliatewp')
         );
     }
 }
