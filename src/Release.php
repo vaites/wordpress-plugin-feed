@@ -6,6 +6,8 @@ use HTMLPurifier_Config;
 
 use Symfony\Component\DomCrawler\Crawler;
 
+use WordPressPluginFeed\Parsers\Parser;
+
 class Release
 {
     /**
@@ -109,6 +111,13 @@ class Release
     protected $purifier = null;
 
     /**
+     * Parser instance
+     *
+     * @var \WordPressPluginFeed\Parsers\Parser
+     */
+    protected $parser = null;
+
+    /**
      * Instantiate dependencies
      *
      * @param   string  $title
@@ -163,6 +172,7 @@ class Release
 
         // base for highlights
         $content = strip_tags($this->content);
+        $content = preg_replace('/' . preg_quote($this->parser->title) . '/i', '', $content);
         $keywords = implode('|', self::$keywords);
         $highlight = array();
 
@@ -235,6 +245,19 @@ class Release
             // set as security release
             $this->security = true;
         }
+
+        return $this;
+    }
+
+    /**
+     * Sets the parser instance
+     *
+     * @param   Parser $parser
+     * @return  $this
+     */
+    public function setParser(Parser $parser)
+    {
+        $this->parser = $parser;
 
         return $this;
     }

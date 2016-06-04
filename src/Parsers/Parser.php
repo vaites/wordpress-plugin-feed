@@ -721,7 +721,7 @@ class Parser
                 continue;
             }
 
-            $release->filter($this->filter);
+            $release->setParser($this)->filter($this->filter);
             $keyless[] = $releases[$release->id] = $release;
 
             $count++;
