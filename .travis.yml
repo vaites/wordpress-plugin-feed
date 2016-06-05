@@ -10,6 +10,8 @@ sudo: false
 cache:
   directories:
   - "$HOME/wpf"
+before_script:
+- echo 'zend.enable_gc=0' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
 before_install:
 - pip install --user codecov
 install:
