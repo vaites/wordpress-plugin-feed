@@ -69,6 +69,23 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Atom Format output test
+     */
+    public function testAtomFormatOutput()
+    {
+        putenv('OUTPUT_FORMAT=atom');
+
+        $parser = Parser::getInstance('jetpack');
+        $generator = Generator::getInstance();
+
+        ob_start();
+        $generator->generate($parser);
+        $output = ob_get_clean();
+
+        $this->stringStartsWith('<feed xmlns="http://www.w3.org/2005/Atom"', $output, $parser->getLastError());
+    }
+
+    /**
      * RSS Format configuration test
      */
     public function testRSSFormatConfiguration()
@@ -79,6 +96,22 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $generator = Generator::getInstance();
 
         $output = $generator->generate($parser, null, false);
+
+        $this->stringStartsWith('<rss version="2.0"', $output, $parser->getLastError());
+    }
+    /**
+     * RSS Format output test
+     */
+    public function testRSSFormatOutput()
+    {
+        putenv('OUTPUT_FORMAT=rss');
+
+        $parser = Parser::getInstance('jetpack');
+        $generator = Generator::getInstance();
+
+        ob_start();
+        $generator->generate($parser);
+        $output = ob_get_clean();
 
         $this->stringStartsWith('<rss version="2.0"', $output, $parser->getLastError());
     }
@@ -99,6 +132,23 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * XML Format output test
+     */
+    public function testXMLFormatOutput()
+    {
+        putenv('OUTPUT_FORMAT=xml');
+
+        $parser = Parser::getInstance('jetpack');
+        $generator = Generator::getInstance();
+
+        ob_start();
+        $generator->generate($parser);
+        $output = ob_get_clean();
+
+        $this->stringStartsWith('<?xml version="1.0"?>', $output, $parser->getLastError());
+    }
+
+    /**
      * YAML Format configuration test
      */
     public function testYAMLFormatConfiguration()
@@ -114,6 +164,23 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * YAML Format configuration test
+     */
+    public function testYAMLFormatOutput()
+    {
+        putenv('OUTPUT_FORMAT=yaml');
+
+        $parser = Parser::getInstance('jetpack');
+        $generator = Generator::getInstance();
+
+        ob_start();
+        $generator->generate($parser);
+        $output = ob_get_clean();
+
+        $this->stringStartsWith('title: Jetpack', $output, $parser->getLastError());
+    }
+
+    /**
      * JSON Format configuration test
      */
     public function testJSONFormatConfiguration()
@@ -124,6 +191,22 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $generator = Generator::getInstance();
 
         $output = @json_decode($generator->generate($parser, null, false));
+
+        $this->assertEquals($output->name, 'jetpack', $parser->getLastError());
+    }
+    /**
+     * JSON Format output test
+     */
+    public function testJSONFormatOutput()
+    {
+        putenv('OUTPUT_FORMAT=json');
+
+        $parser = Parser::getInstance('jetpack');
+        $generator = Generator::getInstance();
+
+        ob_start();
+        $generator->generate($parser);
+        $output = @json_decode(ob_get_clean());
 
         $this->assertEquals($output->name, 'jetpack', $parser->getLastError());
     }
