@@ -13,4 +13,7 @@
         <log type="coverage-clover" target="reports/coverage.xml"/>
         <log type="junit" target="reports/logfile.xml" logIncompleteSkipped="false"/>
     </logging>
+    <php>
+        <ini name="zend.enable_gc" value="Off" />
+    </php>
 </phpunit>
