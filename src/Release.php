@@ -135,10 +135,10 @@ class Release
         // HTMLPurifier instance
         if(empty(self::$purifier))
         {
-            self::$purifier = new HTMLPurifier(HTMLPurifier_Config::create(
-            [
-                'Attr.AllowedFrameTargets' => ['_blank']
-            ]));
+            self::$purifier = new HTMLPurifier(HTMLPurifier_Config::create(array
+            (
+                'Attr.AllowedFrameTargets' => array('_blank')
+            )));
         }
     }
 
@@ -200,8 +200,7 @@ class Release
         // detect Common Vulnerabilities and Exposures
         if(preg_match('/CVE-(\d{4})-(\d{4})/i', $this->content, $match))
         {
-            $link = '<a href="http://www.cvedetails.com/cve/%s/" '
-                . 'target="_blank">%s</a>';
+            $link = '<a href="http://www.cvedetails.com/cve/%s/" target="_blank">%s</a>';
 
             $highlight[$match[0]] = sprintf($link, $match[0], $match[0]);
         }
