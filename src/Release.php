@@ -108,7 +108,7 @@ class Release
      *
      * @var \HTMLPurifier
      */
-    protected $purifier = null;
+    protected static $purifier = null;
 
     /**
      * Parser instance
@@ -133,10 +133,13 @@ class Release
         $this->created = Carbon::now();
 
         // HTMLPurifier instance
-        $this->purifier = new HTMLPurifier(HTMLPurifier_Config::create(array
-        (
-            'Attr.AllowedFrameTargets' => array('_blank')
-        )));
+        if(empty(self::$purifier))
+        {
+            self::$purifier = new HTMLPurifier(HTMLPurifier_Config::create(
+            [
+                'Attr.AllowedFrameTargets' => ['_blank']
+            ]));
+        }
     }
 
     /**
@@ -157,7 +160,7 @@ class Release
         $this->content = preg_replace('/^Commit message:\s+/i', '', $this->content);
 
         // purify HTML
-        $this->content = $this->purifier->purify($this->content);
+        $this->content = self::$purifier->purify($this->content);
         $this->content = html_entity_decode($this->content);
 
         // create a DOM crawler to modify HTML
