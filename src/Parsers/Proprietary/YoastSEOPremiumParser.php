@@ -46,7 +46,7 @@ class YoastSEOPremiumParser extends Parser
      */    
     protected $sources = array
     (
-        'changelog' => 'https://yoast.com/wordpress/plugins/seo-premium/change-log/',
+        'changelog' => 'https://yoast.com/wordpress/plugins/seo/change-log/',
     );
 
     /**
