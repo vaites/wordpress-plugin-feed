@@ -100,7 +100,7 @@ class YoastSEOPremiumParser extends Parser
             }
 
             // pubdate needs to be parsed and can be stripped
-            $release->created = Carbon::parse($changelog->filter('h2')->eq($index)->nextAll()->first()->text());
+            $release->created = $this->parseDate($changelog->filter('h2')->eq($index)->nextAll()->first()->text());
             $release->content = preg_replace("/<p>\s*<small>\s*(.+)\s*<\/small>\s*<\/p>/i", '', $release->content);
 
             $this->addRelease($release);

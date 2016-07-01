@@ -66,7 +66,7 @@ class UberMenuParser extends Parser
             $block = explode("\n", trim($block));
 
             // title must have pubdate and version
-            if(empty($block) || !preg_match('/v([\d|\.]+)\s\(?(.+)\)?/i', array_shift($block), $match))
+            if(empty($block) || !preg_match('/v([\d|\.]+)\s+(.+)/i', array_shift($block), $match))
             {
                 continue;
             }
@@ -83,7 +83,7 @@ class UberMenuParser extends Parser
             $release->content = implode("<br />\n", $block);
 
             // pubdate needs to be parsed
-            $release->created = Carbon::createFromTimestamp(strtotime($match[2]));
+            $release->created = $this->parseDate($match[2]);
 
             $this->addRelease($release);
         }

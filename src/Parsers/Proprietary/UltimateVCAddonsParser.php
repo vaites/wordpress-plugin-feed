@@ -93,7 +93,7 @@ class UltimateVCAddonsParser extends Parser
 
                 // pubdate needs to be parsed
                 $pubdate = $match[1] . ' ' . $match[2] . ', ' . $match[3];
-                $release->created = Carbon::parse($pubdate);
+                $release->created = $this->parseDate($pubdate);
 
                 $this->addRelease($release);
             }

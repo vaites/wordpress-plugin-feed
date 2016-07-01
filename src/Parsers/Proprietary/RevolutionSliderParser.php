@@ -92,8 +92,7 @@ class RevolutionSliderParser extends Parser
                 }
 
                 // pubdate needs to be parsed
-                $pubdate[2] = preg_replace('/dezember/i', 'december', $pubdate[2]);
-                $release->created = Carbon::parse($pubdate[2]);
+                $release->created = $this->parseDate($pubdate[2]);
 
                 $this->addRelease($release);
             }

@@ -444,7 +444,11 @@ class Parser
             $release->vulnerabilities = $this->vulnerabilities[$release->version];
         }
 
-        $this->releases[$release->id] = $release;
+        // add only if date is correct
+        if($release->created)
+        {
+            $this->releases[$release->id] = $release;
+        }
     }
 
     /**
@@ -514,7 +518,7 @@ class Parser
                 $tag->revision = trim($row->filter('.rev a')->first()->text());
                 $tag->description = trim($row->filter('.change')->text());
                 $tag->author = trim($row->filter('.author')->text());
-                $tag->created = Carbon::parse($time);
+                $tag->created = $this->parseDate($time);
 
                 $this->addTag($tag);
             }
@@ -690,6 +694,29 @@ class Parser
         }
         
         return $stability;
+    }
+
+    /**
+     * Parse a date as a string and returns a Carbon instance
+     *
+     * @param   $string
+     * @return  \Carbon\Carbon
+     */
+    protected function parseDate($string)
+    {
+        $string = preg_replace('/.*\((.+)\).*/', '$1', $string);
+        $string = preg_replace('/(\(|\))/', '', $string);
+        $string = preg_replace('/dezember/i', 'december', $string);
+        $string = preg_replace('/(\d+)\/(\d+)(st|nd|rd|th)/i', '$1$3', $string);
+
+        try
+        {
+            return Carbon::parse($string);
+        }
+        catch(Exception $e)
+        {
+            return false;
+        }
     }
     
     /**

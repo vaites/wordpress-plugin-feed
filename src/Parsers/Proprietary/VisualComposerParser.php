@@ -86,7 +86,7 @@ class VisualComposerParser extends Parser
 
             // pubdate needs to be parsed
             $pubdate = $match[3] . '-' . $match[2] . '-' . $match[1];
-            $release->created = Carbon::parse($pubdate);
+            $release->created = $this->parseDate($pubdate);
 
             $this->addRelease($release);
         }
