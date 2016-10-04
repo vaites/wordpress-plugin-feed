@@ -32,7 +32,7 @@ class StandardTest extends PHPUnit_Framework_TestCase
         (
             array('akismet'), array('wp-super-cache'), array('contact-form-7'), array('wordfence'),
             array('better-wp-security'), array('jetpack'), array('woocommerce'), array('wordpress-seo'),
-            array('updraftplus'), array('w3-total-cache'), array('seo-ultimate'), array('newsletter'),
+            array('updraftplus'), array('w3-total-cache'), array('seo-ultimate'), array('breadcrumb-navxt'),
             array('mailchimp-for-wp'), array('user-role-editor'), array('wysija-newsletters'), array('ninja-forms'),
             array('shortcodes-ultimate'), array('sucuri-scanner'), array('php-code-widget'), array('cookie-law-info'),
             array('tinymce-advanced'), array('nextgen-gallery'), array('siteorigin-panels'), array('wpclef'),
