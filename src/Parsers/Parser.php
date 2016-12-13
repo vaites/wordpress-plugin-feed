@@ -29,6 +29,7 @@ class Parser
         'google-sitemap-generator'    => 'OpenSource\\GoogleXMLSitemapsParser',
         'versionpress'                => 'OpenSource\\VersionPressParser',
         'woocommerce'                 => 'OpenSource\\WooCommerceParser',
+        'wordpress-seo'               => 'OpenSource\\YoastSEOParser',
 
         'affiliatewp'                 => 'Proprietary\\AffiliateWPParser',
         'all-in-one-seo-pack'         => 'Proprietary\\AllInOneSEOPackParser',
@@ -736,7 +737,7 @@ class Parser
 
         // get releases filtered
         $count = 0;
-        foreach($this->releases as $release)
+        foreach($this->releases as $version=>$release)
         {
             if($this->stability !== false && !preg_match($this->stability, $release->stability))
             {
