@@ -38,7 +38,7 @@ class AllInOneSEOPackParser extends GenericParser
      *
      * @var string
      */
-    protected $container = '.entry-content';
+    protected $container = '.post-entry';
 
     /**
      * Block separator selector
