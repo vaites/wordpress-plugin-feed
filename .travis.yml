@@ -10,6 +10,8 @@ sudo: false
 cache:
   directories:
   - "$HOME/wpf"
+script:
+- vendor/bin/phpunit
 before_install:
 - pip install --user codecov
 install:
