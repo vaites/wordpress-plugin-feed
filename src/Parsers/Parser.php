@@ -320,8 +320,33 @@ class Parser
         try
         {
             $this->loadVulnerabilities();
-            $this->loadProperties();
-            $this->loadReleases();
+            $this->loadTags();
+
+            try
+            {
+                $this->loadProperties();
+                $this->loadReleases();
+            }
+            catch(Exception $exception)
+            {
+                // with code in SVN and 404 at plugin page, the plugin is probably removed from directory
+                if(!empty($this->tags))
+                {
+                    $this->title = $this->plugin;
+
+                    $release = new Release('Plugin removed from directory', '', 'stable');
+                    $release->link = "https://plugins.trac.wordpress.org/log/{$this->plugin}";
+                    $release->created = Carbon::now();
+                    $release->content = 'The plugin is not available but its code is accessible in Subversion.
+                                         This probably means that the plugin has been removed from the directory.';
+
+                    $this->releases[] = $release;
+                }
+                else
+                {
+                    throw new Exception($exception->getMessage());
+                }
+            }
 
             if(empty($this->releases))
             {
@@ -560,10 +585,7 @@ class Parser
      */
     protected function loadReleases()
     {
-        // tags need to be loaded before parse releases
-        $this->loadTags();
-        
-        // profile 
+        // profile
         $crawler = new Crawler($this->fetch('profile'));
 
         // need to parse changelog block
