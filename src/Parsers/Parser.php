@@ -320,7 +320,11 @@ class Parser
         try
         {
             $this->loadVulnerabilities();
-            $this->loadTags();
+
+            if(get_class($this) == 'WordPressPluginFeed\Parsers\Parser')
+            {
+                $this->loadTags();
+            }
 
             try
             {
