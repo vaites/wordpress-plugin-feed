@@ -24,6 +24,7 @@ class YoastSEOParser extends Parser
      */
     public function loadReleases()
     {
+        parent::loadTags();
         parent::loadReleases();
 
         $changelog = $this->parseReadme();
