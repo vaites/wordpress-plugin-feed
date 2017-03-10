@@ -7,7 +7,7 @@
         }
     },
     "require": {
-        "ezyang/htmlpurifier": "~4.6",
+        "ezyang/htmlpurifier": "~4.8.0",
         "nesbot/carbon": "~1.18",
         "vlucas/phpdotenv": "~2.0",
         "symfony/dom-crawler": ">=2.6",
