@@ -333,6 +333,8 @@ class Parser
             }
             catch(Exception $exception)
             {
+                die(var_dump($exception->getMessage()));
+
                 // with code in SVN and 404 at plugin page, the plugin is probably removed from directory
                 if(!empty($this->tags))
                 {
@@ -508,15 +510,15 @@ class Parser
             $crawler = new Crawler($this->fetch('profile'));
 
             // plugin title (used for feed title)
-            $this->title = $crawler->filter('#plugin-title h2')->text();
+            $this->title = $crawler->filter('h1.plugin-title a')->text();
             $this->title = preg_replace('/\s*(:|\s+\-|\|)(.+)/', '', $this->title);
             $this->title = preg_replace('/\s+\((.+)\)$/', '', $this->title);
 
             // short description
-            $this->description = $crawler->filter('.shortdesc')->text();
+            $this->description = $crawler->filter('meta[property="og:description"]')->attr('content');
 
             // if profile page doesn't have a <meta name="thumbnail">, plugin doesn't have custom image
-            if($crawler->filter('meta[name=thumbnail]')->count() == 0)
+            if($crawler->filter('meta[name="thumbnail"]')->count() == 0)
             {
                 $this->image['uri'] = null;
             }
@@ -593,8 +595,8 @@ class Parser
         $crawler = new Crawler($this->fetch('profile'));
 
         // need to parse changelog block
-        $changelog = $crawler->filter('.block.changelog .block-content');
-        
+        $changelog = $crawler->filter('#changelog');
+
         // each h4 is a release
         foreach($changelog->filter('h4') as $index=>$node)
         {
