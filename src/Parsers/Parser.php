@@ -333,8 +333,6 @@ class Parser
             }
             catch(Exception $exception)
             {
-                die(var_dump($exception->getMessage()));
-
                 // with code in SVN and 404 at plugin page, the plugin is probably removed from directory
                 if(!empty($this->tags))
                 {
