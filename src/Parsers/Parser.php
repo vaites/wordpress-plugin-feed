@@ -593,7 +593,7 @@ class Parser
         $crawler = new Crawler($this->fetch('profile'));
 
         // need to parse changelog block
-        $changelog = $crawler->filter('#changelog');
+        $changelog = $crawler->filter('#tab-changelog');
 
         // each h4 is a release
         foreach($changelog->filter('h4') as $index=>$node)
