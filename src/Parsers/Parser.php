@@ -223,7 +223,7 @@ class Parser
         }
 
         // feed link
-        if($this->cli == false)
+        if($this->cli === false)
         {
             $host = filter_input(INPUT_SERVER, 'HTTP_HOST');
             $request = filter_input(INPUT_SERVER, 'REQUEST_URI');

@@ -1,8 +1,5 @@
 <?php namespace WordPressPluginFeed\Parsers\OpenSource;
 
-use Carbon\Carbon;
-use Symfony\Component\DomCrawler\Crawler;
-
 use WordPressPluginFeed\Release;
 use WordPressPluginFeed\Parsers\Parser;
 
@@ -36,7 +33,8 @@ class WooCommerceParser extends Parser
 
         if(preg_match_all("/= (.+) - (.+) =\n(.+)\n(\n|$)/Us", $changelog, $match))
         {
-            for($r = 0; $r < count($match[0]); $r++)
+            $count = count($match[0]);
+            for($r = 0; $r < $count; $r++)
             {
                 $version = $match[1][$r];
 

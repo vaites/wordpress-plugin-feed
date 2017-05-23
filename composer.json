@@ -1,6 +1,7 @@
 {
-    "name": "WordPress Plugin Feed",
+    "name": "wordpress-plugin-feed",
     "description": "Provides detailed feeds for WordPress plugin releases",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "WordPressPluginFeed\\": "src/"
