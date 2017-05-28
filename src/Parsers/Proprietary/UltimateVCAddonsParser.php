@@ -1,6 +1,5 @@
 <?php namespace WordPressPluginFeed\Parsers\Proprietary;
 
-use Carbon\Carbon;
 use Symfony\Component\DomCrawler\Crawler;
 
 use WordPressPluginFeed\Release;

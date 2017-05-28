@@ -419,7 +419,7 @@ class Parser
             $key = sha1($source);
 
             $code = $this->cache->getItem($key, $success);
-            if($success == false)
+            if($success === false)
             {
                 $response = $this->http->setUri($source)->send();
                 

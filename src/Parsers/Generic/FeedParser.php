@@ -69,7 +69,7 @@ class FeedParser extends Parser
                 }
             }
 
-            if($this->sleep > 0 && $cached == false)
+            if($this->sleep > 0 && $cached === false)
             {
                 sleep($this->sleep);
             }
