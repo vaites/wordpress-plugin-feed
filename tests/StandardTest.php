@@ -38,7 +38,9 @@ class StandardTest extends PHPUnit_Framework_TestCase
             array('tinymce-advanced'), array('nextgen-gallery'), array('siteorigin-panels'),
             array('backwpup'), array('wptouch'), array('the-events-calendar'), array('advanced-custom-fields'),
             array('duplicate-post'), array('disable-comments'), array('ml-slider'), array('iwp-client'),
-            array('regenerate-thumbnails'), array('wp-pagenavi'), array('the-definitive-url-sanitizer')
+            array('regenerate-thumbnails'), array('wp-pagenavi'), array('the-definitive-url-sanitizer'),
+            array('wordpress-importer'), array('limit-login-attempts'), array('google-analytics-for-wordpress'),
+            array('siteorigin-panels'), array('so-widgets-bundle'), array('wp-multibyte-patch'),
         );
     }
 }

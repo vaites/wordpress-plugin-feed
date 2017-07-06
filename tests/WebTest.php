@@ -22,18 +22,11 @@ class WebTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        if(defined('HHVM_VERSION'))
-        {
-            $this->markTestSkipped();
-        }
-        else
-        {
-            $this->server = new Process('php -S localhost:18473');
-            $this->server->setWorkingDirectory(dirname(__DIR__));
-            $this->server->start();
+        $this->server = new Process('php -S localhost:18473');
+        $this->server->setWorkingDirectory(dirname(__DIR__));
+        $this->server->start();
 
-            sleep(2);
-        }
+        sleep(2);
     }
 
     /**
