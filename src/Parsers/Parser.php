@@ -38,7 +38,7 @@ class Parser
         'js-composer'                 => 'Proprietary\\VisualComposerParser',
         'sitepress-multilingual-cms'  => 'Proprietary\\WPMLParser',
         'ubermenu'                    => 'Proprietary\\UberMenuParser',
-        'ultimate-vc-addons'          => 'Proprietary\\UltimateVCAddonsParser',
+            'ultimate-vc-addons'          => 'Proprietary\\UltimateVCAddonsParser',
         'yoast-wordpress-seo-premium' => 'Proprietary\\YoastSEOPremiumParser'
     );
 
