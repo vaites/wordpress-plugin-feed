@@ -39,7 +39,7 @@ Features:
   * [Visual Composer](http://vc.wpbakery.com/)
   * [WooCommerce](https://www.woothemes.com/woocommerce/)
   * [Yoast SEO Premium](https://yoast.com/wordpress/plugins/seo-premium/)
-* Compatible with PHP 5.3 or greater
+* Compatible with PHP 5.4 or greater
 
 Because this tool parses HTML of different websites, result cannot be 100% accurate and can fail after a change in the code. So issues and pull requests are welcome...
 
