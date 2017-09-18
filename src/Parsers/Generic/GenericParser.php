@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\Generic;
+<?php
+
+namespace WordPressPluginFeed\Parsers\Generic;
 
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -52,7 +54,7 @@ class GenericParser extends Parser
         $changelog = $crawler->filter($this->container)->children();
 
         // process each block inside container
-        foreach($changelog->filter($this->block) as $index=>$node)
+        foreach($changelog->filter($this->block) as $index => $node)
         {
             // convert release title to version
             $version = $this->parseVersion($node->textContent);
@@ -75,7 +77,7 @@ class GenericParser extends Parser
 
             // nodes that follows block separator are the details
             $details = $changelog->filter($this->block)->eq($index)->nextAll();
-            foreach($details as $n=>$node)
+            foreach($details as $n => $node)
             {
                 $tagname = $node->tagName;
 

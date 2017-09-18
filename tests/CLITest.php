@@ -21,12 +21,12 @@ class CLITest extends PHPUnit_Framework_TestCase
         $command = $application->find('generate');
 
         $commandTester = new CommandTester($command);
-        $commandTester->execute(array
-        (
-            'command'   => $command->getName(),
-            '--plugin'  => 'jetpack',
-            '--format'  => 'rss'
-        ));
+        $commandTester->execute(
+        [
+            'command' => $command->getName(),
+            '--plugin' => 'jetpack',
+            '--format' => 'rss'
+        ]);
 
         $output = $commandTester->getDisplay();
 

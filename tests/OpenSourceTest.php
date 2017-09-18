@@ -11,7 +11,7 @@ class OpenSourceTest extends PHPUnit_Framework_TestCase
      * Open source plugin test
      *
      * @dataProvider    pluginProvider
-     * @param   string  $plugin
+     * @param   string $plugin
      */
     public function testOpenSource($plugin)
     {
@@ -28,9 +28,6 @@ class OpenSourceTest extends PHPUnit_Framework_TestCase
      */
     public function pluginProvider()
     {
-        return array
-        (
-            array('buddypress'), array('google-sitemap-generator'), array('versionpress'), array('woocommerce')
-        );
+        return [['buddypress'], ['google-sitemap-generator'], ['versionpress'], ['woocommerce']];
     }
 }

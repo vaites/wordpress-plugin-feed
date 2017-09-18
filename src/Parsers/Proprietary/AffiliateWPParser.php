@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\Proprietary;
+<?php
+
+namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use WordPressPluginFeed\Parsers\Generic\FeedParser;
 
@@ -15,7 +17,7 @@ class AffiliateWPParser extends FeedParser
      * @var string
      */
     public $title = 'AffiliateWP';
-    
+
     /**
      * Plugin short description
      *
@@ -25,25 +27,25 @@ class AffiliateWPParser extends FeedParser
 
     /**
      * Plugin image
-     * 
+     *
      * @var string
      */
-    public $image = array
-    (
+    public $image =
+    [
         'uri' => 'https://7386-presscdn-0-40-pagely.netdna-ssl.com/wp-content/themes/affiliatewp-master/images/favicon-152.png',
         'height' => 152,
         'width' => 152
-    );
-    
+    ];
+
     /**
-     * Source URLs 
+     * Source URLs
      *
      * @var array
-     */    
-    protected $sources = array
-    (
+     */
+    protected $sources =
+    [
         'changelog' => 'https://affiliatewp.com/feed/'
-    );
+    ];
 
     /**
      * Number of pages to request

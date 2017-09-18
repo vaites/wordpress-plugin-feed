@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\Proprietary;
+<?php
+
+namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use WordPressPluginFeed\Parsers\Generic\FeedParser;
 
@@ -15,7 +17,7 @@ class GravityFormsParser extends FeedParser
      * @var string
      */
     public $title = 'Gravity Forms';
-    
+
     /**
      * Plugin short description
      *
@@ -25,26 +27,26 @@ class GravityFormsParser extends FeedParser
 
     /**
      * Plugin image
-     * 
+     *
      * @var string
      */
-    public $image = array
-    (
+    public $image =
+    [
         'uri' => 'http://gravityforms.s3.amazonaws.com/logos/gravityforms_logo_100.png',
         'height' => 100,
         'width' => 116
-    );
-    
+    ];
+
     /**
-     * Source URLs 
+     * Source URLs
      *
      * @var array
-     */    
-    protected $sources = array
-    (
+     */
+    protected $sources =
+    [
         'changelog' => 'http://www.gravityhelp.com/feed/atom/',
-        'profile'   => false
-    );
+        'profile' => false
+    ];
 
     /**
      * Regular expression to detect releases

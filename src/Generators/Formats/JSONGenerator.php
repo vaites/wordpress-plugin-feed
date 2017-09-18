@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Generators\Formats;
+<?php
+
+namespace WordPressPluginFeed\Generators\Formats;
 
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -30,8 +32,8 @@ class JSONGenerator extends Generator
         }
 
         $data = $this->serialize('array', $limit);
-        $serializer = new Serializer(array(new ObjectNormalizer()), array(new JsonEncoder()));
-        $context = array('json_encode_options' => defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0);
+        $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
+        $context = ['json_encode_options' => defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : 0];
         $output = $serializer->serialize($data, 'json', $context);
 
         if($echo)

@@ -1,10 +1,11 @@
-<?php namespace WordPressPluginFeed\Generators\Formats;
+<?php
+
+namespace WordPressPluginFeed\Generators\Formats;
 
 use Zend\Feed\Writer\Feed;
 
 use WordPressPluginFeed\Parsers\Parser;
 use WordPressPluginFeed\Generators\Generator;
-
 
 /**
  * Feed generator
@@ -51,14 +52,14 @@ class AtomGenerator extends Generator
 
         if(!empty($this->parser->image['uri']))
         {
-            $feed->setImage(array
-            (
+            $feed->setImage(
+            [
                 'height' => $this->parser->image['height'],
                 'link' => $feed->getLink(),
                 'title' => $this->parser->title,
                 'uri' => sprintf($this->parser->image['uri'], $this->parser->plugin),
                 'width' => $this->parser->image['width']
-            ));
+            ]);
         }
 
         foreach($this->parser->getReleases($limit) as $release)
@@ -74,17 +75,17 @@ class AtomGenerator extends Generator
 
             foreach($release->categories as $category)
             {
-                $entry->addCategory(array('term' => $category));
+                $entry->addCategory(['term' => $category]);
             }
 
             // entry author
             if(is_string($release->author))
             {
-                $entry->addAuthor(array
-                (
+                $entry->addAuthor(
+                [
                     'name' => $release->author,
                     'uri' => "https://profiles.wordpress.org/{$release->author}/"
-                ));
+                ]);
             }
             elseif(is_array($release->author))
             {

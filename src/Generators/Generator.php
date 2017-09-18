@@ -24,19 +24,19 @@ abstract class Generator
      *
      * @var array
      */
-    protected static $aliases = array
-    (
+    protected static $aliases =
+    [
         'atom'  => 'Formats\\AtomGenerator',
         'rss'   => 'Formats\\RSSGenerator',
         'json'  => 'Formats\\JSONGenerator',
         'xml'   => 'Formats\\XMLGenerator',
         'yaml'  => 'Formats\\YAMLGenerator'
-    );
+    ];
 
     /**
      * Set release list on construct
      *
-     * @param   Parser   $parser
+     * @param   Parser $parser
      */
     public function __construct(Parser $parser = null)
     {
@@ -50,8 +50,8 @@ abstract class Generator
      * Get a generator class instance based on format
      * Default format defined in .env file (OUTPUT_FORMAT)
      *
-     * @param   string  $format
-     * @param   Parser  $parser
+     * @param   string $format
+     * @param   Parser $parser
      * @return  \WordPressPluginFeed\Generators\Generator
      * @throws  \Exception
      */
@@ -85,7 +85,7 @@ abstract class Generator
     /**
      * Set parser
      *
-     * @param   Parser  $parser
+     * @param   Parser $parser
      * @return  $this
      */
     public function setParser(Parser $parser)
@@ -98,8 +98,8 @@ abstract class Generator
     /**
      * Serialize parsed data to a basic class with plugin info and release list
      *
-     * @param   string  $mode   array or object
-     * @param   int     $limit
+     * @param   string $mode array or object
+     * @param   int    $limit
      * @return  stdClass
      */
     protected function serialize($mode = 'array', $limit = null)
@@ -128,7 +128,7 @@ abstract class Generator
             }
         }
 
-        $data->releases = array();
+        $data->releases = [];
         foreach($this->parser->getReleases($limit) as $release)
         {
             $item = new stdClass();;
@@ -146,11 +146,11 @@ abstract class Generator
 
             if(is_string($release->author))
             {
-                $item->author = array
-                (
+                $item->author =
+                [
                     'name' => $release->author,
                     'uri' => "https://profiles.wordpress.org/{$release->author}/"
-                );
+                ];
             }
             elseif(is_array($release->author))
             {

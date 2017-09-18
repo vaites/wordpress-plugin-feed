@@ -4,9 +4,6 @@ use Symfony\Component\Process\Process;
 
 /**
  * Web interface test
- *
- * @requires PHP 5.4
- * @requires ! HHVM
  */
 class WebTest extends PHPUnit_Framework_TestCase
 {

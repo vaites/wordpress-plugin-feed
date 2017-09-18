@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers;
+<?php
+
+namespace WordPressPluginFeed\Parsers;
 
 use ErrorException;
 use Exception;
@@ -13,7 +15,7 @@ use WordPressPluginFeed\Tag;
 
 /**
  * Main class that parses WordPress.org plugin profiles
- * 
+ *
  * @author  David Martínez <contacto@davidmartinez.net>
  */
 class Parser
@@ -23,24 +25,24 @@ class Parser
      *
      * @var array
      */
-    protected static $aliases = array
-    (
-        'buddypress'                  => 'OpenSource\\BuddyPressParser',
-        'google-sitemap-generator'    => 'OpenSource\\GoogleXMLSitemapsParser',
-        'versionpress'                => 'OpenSource\\VersionPressParser',
-        'woocommerce'                 => 'OpenSource\\WooCommerceParser',
-        'wordpress-seo'               => 'OpenSource\\YoastSEOParser',
+    protected static $aliases =
+    [
+        'buddypress' => 'OpenSource\\BuddyPressParser',
+        'google-sitemap-generator' => 'OpenSource\\GoogleXMLSitemapsParser',
+        'versionpress' => 'OpenSource\\VersionPressParser',
+        'woocommerce' => 'OpenSource\\WooCommerceParser',
+        'wordpress-seo' => 'OpenSource\\YoastSEOParser',
 
-        'affiliatewp'                 => 'Proprietary\\AffiliateWPParser',
-        'all-in-one-seo-pack'         => 'Proprietary\\AllInOneSEOPackParser',
-        'gravityforms'                => 'Proprietary\\GravityFormsParser',
-        'revslider'                   => 'Proprietary\\RevolutionSliderParser',
-        'js-composer'                 => 'Proprietary\\VisualComposerParser',
-        'sitepress-multilingual-cms'  => 'Proprietary\\WPMLParser',
-        'ubermenu'                    => 'Proprietary\\UberMenuParser',
-            'ultimate-vc-addons'          => 'Proprietary\\UltimateVCAddonsParser',
+        'affiliatewp' => 'Proprietary\\AffiliateWPParser',
+        'all-in-one-seo-pack' => 'Proprietary\\AllInOneSEOPackParser',
+        'gravityforms' => 'Proprietary\\GravityFormsParser',
+        'revslider' => 'Proprietary\\RevolutionSliderParser',
+        'js-composer' => 'Proprietary\\VisualComposerParser',
+        'sitepress-multilingual-cms' => 'Proprietary\\WPMLParser',
+        'ubermenu' => 'Proprietary\\UberMenuParser',
+        'ultimate-vc-addons' => 'Proprietary\\UltimateVCAddonsParser',
         'yoast-wordpress-seo-premium' => 'Proprietary\\YoastSEOPremiumParser'
-    );
+    ];
 
     /**
      * Plugin name
@@ -48,7 +50,7 @@ class Parser
      * @var string
      */
     public $plugin = null;
-    
+
     /**
      * Stability filter
      *
@@ -62,39 +64,39 @@ class Parser
      * @var string
      */
     public $filter = false;
-    
+
     /**
      * Plugin title
      *
      * @var string
      */
     public $title = null;
-    
+
     /**
      * Plugin short description
      *
      * @var string
      */
     public $description = null;
-    
+
     /**
      * Plugin image
-     * 
+     *
      * @var array
      */
-    public $image = array
-    (
+    public $image =
+    [
         'uri' => "http://ps.w.org/%s/assets/icon-128x128.png",
         'height' => 128,
-        'width' => 128        
-    );
+        'width' => 128
+    ];
 
     /**
      * User defined categories
      *
      * @var array
      */
-    public $categories = array();
+    public $categories = [];
 
     /**
      * Plugin URL at WordPress.org
@@ -102,59 +104,59 @@ class Parser
      * @var string
      */
     public $link = null;
-    
+
     /**
      * Feed URL
      *
      * @var string
      */
     public $feed_link = null;
-    
+
     /**
      * Last release date
      *
      * @var \Carbon\Carbon
      */
     public $modified = null;
-    
+
     /**
      * Release list
      *
      * @var \WordPressPluginFeed\Release[]
      */
-    protected $releases = array();
-    
+    protected $releases = [];
+
     /**
-     * Subversion tag list 
-     * 
+     * Subversion tag list
+     *
      * @var array
      */
-    protected $tags = array();
-    
+    protected $tags = [];
+
     /**
      * WPScan Vulnerability Database
      *
      * @var array
      */
-    protected $vulnerabilities = array();
+    protected $vulnerabilities = [];
 
     /**
      * Default source URLs
      *
      * @var array
      */
-    protected $defaultSources = array
-    (
-        'profile'   => 'https://wordpress.org/plugins/%s/changelog/',
-        'tags'      => 'https://plugins.trac.wordpress.org/browser/%s/tags?order=date&desc=1'
-    );
+    protected $defaultSources =
+    [
+        'profile' => 'https://wordpress.org/plugins/%s/changelog/',
+        'tags' => 'https://plugins.trac.wordpress.org/browser/%s/tags?order=date&desc=1'
+    ];
 
     /**
      * Other source URLs
      *
      * @var array
      */
-    protected $sources = array();
+    protected $sources = [];
 
     /**
      * CLI call
@@ -169,7 +171,7 @@ class Parser
      * @var \Zend\Http\Client
      */
     protected $http = null;
-    
+
     /**
      * Cache handler instance
      *
@@ -182,7 +184,7 @@ class Parser
      *
      * @var \Exception[]
      */
-    protected $exceptions = array();
+    protected $exceptions = [];
 
     /**
      * Show errors and exceptions
@@ -190,22 +192,22 @@ class Parser
      * @var bool
      */
     protected $debug = true;
-    
+
     /**
      * Load plugin data
-     * 
-     * @param   string  $plugin
-     * @param   string  $stability
-     * @param   string  $filter
-     * @param   string  $categories
-     * @param   bool    $debug
+     *
+     * @param   string $plugin
+     * @param   string $stability
+     * @param   string $filter
+     * @param   string $categories
+     * @param   bool   $debug
      */
     public function __construct($plugin, $stability = null, $filter = null, $categories = null, $debug = null)
     {
         $this->plugin = $plugin;
 
         // error handler
-        set_error_handler(array($this, 'error'));
+        set_error_handler([$this, 'error']);
 
         // load .env
         $env_path = dirname(dirname(dirname(__FILE__)));
@@ -240,7 +242,7 @@ class Parser
         {
             $stability = getenv('RELEASE_STABILITY') ?: 'any';
         }
-        
+
         // stability filter
         if($stability == 'any')
         {
@@ -278,40 +280,39 @@ class Parser
 
         // Zend HTTP Client instance
         $this->http = new Client();
-        $this->http->setOptions(array
-        (
+        $this->http->setOptions(
+        [
             'sslcapath' => '/etc/ssl/certs',
             'timeout' => 30,
             'useragent' => 'Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:43.0) Gecko/20100101 Firefox/43.0'
-        ));
+        ]);
 
         // use cURL if exists
         if(function_exists('curl_init'))
         {
-            $this->http->setOptions(array
-            (
+            $this->http->setOptions(
+            [
                 'adapter' => 'Zend\Http\Client\Adapter\Curl',
-                'curloptions' => array
-                (
+                'curloptions' =>
+                [
                     CURLOPT_CONNECTTIMEOUT => 30,
                     CURLOPT_TIMEOUT => 30
-                )
-            ));
+                ]
+            ]);
         }
 
         // cache instance
-        $this->cache = StorageFactory::factory(array
-        (
-            'adapter' => array
-            (
-                'name' => 'filesystem', 
-                'options' => array
-                (
+        $this->cache = StorageFactory::factory([
+            'adapter' =>
+            [
+                'name' => 'filesystem',
+                'options' =>
+                [
                     'cache_dir' => getenv('CACHE_DIR') ?: dirname(dirname(__DIR__)) . '/cache',
                     'ttl' => getenv('CACHE_TTL') ?: 3600
-                )
-            )
-        ));
+                ]
+            ]
+        ]);
 
         // debug mode
         $this->debug = is_null($debug) ? !$this->cli : (bool) $debug;
@@ -362,11 +363,11 @@ class Parser
             $this->exception($exception);
         }
     }
-    
+
     /**
      * Clear expired cache after work is done
      */
-    public function __destruct() 
+    public function __destruct()
     {
         if($this->cache instanceof \Zend\Cache\Storage\Adapter\Filesystem)
         {
@@ -377,11 +378,11 @@ class Parser
     /**
      * Get a parser class instance based on plugin name
      *
-     * @param   string  $plugin
-     * @param   string  $stability
-     * @param   string  $filter
-     * @param   string  $categories
-     * @param   bool    $debug
+     * @param   string $plugin
+     * @param   string $stability
+     * @param   string $filter
+     * @param   string $categories
+     * @param   bool   $debug
      * @return  \WordPressPluginFeed\Parsers\Parser
      */
     public static function getInstance($plugin, $stability = null, $filter = null, $categories = null, $debug = null)
@@ -397,14 +398,14 @@ class Parser
 
         return new $class($plugin, $stability, $filter, $categories, $debug);
     }
-    
+
     /**
      * Fetch a source (results are cached)
-     * 
+     *
      * @link    http://framework.zend.com/manual/2.4/en/modules/zend.http.client.html
-     * @param   string  $type   profile, tags or image
-     * @param   string  $append query string or other parameters
-     * @param   bool    $cached if result is cached, is set to true
+     * @param   string $type   profile, tags or image
+     * @param   string $append query string or other parameters
+     * @param   bool   $cached if result is cached, is set to true
      * @return  string
      * @throws  \Exception
      */
@@ -422,11 +423,11 @@ class Parser
             if($success === false)
             {
                 $response = $this->http->setUri($source)->send();
-                
+
                 if($response->isSuccess())
                 {
                     $code = $response->getBody();
-                    
+
                     $this->cache->setItem($key, $code);
                 }
                 else
@@ -441,7 +442,7 @@ class Parser
                 $cached = true;
             }
         }
-        
+
         return $code;
     }
 
@@ -484,7 +485,7 @@ class Parser
     /**
      * Add a tag to list
      *
-     * @param   Tag     $tag
+     * @param   Tag $tag
      */
     public function addTag(Tag $tag)
     {
@@ -522,7 +523,7 @@ class Parser
             }
         }
     }
-    
+
     /**
      * Parse Subversion tags using Trac browser
      */
@@ -530,10 +531,10 @@ class Parser
     {
         // tag list from Trac repository browser
         $crawler = new Crawler($this->fetch('tags'));
-        
+
         // each table row is a tag
         $rows = $crawler->filter('#dirlist tr');
-        foreach($rows as $index=>$node)
+        foreach($rows as $index => $node)
         {
             $row = $rows->eq($index);
             if($row->filter('a.dir')->count())
@@ -541,10 +542,10 @@ class Parser
                 // created datetime obtained from "age" link
                 $time = $row->filter('a.timeline')->attr('title');
                 $time = trim(preg_replace('/See timeline at/', '', $time));
-                
+
                 // tag object
                 $tag = new Tag();
-                $tag->name = trim($row->filter('.name')->text());  
+                $tag->name = trim($row->filter('.name')->text());
                 $tag->revision = trim($row->filter('.rev a')->first()->text());
                 $tag->description = trim($row->filter('.change')->text());
                 $tag->author = trim($row->filter('.author')->text());
@@ -572,7 +573,7 @@ class Parser
             {
                 if(!isset($this->vulnerabilities[$vulnerability->fixed_in]))
                 {
-                    $this->vulnerabilities[$vulnerability->fixed_in] = array();
+                    $this->vulnerabilities[$vulnerability->fixed_in] = [];
                 }
 
                 $this->vulnerabilities[$vulnerability->fixed_in][] = $vulnerability;
@@ -583,7 +584,7 @@ class Parser
             // not all plugins have  profile at wpvulndb.com
         }
     }
-    
+
     /**
      * Parse public releases using "changelog" tab on profile
      */
@@ -596,7 +597,7 @@ class Parser
         $changelog = $crawler->filter('#tab-changelog');
 
         // each h4 is a release
-        foreach($changelog->filter('h4') as $index=>$node)
+        foreach($changelog->filter('h4') as $index => $node)
         {
             // convert release title to version
             $version = $this->parseVersion($node->textContent);
@@ -614,7 +615,7 @@ class Parser
                     $version .= '.0';
                 }
             }
-            
+
             /* @var $tag Tag */
             $tag =& $this->tags[$version];
 
@@ -627,7 +628,7 @@ class Parser
 
             // nodes that follows h4 are the details
             $details = $changelog->filter('h4')->eq($index)->nextAll();
-            foreach($details as $n=>$node)
+            foreach($details as $n => $node)
             {
                 $tagname = $node->tagName;
                 if($tagname != 'h4')
@@ -648,7 +649,7 @@ class Parser
 
             $this->addRelease($release);
         }
-        
+
         // with zero releases, generate release data from Trac
         if(empty($this->releases))
         {
@@ -664,62 +665,62 @@ class Parser
 
                 $this->addRelease($release);
             }
-            
-            reset($this->tags);            
+
+            reset($this->tags);
         }
     }
-    
+
     /**
      * Parses a string containing version to extract it
-     * 
-     * @param   string  $string
+     *
+     * @param   string $string
      * @return  string
      */
     protected function parseVersion($string)
     {
         $version = false;
-        
+
         $string = preg_replace("/^{$this->title}\s+/i", '', $string);
         $string = preg_replace('/^v(er)?(sion\s*)?/i', '', trim($string));
 
         if(preg_match('/(\d|\.)+/', $string, $match))
         {
             $version = $match[0];
-        }                
+        }
 
         return $version;
     }
-    
+
     /**
      * Parses a string containing version to extract its type (alpha, beta...)
-     * 
-     * @param   string  $string
+     *
+     * @param   string $string
      * @return  strign
      */
     protected function parseStability($string)
     {
         $stability = 'stable';
-        
-        $versions = array
-        (
+
+        $versions =
+        [
             'alpha' => "/(alpha)(\s*\d+)?/i",
             'beta' => "/(beta)(\s*\d+)?/i",
             'rc' => "/(\Wrc\W|release\s+candidate)(\s*\d+)?/i",
-        );
-        
-        foreach($versions as $version=>$regexp)
+        ];
+
+        foreach($versions as $version => $regexp)
         {
             if(preg_match($regexp, $string, $match))
             {
                 $stability = $version;
-                
+
                 if(!empty($match[2]))
                 {
                     $stability .= '.' . trim($match[2]);
                 }
             }
         }
-        
+
         return $stability;
     }
 
@@ -745,16 +746,16 @@ class Parser
             return false;
         }
     }
-    
+
     /**
      * Get the parsed releases applying filters
-     * 
+     *
      * @return  \WordPressPluginFeed\Release[]
      */
     public function getReleases($limit = null)
     {
-        $releases = array();
-        $keyless = array();
+        $releases = [];
+        $keyless = [];
 
         if(is_null($limit))
         {
@@ -763,7 +764,7 @@ class Parser
 
         // get releases filtered
         $count = 0;
-        foreach($this->releases as $version=>$release)
+        foreach($this->releases as $version => $release)
         {
             if($this->stability !== false && !preg_match($this->stability, $release->stability))
             {
@@ -850,15 +851,15 @@ class Parser
 
         return $error;
     }
-    
+
     /**
      * Error handler
      *
      * @codeCoverageIgnore
-     * @param   int     $errno
-     * @param   string  $errstr
-     * @param   string  $errfile
-     * @param   int     $errline
+     * @param   int    $errno
+     * @param   string $errstr
+     * @param   string $errfile
+     * @param   int    $errline
      */
     public function error($errno, $errstr, $errfile, $errline)
     {

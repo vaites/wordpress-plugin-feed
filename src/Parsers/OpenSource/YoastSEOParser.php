@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\OpenSource;
+<?php
+
+namespace WordPressPluginFeed\Parsers\OpenSource;
 
 use WordPressPluginFeed\Parsers\Parser;
 
@@ -14,10 +16,10 @@ class YoastSEOParser extends Parser
      *
      * @var array
      */
-    protected $sources = array
-    (
+    protected $sources =
+    [
         'readme' => 'https://plugins.trac.wordpress.org/export/%d/wordpress-seo/trunk/readme.txt'
-    );
+    ];
 
     /**
      * Load detailed changelog from readme.txt
@@ -29,7 +31,7 @@ class YoastSEOParser extends Parser
 
         $changelog = $this->parseReadme();
 
-        foreach($this->releases as $version=>$release)
+        foreach($this->releases as $version => $release)
         {
             $major_version = preg_replace('/-stable/i', '', $version);
             $minor_version = $major_version . '.0';
@@ -52,7 +54,7 @@ class YoastSEOParser extends Parser
      */
     protected function parseReadme()
     {
-        $changelog = array();
+        $changelog = [];
 
         $latest_tag = current($this->tags);
 
@@ -63,7 +65,7 @@ class YoastSEOParser extends Parser
 
         $blocks = preg_split('/=\s*(.+)\s*=/Usi', $readme, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-        foreach($blocks as $index=>$block)
+        foreach($blocks as $index => $block)
         {
             $version = $this->parseVersion(trim($block));
             if(mb_strlen($block) < 8 && $version && isset($blocks[$index + 1]))

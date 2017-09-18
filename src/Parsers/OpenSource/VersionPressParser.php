@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\OpenSource;
+<?php
+
+namespace WordPressPluginFeed\Parsers\OpenSource;
 
 use Exception;
 
@@ -32,12 +34,12 @@ class VersionPressParser extends GitHubParser
      *
      * @var string
      */
-    public $image = array
-    (
+    public $image =
+    [
         'uri' => 'https://versionpress.net/wp-content/themes/versionpress.net/img/icon.png',
         'height' => 54,
         'width' => 53
-    );
+    ];
 
     /**
      * GitHub repository (user/repo)
@@ -53,7 +55,7 @@ class VersionPressParser extends GitHubParser
     {
         parent::loadReleases();
 
-        foreach($this->releases as $version=>$release)
+        foreach($this->releases as $version => $release)
         {
             $version_fixed = preg_replace('/-stable/i', '', $version);
             $source = "release-$version_fixed";
@@ -67,7 +69,7 @@ class VersionPressParser extends GitHubParser
                 $content = '';
 
                 $details = $crawler->filter('.markdown-body.main-content h1')->nextAll();
-                foreach($details as $n=>$node)
+                foreach($details as $n => $node)
                 {
                     $tagname = $node->tagName;
                     $content .= "<$tagname>" . $details->eq($n)->html() . "</$tagname>" . PHP_EOL;

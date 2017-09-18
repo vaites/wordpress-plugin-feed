@@ -1,5 +1,6 @@
-<?php namespace WordPressPluginFeed\Generators\Formats;
+<?php
 
+namespace WordPressPluginFeed\Generators\Formats;
 
 class RSSGenerator extends AtomGenerator
 {

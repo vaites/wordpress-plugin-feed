@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed;
+<?php
+
+namespace WordPressPluginFeed;
 
 use Carbon\Carbon;
 use HTMLPurifier;
@@ -58,13 +60,13 @@ class Release
      * @var string
      */
     public $link;
-    
+
     /**
      * User defined categories
      *
      * @var array
      */
-    public $categories = array();
+    public $categories = [];
 
     /**
      * Changelog
@@ -97,11 +99,11 @@ class Release
      *
      * @var array
      */
-    protected static $keywords = array
-    (
+    protected static $keywords =
+    [
         'safe', 'trusted', 'security', 'insecure', 'vulnerability', 'leak', 'attack', 'malware', 'malicious',
         'CSRF', 'SSRF', 'SQLi', 'SQL.+injection', 'XSS', 'XXE', 'LFI', 'RFI', 'MITM', 'CVE-', 'CVSS',
-    );
+    ];
 
     /**
      * HTMLPurifier instance
@@ -120,8 +122,8 @@ class Release
     /**
      * Instantiate dependencies
      *
-     * @param   string  $title
-     * @param   string  $version
+     * @param   string $title
+     * @param   string $version
      */
     public function __construct($title, $version, $stability)
     {
@@ -135,17 +137,17 @@ class Release
         // HTMLPurifier instance
         if(empty(self::$purifier))
         {
-            self::$purifier = new HTMLPurifier(HTMLPurifier_Config::create(array
-            (
-                'Attr.AllowedFrameTargets' => array('_blank')
-            )));
+            self::$purifier = new HTMLPurifier(HTMLPurifier_Config::create(
+            [
+                'Attr.AllowedFrameTargets' => ['_blank']
+            ]));
         }
     }
 
     /**
      * Filter a release adding type, warnings and other stuff
      *
-     * @param   string  $filter
+     * @param   string $filter
      * @return  self
      */
     public function filter($filter = null)
@@ -167,7 +169,7 @@ class Release
         $crawler = new Crawler($this->content);
 
         // add target="_blank" to all links
-        foreach($crawler->filter('a') as $index=>$node)
+        foreach($crawler->filter('a') as $index => $node)
         {
             $node->setAttribute('target', '_blank');
         }
@@ -177,7 +179,7 @@ class Release
         $content = strip_tags($this->content);
         $content = preg_replace('/' . preg_quote($this->parser->title) . '/i', '', $content);
         $keywords = implode('|', self::$keywords);
-        $highlight = array();
+        $highlight = [];
 
         // detect filtered words
         if(!empty($filter) && preg_match_all($filter, $content, $match))
@@ -211,7 +213,7 @@ class Release
             $this->title .= ' (Security release)';
 
             // highlight security keywords
-            foreach($highlight as $search=>$replace)
+            foreach($highlight as $search => $replace)
             {
                 $this->content = preg_replace
                 (
@@ -238,8 +240,7 @@ class Release
             foreach($this->vulnerabilities as $vulnerability)
             {
                 $this->content .= "<li><a href=\"https://wpvulndb.com/vulnerabilities/{$vulnerability->id}\">"
-                                 . "{$vulnerability->title}</a></li>\n";
-
+                                . "{$vulnerability->title}</a></li>\n";
             }
 
             $this->content .= "\n</ul>";

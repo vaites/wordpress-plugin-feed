@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\Proprietary;
+<?php
+
+namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use WordPressPluginFeed\Parsers\Generic\GenericParser;
 
@@ -15,23 +17,23 @@ class AllInOneSEOPackParser extends GenericParser
      * @var string
      */
     public $title = 'All in One SEO Pack';
-    
+
     /**
      * Plugin short description
      *
      * @var string
      */
     public $description = 'All in One SEO Pack is a WordPress SEO plugin to automatically optimize your WordPress blog for Search Engines such as Google.';
-    
+
     /**
-     * Source URLs 
+     * Source URLs
      *
      * @var array
-     */    
-    protected $sources = array
-    (
+     */
+    protected $sources =
+    [
         'changelog' => 'http://semperfiwebdesign.com/blog/all-in-one-seo-pack/all-in-one-seo-pack-release-history/',
-    );
+    ];
 
     /**
      * Release list container selector

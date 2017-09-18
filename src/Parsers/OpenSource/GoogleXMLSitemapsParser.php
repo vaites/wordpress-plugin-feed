@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\OpenSource;
+<?php
+
+namespace WordPressPluginFeed\Parsers\OpenSource;
 
 use WordPressPluginFeed\Parsers\Generic\GenericParser;
 
@@ -10,14 +12,14 @@ use WordPressPluginFeed\Parsers\Generic\GenericParser;
 class GoogleXMLSitemapsParser extends GenericParser
 {
     /**
-     * Source URLs 
+     * Source URLs
      *
      * @var array
-     */    
-    protected $sources = array
-    (
+     */
+    protected $sources =
+    [
         'changelog' => 'http://www.arnebrachhold.de/projects/wordpress-plugins/google-xml-sitemaps-generator/changelog/',
-    );
+    ];
 
     /**
      * Release list container selector

@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\Generic;
+<?php
+
+namespace WordPressPluginFeed\Parsers\Generic;
 
 use Carbon\Carbon;
 use Zend\Feed\Reader\Reader;

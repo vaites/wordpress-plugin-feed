@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\Proprietary;
+<?php
+
+namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -18,35 +20,35 @@ class RevolutionSliderParser extends Parser
      * @var string
      */
     public $title = 'Revolution Slider';
-    
+
     /**
      * Plugin short description
      *
      * @var string
      */
     public $description = 'Create a responsive(mobile friendly) or fullwidth slider with must-see-effects and meanwhile keep or build your SEO optimization (all content always readable for search engines)';
-    
+
     /**
      * Plugin image
-     * 
+     *
      * @var string
      */
-    public $image = array
-    (
+    public $image =
+    [
         'uri' => 'https://thumb-cc.s3.envato.com/files/144560542/smallicon.png',
         'height' => 80,
         'width' => 80
-    );
+    ];
 
     /**
-     * Source URLs 
+     * Source URLs
      *
      * @var array
-     */    
-    protected $sources = array
-    (
+     */
+    protected $sources =
+    [
         'changelog' => 'http://codecanyon.net/item/slider-revolution-responsive-wordpress-plugin/2751380',
-    );
+    ];
 
     /**
      * Parse public releases using "release log" block on Code Canyon profile
@@ -60,7 +62,7 @@ class RevolutionSliderParser extends Parser
         $changelog = $crawler->filter('#item-description__ressources-credits')->nextAll();
 
         // each h3 is a release
-        foreach($changelog->filter('h3') as $index=>$node)
+        foreach($changelog->filter('h3') as $index => $node)
         {
             // convert release title to version
             $version = $this->parseVersion($node->textContent);
@@ -77,7 +79,7 @@ class RevolutionSliderParser extends Parser
 
                 // nodes that follows h3 are the details
                 $details = $changelog->filter('h3')->eq($index)->nextAll();
-                foreach($details as $n=>$node)
+                foreach($details as $n => $node)
                 {
                     $tagname = $node->tagName;
                     if($tagname != 'h3')

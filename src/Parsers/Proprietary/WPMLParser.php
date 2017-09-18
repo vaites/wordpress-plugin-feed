@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\Proprietary;
+<?php
+
+namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use WordPressPluginFeed\Parsers\Generic\FeedParser;
 
@@ -15,7 +17,7 @@ class WPMLParser extends FeedParser
      * @var string
      */
     public $title = 'The WordPress Multilingual Plugin';
-    
+
     /**
      * Plugin short description
      *
@@ -25,25 +27,25 @@ class WPMLParser extends FeedParser
 
     /**
      * Plugin image
-     * 
+     *
      * @var string
      */
-    public $image = array
-    (
+    public $image =
+    [
         'uri' => 'https://d2salfytceyqoe.cloudfront.net/wp-content/uploads/2010/09/wpml_logo.png',
         'height' => 265,
         'width' => 101
-    );
-    
+    ];
+
     /**
-     * Source URLs 
+     * Source URLs
      *
      * @var array
-     */    
-    protected $sources = array
-    (
+     */
+    protected $sources =
+    [
         'changelog' => 'https://wpml.org/category/changelog/feed/'
-    );
+    ];
 
     /**
      * Seconds to sleep between calls

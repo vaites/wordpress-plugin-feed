@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\Proprietary;
+<?php
+
+namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -18,55 +20,55 @@ class UltimateVCAddonsParser extends Parser
      * @var string
      */
     public $title = 'Ultimate Addons for Visual Composer';
-    
+
     /**
      * Plugin short description
      *
      * @var string
      */
     public $description = 'This plugin adds several premium elements in your Visual Composer on top of the built-in ones given by WPBakery.';
-    
+
     /**
      * Plugin image
-     * 
+     *
      * @var string
      */
-    public $image = array
-    (
+    public $image =
+    [
         'uri' => 'https://thumb-cc.s3.envato.com/files/86787603/80x80.png',
         'height' => 80,
         'width' => 80
-    );
+    ];
 
     /**
-     * Source URLs 
+     * Source URLs
      *
      * @var array
-     */    
-    protected $sources = array
-    (
+     */
+    protected $sources =
+    [
         'changelog' => 'https://changelog.brainstormforce.com/ultimate',
-    );
-    
+    ];
+
     /**
      * Parse public releases using "release log" block on Code Canyon profile
-     */    
+     */
     protected function loadReleases()
     {
         // profile
         $crawler = new Crawler($this->fetch('changelog'));
-        
+
         // need to parse changelog block
         $changelog = $crawler->filter('#recent-posts-2 ul')->children();
 
         // each p is a release
-        foreach($changelog->filter('li') as $index=>$node)
+        foreach($changelog->filter('li') as $index => $node)
         {
             // title must have pubdate and version
             if(preg_match('/Version\s+(.+)/i', $node->textContent, $match))
             {
                 // convert release title to version
-                $version = $this->parseVersion($match[0 ]);
+                $version = $this->parseVersion($match[0]);
 
                 // release object
                 $release = new Release($this->title, $version, $this->parseStability($version));

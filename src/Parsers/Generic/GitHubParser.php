@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\Generic;
+<?php
+
+namespace WordPressPluginFeed\Parsers\Generic;
 
 use Carbon\Carbon;
 use Zend\Feed\Reader\Reader;
@@ -60,7 +62,7 @@ class GitHubParser extends FeedParser
 
         parent::loadReleases();
 
-        foreach($this->releases as $version=>$release)
+        foreach($this->releases as $version => $release)
         {
             $this->releases[$version]->link = "https://github.com/{$release->link}";
         }

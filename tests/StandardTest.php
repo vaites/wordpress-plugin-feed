@@ -11,13 +11,13 @@ class StandardTest extends PHPUnit_Framework_TestCase
      * Standard plugin
      *
      * @dataProvider    pluginProvider
-     * @param   string  $plugin
+     * @param   string $plugin
      */
     public function testStandard($plugin)
     {
         $parser = Parser::getInstance($plugin);
         $releases = $parser->getReleases();
-        
+
         $this->assertGreaterThan(0, count($releases), $parser->getLastError());
     }
 
@@ -28,19 +28,19 @@ class StandardTest extends PHPUnit_Framework_TestCase
      */
     public function pluginProvider()
     {
-        return array
-        (
-            array('akismet'), array('wp-super-cache'), array('contact-form-7'), array('wordfence'),
-            array('better-wp-security'), array('jetpack'), array('woocommerce'), array('wordpress-seo'),
-            array('updraftplus'), array('w3-total-cache'), array('seo-ultimate'), array('breadcrumb-navxt'),
-            array('mailchimp-for-wp'), array('user-role-editor'), array('wysija-newsletters'), array('ninja-forms'),
-            array('shortcodes-ultimate'), array('sucuri-scanner'), array('php-code-widget'), array('cookie-law-info'),
-            array('tinymce-advanced'), array('nextgen-gallery'), array('siteorigin-panels'),
-            array('backwpup'), array('wptouch'), array('the-events-calendar'), array('advanced-custom-fields'),
-            array('duplicate-post'), array('disable-comments'), array('ml-slider'), array('iwp-client'),
-            array('regenerate-thumbnails'), array('wp-pagenavi'), array('the-definitive-url-sanitizer'),
-            array('wordpress-importer'), array('limit-login-attempts'), array('google-analytics-for-wordpress'),
-            array('siteorigin-panels'), array('so-widgets-bundle'), array('wp-multibyte-patch'),
-        );
+        return
+        [
+            ['akismet'], ['wp-super-cache'], ['contact-form-7'], ['wordfence'],
+            ['better-wp-security'], ['jetpack'], ['woocommerce'], ['wordpress-seo'],
+            ['updraftplus'], ['w3-total-cache'], ['seo-ultimate'], ['breadcrumb-navxt'],
+            ['mailchimp-for-wp'], ['user-role-editor'], ['wysija-newsletters'], ['ninja-forms'],
+            ['shortcodes-ultimate'], ['sucuri-scanner'], ['php-code-widget'], ['cookie-law-info'],
+            ['tinymce-advanced'], ['nextgen-gallery'], ['siteorigin-panels'],
+            ['backwpup'], ['wptouch'], ['the-events-calendar'], ['advanced-custom-fields'],
+            ['duplicate-post'], ['disable-comments'], ['ml-slider'], ['iwp-client'],
+            ['regenerate-thumbnails'], ['wp-pagenavi'], ['the-definitive-url-sanitizer'],
+            ['wordpress-importer'], ['limit-login-attempts'], ['google-analytics-for-wordpress'],
+            ['siteorigin-panels'], ['so-widgets-bundle'], ['wp-multibyte-patch'],
+        ];
     }
 }

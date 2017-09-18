@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\OpenSource;
+<?php
+
+namespace WordPressPluginFeed\Parsers\OpenSource;
 
 use WordPressPluginFeed\Release;
 use WordPressPluginFeed\Parsers\Parser;
@@ -11,14 +13,14 @@ use WordPressPluginFeed\Parsers\Parser;
 class WooCommerceParser extends Parser
 {
     /**
-     * Source URLs 
+     * Source URLs
      *
      * @var array
-     */    
-    protected $sources = array
-    (
+     */
+    protected $sources =
+    [
         'changelog' => 'https://raw.githubusercontent.com/woothemes/woocommerce/master/CHANGELOG.txt',
-    );
+    ];
 
     /**
      * Parse public releases using changelog page on GitHub
@@ -55,7 +57,6 @@ class WooCommerceParser extends Parser
                 $release->created = $tag->created;
 
                 $this->addRelease($release);
-
             }
         }
     }

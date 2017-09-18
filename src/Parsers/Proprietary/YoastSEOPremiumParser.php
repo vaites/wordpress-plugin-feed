@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\Proprietary;
+<?php
+
+namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -18,53 +20,53 @@ class YoastSEOPremiumParser extends Parser
      * @var string
      */
     public $title = 'Yoast SEO Premium';
-    
+
     /**
      * Plugin short description
      *
      * @var string
      */
     public $description = 'The Yoast SEO Premium plugin (formerly known as WordPress SEO by Yoast Premium) adds several features to the Yoast SEO plugin';
-    
+
     /**
      * Plugin image
-     * 
+     *
      * @var string
      */
-    public $image = array
-    (
+    public $image =
+    [
         'uri' => 'http://ps.w.org/wordpress-seo/assets/icon-128x128.png',
         'height' => 128,
         'width' => 128
-    );
+    ];
 
     /**
-     * Source URLs 
+     * Source URLs
      *
      * @var array
-     */    
-    protected $sources = array
-    (
+     */
+    protected $sources =
+    [
         'changelog' => 'https://yoast.com/wordpress/plugins/seo/change-log/',
-    );
+    ];
 
     /**
      * Parse public releases using changelog page on Yoast.com
-     */    
+     */
     protected function loadReleases()
     {
         // load Yoast SEO (free) releases
         $free = Parser::getInstance('wordpress-seo', $this->stability)->getReleases();
 
         // profile
-        $this->http->setOptions(array('curloptions' => array(CURLOPT_SSL_VERIFYPEER => false)));
+        $this->http->setOptions(['curloptions' => [CURLOPT_SSL_VERIFYPEER => false]]);
         $crawler = new Crawler($this->fetch('changelog'));
 
         // need to parse changelog block
         $changelog = $crawler->filter('section.content')->children();
 
         // each h2 is a release
-        foreach($changelog->filter('h2') as $index=>$node)
+        foreach($changelog->filter('h2') as $index => $node)
         {
             // convert release title to version
             $version = $this->parseVersion($node->textContent);
@@ -85,7 +87,7 @@ class YoastSEOPremiumParser extends Parser
 
             // nodes that follows h2 are the details
             $details = $changelog->filter('h2')->eq($index)->nextAll();
-            foreach($details as $n=>$node)
+            foreach($details as $n => $node)
             {
                 $tagname = $node->tagName;
                 if($tagname != 'h2')

@@ -37,7 +37,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
         $output = @json_decode($generator->generate($parser, null, false));
 
-        $this->assertEquals($output->releases[0]->categories, array('example.com'), $parser->getLastError());
+        $this->assertEquals($output->releases[0]->categories, ['example.com'], $parser->getLastError());
     }
 
     /**
@@ -99,6 +99,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
         $this->stringStartsWith('<rss version="2.0"', $output, $parser->getLastError());
     }
+
     /**
      * RSS Format output test
      */
@@ -194,6 +195,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($output->name, 'jetpack', $parser->getLastError());
     }
+
     /**
      * JSON Format output test
      */

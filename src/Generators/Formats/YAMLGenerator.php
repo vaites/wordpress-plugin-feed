@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Generators\Formats;
+<?php
+
+namespace WordPressPluginFeed\Generators\Formats;
 
 use Symfony\Component\Yaml\Dumper;
 

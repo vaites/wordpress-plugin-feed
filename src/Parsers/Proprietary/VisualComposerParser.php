@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\Proprietary;
+<?php
+
+namespace WordPressPluginFeed\Parsers\Proprietary;
 
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -18,44 +20,44 @@ class VisualComposerParser extends Parser
      * @var string
      */
     public $title = 'Visual composer';
-    
+
     /**
      * Plugin short description
      *
      * @var string
      */
     public $description = 'Visual Composer for WordPress is drag and drop frontend and backend page builder plugin that will save you tons of time working on the site content.';
-    
+
     /**
      * Plugin image
-     * 
+     *
      * @var string
      */
-    public $image = array
-    (
+    public $image =
+    [
         'uri' => 'https://thumb-cc.s3.envato.com/files/140080840/th-4.6.png',
         'height' => 80,
         'width' => 80
-    );
+    ];
 
     /**
-     * Source URLs 
+     * Source URLs
      *
      * @var array
-     */    
-    protected $sources = array
-    (
+     */
+    protected $sources =
+    [
         'changelog' => 'http://codecanyon.net/item/visual-composer-page-builder-for-wordpress/242431',
-    );
-    
+    ];
+
     /**
      * Parse public releases using "release log" block on Code Canyon profile
-     */    
+     */
     protected function loadReleases()
     {
         // profile
         $crawler = new Crawler($this->fetch('changelog'));
-        
+
         // need to parse changelog block
         $changelog = $crawler->filter('#item-description__updates')->nextAll()->filter('pre')->eq(0);
 

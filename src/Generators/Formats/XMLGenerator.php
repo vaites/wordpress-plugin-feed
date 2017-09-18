@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Generators\Formats;
+<?php
+
+namespace WordPressPluginFeed\Generators\Formats;
 
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -30,8 +32,8 @@ class XMLGenerator extends Generator
         }
 
         $data = $this->serialize('array', $limit);
-        $serializer = new Serializer(array(new ObjectNormalizer()), array(new XmlEncoder()));
-        $context = array('xml_root_node_name' => 'plugin');
+        $serializer = new Serializer([new ObjectNormalizer()], [new XmlEncoder()]);
+        $context = ['xml_root_node_name' => 'plugin'];
         $output = $serializer->serialize($data, 'xml', $context);
 
         if($echo)

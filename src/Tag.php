@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed;
+<?php
+
+namespace WordPressPluginFeed;
 
 class Tag
 {

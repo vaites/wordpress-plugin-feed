@@ -1,4 +1,6 @@
-<?php namespace WordPressPluginFeed\Parsers\OpenSource;
+<?php
+
+namespace WordPressPluginFeed\Parsers\OpenSource;
 
 use WordPressPluginFeed\Parsers\Generic\FeedParser;
 
