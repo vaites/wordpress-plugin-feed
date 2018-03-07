@@ -509,7 +509,7 @@ class Parser
             $crawler = new Crawler($this->fetch('profile'));
 
             // plugin title (used for feed title)
-            $this->title = $crawler->filter('h1.plugin-title a')->text();
+            $this->title = $crawler->filter('h1.plugin-title')->text();
             $this->title = preg_replace('/\s*(:|\s+\-|\|)(.+)/', '', $this->title);
             $this->title = preg_replace('/\s+\((.+)\)$/', '', $this->title);
 
