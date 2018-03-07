@@ -44,7 +44,7 @@ class GravityFormsParser extends FeedParser
      */
     protected $sources =
     [
-        'changelog' => 'http://www.gravityhelp.com/feed/atom/',
+        'changelog' => 'https://www.gravityforms.com/feed/',
         'profile' => false
     ];
 
