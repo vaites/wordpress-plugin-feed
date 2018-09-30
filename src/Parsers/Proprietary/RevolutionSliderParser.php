@@ -47,7 +47,7 @@ class RevolutionSliderParser extends Parser
      */
     protected $sources =
     [
-        'changelog' => 'http://codecanyon.net/item/slider-revolution-responsive-wordpress-plugin/2751380',
+        'changelog' => 'https://www.themepunch.com/revslider-doc/changelog/',
     ];
 
     /**
@@ -59,13 +59,19 @@ class RevolutionSliderParser extends Parser
         $crawler = new Crawler($this->fetch('changelog'));
 
         // need to parse changelog block
-        $changelog = $crawler->filter('#item-description__ressources-credits')->nextAll();
+        $changelog = $crawler->filter('.slider-revolution-update-list')->children();
 
         // each h3 is a release
         foreach($changelog->filter('h3') as $index => $node)
         {
             // convert release title to version
             $version = $this->parseVersion($node->textContent);
+
+            // version 5.4.6.2 and lower are nested
+            if(version_compare($version, '5.4.6.4', '<'))
+            {
+                break;
+            }
 
             // title must have pubdate
             if(preg_match('/(.+) \((.+)\)/i', $node->textContent, $pubdate))
