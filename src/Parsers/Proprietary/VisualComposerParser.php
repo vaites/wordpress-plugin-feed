@@ -47,7 +47,7 @@ class VisualComposerParser extends Parser
      */
     protected $sources =
     [
-        'changelog' => 'http://codecanyon.net/item/visual-composer-page-builder-for-wordpress/242431',
+        'changelog' => 'https://kb.wpbakery.com/docs/preface/release-notes/',
     ];
 
     /**
@@ -59,31 +59,35 @@ class VisualComposerParser extends Parser
         $crawler = new Crawler($this->fetch('changelog'));
 
         // need to parse changelog block
-        $changelog = $crawler->filter('#item-description__updates')->nextAll()->filter('pre')->eq(0);
+        $changelog = $crawler->filter('table.confluenceTable');
 
-        // each release has a title with date and version followed by changes
-        foreach(explode("\n\n", $changelog->text()) as $block)
+        // each row is release
+        foreach($changelog->filter('tr') as $index => $node)
         {
-            $block = explode("\n", $block);
+            // first row are the headers
+            if($index == 0)
+            {
+                continue;
+            }
+
+            $first = $changelog->filter('tr')->eq($index)->children()->getNode(0);
+            $last = $changelog->filter('tr')->eq($index)->children()->getNode(1);
 
             // title must have pubdate and version
-            $title = array_shift($block);
-            $regexp = '/(\d+)\.(\d+)\.(\d+) - ver (.+)/i';
-            if(!preg_match($regexp, $title, $match) || empty($block))
+            $title = $first->textContent;
+            $regexp = '/(\d+)\.(\d+)\.(\d+)(.+)ver\s+(.+)/i';
+            if(!preg_match($regexp, $title, $match))
             {
                 continue;
             }
 
             // convert release title to version
-            $version = $this->parseVersion($match[4]);
-
-            // get de ID to build the link
-            $id = 'item-description__updates';
+            $version = $this->parseVersion($match[5]);
 
             // release object
             $release = new Release($this->title, $version, $this->parseStability($version));
-            $release->link = "{$this->sources['profile']}#$id";
-            $release->content = implode("<br />\n", $block);
+            $release->link = "{$this->sources['profile']}#$version";
+            $release->content = $last->ownerDocument->saveHTML($last);
 
             // pubdate needs to be parsed
             $pubdate = $match[3] . '-' . $match[2] . '-' . $match[1];
