@@ -46,7 +46,8 @@ class FeedParser extends Parser
         {
             $query = $this->pages > 0 ? "?paged=$p" : '';
             $source = isset($this->sources['changelog']) ? 'changelog' : 'profile';
-            $changelog = Reader::importString($this->fetch($source, $query, $cached));
+            $xml = $this->fetch($source, $query, $cached);
+            $changelog = Reader::importString($this->filterXML($xml));
 
             // each entry can be a release
             foreach($changelog as $entry)
@@ -76,5 +77,18 @@ class FeedParser extends Parser
                 sleep($this->sleep);
             }
         }
+    }
+
+    /**
+     * Filter the feed XML before parsing it
+     *
+     * @param   string  $xml
+     * @return  string
+     */
+    protected function filterXML($xml)
+    {
+        $xml = preg_replace('/^(.+)<\?xml/', '<?xml', $xml);
+
+        return $xml;
     }
 }
