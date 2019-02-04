@@ -1,5 +1,5 @@
 {
-    "name": "wordpress-plugin-feed",
+    "name": "vaites/wordpress-plugin-feed",
     "description": "Provides detailed feeds for WordPress plugin releases",
     "license": "MIT",
     "autoload": {
