@@ -569,14 +569,17 @@ class Parser
         {
             $response = @json_decode($this->fetch('vulnerabilities'));
 
-            foreach($response->{$this->plugin}->vulnerabilities as $vulnerability)
+            if(isset($response->{$this->plugin}))
             {
-                if(!isset($this->vulnerabilities[$vulnerability->fixed_in]))
+                foreach($response->{$this->plugin}->vulnerabilities as $vulnerability)
                 {
-                    $this->vulnerabilities[$vulnerability->fixed_in] = [];
-                }
+                    if(!isset($this->vulnerabilities[$vulnerability->fixed_in]))
+                    {
+                        $this->vulnerabilities[$vulnerability->fixed_in] = [];
+                    }
 
-                $this->vulnerabilities[$vulnerability->fixed_in][] = $vulnerability;
+                    $this->vulnerabilities[$vulnerability->fixed_in][] = $vulnerability;
+                }
             }
         }
         catch(Exception $exception)
