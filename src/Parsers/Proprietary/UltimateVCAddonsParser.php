@@ -47,7 +47,7 @@ class UltimateVCAddonsParser extends Parser
      */
     protected $sources =
     [
-        'changelog' => 'https://changelog.brainstormforce.com/ultimate',
+        'changelog' => 'https://ultimate.brainstormforce.com/changelog/',
     ];
 
     /**
@@ -59,38 +59,30 @@ class UltimateVCAddonsParser extends Parser
         $crawler = new Crawler($this->fetch('changelog'));
 
         // need to parse changelog block
-        $changelog = $crawler->filter('#recent-posts-2 ul')->children();
+        $changelog = $crawler->filter('main');
 
         // each p is a release
-        foreach($changelog->filter('li') as $index => $node)
+        foreach($changelog->filter('article') as $index => $node)
         {
-            // title must have pubdate and version
-            if(preg_match('/Version\s+(.+)/i', $node->textContent, $match))
+            $title = $changelog->filter('header h2')->eq($index)->text();
+
+            // title must have version
+            if(preg_match('/Version\s+(.+)/i', $title, $match))
             {
                 // convert release title to version
-                $version = $this->parseVersion($match[0]);
+                $version = $this->parseVersion($title);
 
                 // release object
                 $release = new Release($this->title, $version, $this->parseStability($version));
-                $release->link = $changelog->filter('li')->eq($index)->children()->getNode(0)->getAttribute('href');
+                $release->link = $this->sources['changelog'].'?p='.str_replace('post-', '', $node->getAttribute('id'));
 
-                // fetch the post
-                $this->sources["version-{$release->version}"] = $release->link;
-                $detail = new Crawler($this->fetch("version-{$release->version}"));
-
-                // pre that follows p are the details
-                $release->content = $detail->filter('.entry-content')->html();
+                // contents are in a div
+                $release->content =  $changelog->filter('.bsf-entry-content')->eq($index)->html();
 
                 // pubdate needs to be parsed
-                $pubdate = $detail->filter('.entry-footer time')->getNode(0)->getAttribute('datetime');
-                $release->created = $this->parseDate($pubdate);
+                $release->created = $this->parseDate($changelog->filter('.changelog-publish-date')->eq($index)->text());
 
                 $this->addRelease($release);
-
-                if($index == 5)
-                {
-                    break;
-                }
             }
         }
     }
