@@ -2,6 +2,9 @@
 
 namespace WordPressPluginFeed\Parsers\Proprietary;
 
+use Symfony\Component\DomCrawler\Crawler;
+
+use WordPressPluginFeed\Release;
 use WordPressPluginFeed\Parsers\Generic\FeedParser;
 
 /**
@@ -44,7 +47,7 @@ class AffiliateWPParser extends FeedParser
      */
     protected $sources =
     [
-        'changelog' => 'https://affiliatewp.com/feed/'
+        'changelog' => 'https://affiliatewp.com/changelog/'
     ];
 
     /**
@@ -55,9 +58,49 @@ class AffiliateWPParser extends FeedParser
     protected $pages = 1;
 
     /**
-     * Regular expression to detect releases
-     *
-     * @var string
+     * Parse public releases using official page
      */
-    protected $regexp = '/^Version\s+(\d+)\.(\d+)\s+released/i';
+    protected function loadReleases()
+    {
+        // profile
+        $crawler = new Crawler($this->fetch('changelog'));
+
+        // need to parse changelog block
+        $changelog = $crawler->filter('article .entry-content')->children();
+
+        // each h3 is a release
+        foreach($changelog->filter('h3') as $index => $node)
+        {
+            // title must have pubdate
+            if(preg_match_all('/Version\s+(.+),(.+),(.+)/i', $node->textContent, $match))
+            {
+                // convert release title to version
+                $version = $this->parseVersion($match[1][0]);
+
+                // release object
+                $release = new Release($this->title, $version, $this->parseStability($node->textContent));
+                $release->link = $this->sources['changelog'];
+
+                // nodes that follows h3 are the details
+                $details = $changelog->filter('h3')->eq($index)->nextAll();
+                foreach($details as $n => $node)
+                {
+                    $tagname = $node->tagName;
+                    if($tagname != 'h3')
+                    {
+                        $release->content .= "<$tagname>" . $details->eq($n)->html() . "</$tagname>" . PHP_EOL;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                // pubdate needs to be parsed
+                $release->created = $this->parseDate($match[2][0] . ', ' . $match[3][0]);
+
+                $this->addRelease($release);
+            }
+        }
+    }
 }
