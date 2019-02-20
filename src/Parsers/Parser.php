@@ -290,19 +290,28 @@ class Parser
         // use cURL if exists
         if(function_exists('curl_init'))
         {
+            $curl_options =
+            [
+                CURLOPT_CONNECTTIMEOUT => 30,
+                CURLOPT_TIMEOUT => 30
+            ];
+
+            if(getenv('ENVIRONMENT') == 'testing')
+            {
+                $curl_options[CURLOPT_SSL_VERIFYHOST] = false;
+                $curl_options[CURLOPT_SSL_VERIFYPEER] = false;
+            }
+
             $this->http->setOptions(
             [
                 'adapter' => 'Zend\Http\Client\Adapter\Curl',
-                'curloptions' =>
-                [
-                    CURLOPT_CONNECTTIMEOUT => 30,
-                    CURLOPT_TIMEOUT => 30
-                ]
+                'curloptions' => $curl_options
             ]);
         }
 
         // cache instance
-        $this->cache = StorageFactory::factory([
+        $this->cache = StorageFactory::factory(
+        [
             'adapter' =>
             [
                 'name' => 'filesystem',
