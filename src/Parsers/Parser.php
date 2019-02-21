@@ -296,7 +296,7 @@ class Parser
                 CURLOPT_TIMEOUT => 30
             ];
 
-            if(getenv('ENVIRONMENT') == 'testing')
+            if(getenv('ENVIRONMENT') != 'production')
             {
                 $curl_options[CURLOPT_SSL_VERIFYHOST] = false;
                 $curl_options[CURLOPT_SSL_VERIFYPEER] = false;
