@@ -59,36 +59,30 @@ class RevolutionSliderParser extends Parser
         $crawler = new Crawler($this->fetch('changelog'));
 
         // need to parse changelog block
-        $changelog = $crawler->filter('.slider-revolution-update-list')->children();
+        $changelog = $crawler->filter('main .entry-content')->children();
 
         // each h3 is a release
-        foreach($changelog->filter('h3') as $index => $node)
+        foreach($changelog->filter('.wp-block-themepunchblocks-tpcheadline') as $index => $node)
         {
-            // convert release title to version
-            $version = $this->parseVersion($node->textContent);
+            // skip first block
+            if(!$index) continue;
 
-            // version 5.4.6.2 and lower are nested
-            if(version_compare($version, '5.4.6.4', '<'))
-            {
-                break;
-            }
+            // detect the version
+            $version = $this->parseVersion($node->previousSibling->getAttribute('id'));
 
             // title must have pubdate
             if(preg_match('/(.+) \((.+)\)/i', $node->textContent, $pubdate))
             {
-                // get the ID to build link
-                $id = $changelog->filter('h3')->eq($index)->attr('id');
-
                 // release object
                 $release = new Release($this->title, $version, $this->parseStability($node->textContent));
-                $release->link = "{$this->sources['changelog']}#{$id}";
+                $release->link = "{$this->sources['changelog']}#{$version}";
 
                 // nodes that follows h3 are the details
-                $details = $changelog->filter('h3')->eq($index)->nextAll();
+                $details = $changelog->filter('.wp-block-themepunchblocks-tpcheadline')->eq($index)->nextAll();
                 foreach($details as $n => $node)
                 {
                     $tagname = $node->tagName;
-                    if($tagname != 'h3')
+                    if($node->getAttribute('class') != 'wp-block-themepunchblocks-tpcinnerlink')
                     {
                         $release->content .= "<$tagname>" . $details->eq($n)->html() . "</$tagname>" . PHP_EOL;
                     }
