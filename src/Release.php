@@ -169,11 +169,15 @@ class Release
         $crawler = new Crawler($this->content);
 
         // add target="_blank" to all links
-        foreach($crawler->filter('a') as $index => $node)
+        if($crawler->count())
         {
-            $node->setAttribute('target', '_blank');
+            foreach($crawler->filter('a') as $index => $node)
+            {
+                $node->setAttribute('target', '_blank');
+            }
+
+            $this->content = utf8_decode($crawler->html());
         }
-        $this->content = utf8_decode($crawler->html());
 
         // base for highlights
         $content = strip_tags($this->content);
