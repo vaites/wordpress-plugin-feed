@@ -91,7 +91,10 @@ class GenericParser extends Parser
                 }
             }
 
-            $this->addRelease($release);
+            if(!empty($release->content))
+            {
+                $this->addRelease($release);
+            }
         }
     }
 }

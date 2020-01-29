@@ -32,7 +32,7 @@ class AllInOneSEOPackParser extends GenericParser
      */
     protected $sources =
     [
-        'changelog' => 'http://semperfiwebdesign.com/blog/all-in-one-seo-pack/all-in-one-seo-pack-release-history/',
+        'changelog' => 'https://semperplugins.com/all-in-one-seo-pack-changelog/',
     ];
 
     /**
