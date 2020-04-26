@@ -44,7 +44,7 @@ class GravityFormsParser extends FeedParser
      */
     protected $sources =
     [
-        'changelog' => 'https://www.gravityforms.com/feed/',
+        'changelog' => 'https://www.gravityforms.com/feed/?s=release',
         'profile' => false
     ];
 
