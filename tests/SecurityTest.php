@@ -12,16 +12,10 @@ class SecurityTest extends PHPUnit_Framework_TestCase
      */
     public function testSecurityJetPack()
     {
-        $parser = Parser::getInstance('akismet');
+        $version = '4.1.0-stable';
+        $parser = Parser::getInstance('woocommerce');
         $releases = $parser->getReleases(false);
 
-        $this->assertTrue
-        (
-            isset($releases['3.1.2-stable']) &&
-            preg_match('/security/i', $releases['3.1.2-stable']->title) &&
-
-            isset($releases['3.1.5-stable']) &&
-            preg_match('/security/i', $releases['3.1.5-stable']->title)
-        );
+        $this->assertTrue(isset($releases[$version]) && preg_match('/security/i', $releases[$version]->title));
     }
 }
