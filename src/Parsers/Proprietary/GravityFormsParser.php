@@ -53,7 +53,7 @@ class GravityFormsParser extends FeedParser
      *
      * @var string
      */
-    protected $regexp = '/^Gravity Forms v(\d|\.)+ Released/i';
+    protected $regexp = '/^Gravity Forms v(.+) Release/i';
 
     /**
      * Number of pages to request
