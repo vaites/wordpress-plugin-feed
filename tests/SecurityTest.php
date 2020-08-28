@@ -8,11 +8,11 @@ use WordPressPluginFeed\Parsers\Parser;
 class SecurityTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Security detection in JetPack: versions 2.9.3
+     * Security detection in WooCoomerce: versions 4.2.1
      */
-    public function testSecurityJetPack()
+    public function testSecurityRelease()
     {
-        $version = '4.1.0-stable';
+        $version = '4.2.1-stable';
         $parser = Parser::getInstance('woocommerce');
         $releases = $parser->getReleases(false);
 
