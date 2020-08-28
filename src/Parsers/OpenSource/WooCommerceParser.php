@@ -19,7 +19,7 @@ class WooCommerceParser extends Parser
      */
     protected $sources =
     [
-        'changelog' => 'https://raw.githubusercontent.com/woothemes/woocommerce/master/CHANGELOG.txt',
+        'changelog' => 'https://raw.githubusercontent.com/woocommerce/woocommerce/master/changelog.txt',
     ];
 
     /**
