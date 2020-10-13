@@ -47,7 +47,7 @@ class RevolutionSliderParser extends Parser
      */
     protected $sources =
     [
-        'changelog' => 'https://www.themepunch.com/revslider-doc/changelog/',
+        'changelog' => 'https://www.sliderrevolution.com/documentation/changelog',
     ];
 
     /**
@@ -62,13 +62,9 @@ class RevolutionSliderParser extends Parser
         $changelog = $crawler->filter('main .entry-content')->children();
 
         // each h3 is a release
-        foreach($changelog->filter('.wp-block-themepunchblocks-tpcheadline') as $index => $node)
+        foreach($changelog->filter('.wp-block-group__inner-container > h3') as $index => $node)
         {
-            // skip first block
-            if(!$index) continue;
-
-            // detect the version
-            $version = $this->parseVersion($node->previousSibling->getAttribute('id'));
+            $version = $this->parseVersion($node->textContent);
 
             // title must have pubdate
             if(preg_match('/(.+) \((.+)\)/i', $node->textContent, $pubdate))
@@ -78,11 +74,11 @@ class RevolutionSliderParser extends Parser
                 $release->link = "{$this->sources['changelog']}#{$version}";
 
                 // nodes that follows h3 are the details
-                $details = $changelog->filter('.wp-block-themepunchblocks-tpcheadline')->eq($index)->nextAll();
+                $details = $changelog->filter('.wp-block-group__inner-container > h3')->eq($index)->nextAll();
                 foreach($details as $n => $node)
                 {
                     $tagname = $node->tagName;
-                    if($node->getAttribute('class') != 'wp-block-themepunchblocks-tpcinnerlink')
+                    if($node->getAttribute('class') != 'wp-block-group__inner-container')
                     {
                         $release->content .= "<$tagname>" . $details->eq($n)->html() . "</$tagname>" . PHP_EOL;
                     }
