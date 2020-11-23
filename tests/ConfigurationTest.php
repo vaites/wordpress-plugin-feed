@@ -50,7 +50,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $parser = Parser::getInstance('akismet');
         $releases = $parser->getReleases();
 
-        $this->assertCount(5, $releases, $parser->getLastError());
+        $this->assertLessThan(5, count($releases), $parser->getLastError());
     }
 
     /**
